@@ -1,6 +1,9 @@
 import { app } from "electron";
 import { createCapacitorElectronApp } from "@capacitor-community/electron";
 
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./matricula.db");
+
 // The MainWindow object can be accessed via myCapacitorApp.getMainWindow()
 const myCapacitorApp = createCapacitorElectronApp();
 
@@ -9,6 +12,12 @@ const myCapacitorApp = createCapacitorElectronApp();
 // Some Electron APIs can only be used after this event occurs.
 app.on("ready", () => {
   myCapacitorApp.init();
+
+  db.serialize(function () {
+    db.run("CREATE TABLE IF NOT EXISTS aluno (nome VARCHAR)");
+  });
+
+  db.close();
 });
 
 // Quit when all windows are closed.
