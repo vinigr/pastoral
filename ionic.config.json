@@ -1,0 +1,7 @@
+{
+  "name": "pastoral",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
