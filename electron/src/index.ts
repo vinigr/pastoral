@@ -1,4 +1,5 @@
-import { app } from "electron";
+import { app, ipcMain } from "electron";
+
 import { createCapacitorElectronApp } from "@capacitor-community/electron";
 
 const sqlite3 = require("sqlite3").verbose();
@@ -33,6 +34,11 @@ app.on("activate", function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (myCapacitorApp.getMainWindow().isDestroyed()) myCapacitorApp.init();
+});
+
+ipcMain.handle("fazerLogin", (event, args) => {
+  return args;
+  // return true;
 });
 
 // Define any IPC or other custom functionality below here
