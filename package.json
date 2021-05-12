@@ -5,6 +5,7 @@
   "dependencies": {
     "@capacitor-community/electron": "^1.4.2",
     "@capacitor/core": "2.4.7",
+    "@hookform/resolvers": "^2.4.0",
     "@ionic-native/core": "^5.32.1",
     "@ionic-native/sqlite": "^5.32.1",
     "@ionic/react": "^5.5.0",
@@ -22,6 +23,7 @@
     "ionicons": "^5.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^7.5.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
@@ -38,7 +40,8 @@
     "workbox-range-requests": "^5.1.4",
     "workbox-routing": "^5.1.4",
     "workbox-strategies": "^5.1.4",
-    "workbox-streams": "^5.1.4"
+    "workbox-streams": "^5.1.4",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",
