@@ -46,7 +46,7 @@ const Login: React.FC = () => {
     const resultado = await fazerLogin(usuario, senha);
 
     if (resultado) {
-      push("/inicio");
+      push("/alunos");
     }
   };
 

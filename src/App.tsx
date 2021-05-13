@@ -14,13 +14,15 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
-import { Redirect, Route } from "react-router-dom";
+import { IonApp, IonPage, IonRouterOutlet, IonSplitPane } from "@ionic/react";
+import { Redirect, Route, Switch } from "react-router-dom";
 
+import Alunos from "./pages/Alunos/Alunos";
+import Instituicao from "./pages/Instituicao/Instituicao";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login/Login";
-import Menu from "./components/Menu";
-import Page from "./pages/Page";
+import Menu from "./components/Menu/Menu";
+import Oficinas from "./pages/Oficinas/Oficinas";
 
 const App: React.FC = () => {
   return (
@@ -35,9 +37,19 @@ const App: React.FC = () => {
           </Route>
           <IonSplitPane contentId="main">
             <Menu />
-            <Route path="/page/:id" exact={true}>
-              <Page />
-            </Route>
+            <IonPage id="main">
+              <Switch>
+                <Route path="/alunos" exact={true}>
+                  <Alunos />
+                </Route>
+                <Route path="/oficinas" exact={true}>
+                  <Oficinas />
+                </Route>
+                <Route path="/instituicao" exact={true}>
+                  <Instituicao />
+                </Route>
+              </Switch>
+            </IonPage>
           </IonSplitPane>
         </IonRouterOutlet>
       </IonReactRouter>
