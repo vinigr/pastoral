@@ -1,9 +1,12 @@
 import { app, ipcMain } from "electron";
 
 import { createCapacitorElectronApp } from "@capacitor-community/electron";
+import { promisify } from "util";
 
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./matricula.db");
+
+const getPromise = promisify(db.get.bind(db));
 
 // The MainWindow object can be accessed via myCapacitorApp.getMainWindow()
 const myCapacitorApp = createCapacitorElectronApp();
@@ -16,13 +19,13 @@ app.on("ready", () => {
 
   db.serialize(function () {
     db.run("CREATE TABLE IF NOT EXISTS aluno (nome VARCHAR)");
+    db.run("CREATE TABLE IF NOT EXISTS USUARIOS (USUARIO VARCHAR, SENHA VARCHAR)");
   });
-
-  db.close();
 });
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function () {
+  db.close();
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
@@ -36,9 +39,12 @@ app.on("activate", function () {
   if (myCapacitorApp.getMainWindow().isDestroyed()) myCapacitorApp.init();
 });
 
-ipcMain.handle("fazerLogin", (event, args) => {
-  return args;
-  // return true;
+ipcMain.handle("fazerLogin", async (event, args) => {
+  const {usuario, senha} = args;
+
+  const existeUsuario = await getPromise("SELECT * FROM USUARIOS WHERE USUARIO = ? AND SENHA = ?", [usuario, senha])
+
+  return !!existeUsuario;
 });
 
 // Define any IPC or other custom functionality below here
