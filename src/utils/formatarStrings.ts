@@ -6,3 +6,22 @@ export const formatarCpf = (cpf: string) => {
     .replace(/(\d{3})(\d{1,2})/, "$1-$2")
     .replace(/(-\d{2})\d+?$/, "$1"); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
 };
+
+export const formatarCNPJ = (cnpj: string) => {
+  return cnpj
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2")
+    .replace(/(-\d{2})\d+?$/, "$1");
+};
+
+export const formatarTelefone = (telefone: string) => {
+  return telefone
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{4})(\d)/, "$1-$2")
+    .replace(/(\d{5})-(\d)(\d{4})/, "$1$2-$3")
+    .replace(/(-\d{4})\d+?$/, "$1");
+};

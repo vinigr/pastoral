@@ -54,68 +54,69 @@ const Login: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <main>
-        <IonCard className="card">
-          <IonCardContent>
-            <IonCardHeader>
-              <IonCardTitle>Login</IonCardTitle>
-            </IonCardHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <IonItem>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "usuario",
-                            value: e?.detail?.value,
-                          },
-                          type: "text",
-                        });
-                      }}
-                      placeholder="Usuário"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="usuario"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors?.usuario?.message}</div>
-              <IonItem>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "senha",
-                            value: e?.detail?.value,
-                          },
-                          type: "password",
-                        });
-                      }}
-                      placeholder="Senha"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="senha"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors?.senha?.message}</div>
-              <IonButton expand="full" type="submit">
-                Entrar
-              </IonButton>
-            </form>
-          </IonCardContent>
-        </IonCard>
+          <IonCard className="card">
+            <IonCardContent>
+              <IonCardHeader>
+                <IonCardTitle>Login</IonCardTitle>
+              </IonCardHeader>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <IonItem>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <IonInput
+                        value={value}
+                        onIonChange={(e) => {
+                          onChange({
+                            target: {
+                              name: "usuario",
+                              value: e?.detail?.value,
+                            },
+                            type: "text",
+                          });
+                        }}
+                        placeholder="Usuário"
+                        onBlur={onBlur}
+                        clearInput
+                      />
+                    )}
+                    name="usuario"
+                    rules={{ required: true }}
+                  />
+                </IonItem>
+                <div className="mensagem-erro">{errors?.usuario?.message}</div>
+                <IonItem>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <IonInput
+                        value={value}
+                        onIonChange={(e) => {
+                          onChange({
+                            target: {
+                              name: "senha",
+                              value: e?.detail?.value,
+                            },
+                            type: "password",
+                          });
+                        }}
+                        placeholder="Senha"
+                        onBlur={onBlur}
+                        type="password"
+                        clearInput
+                      />
+                    )}
+                    name="senha"
+                    rules={{ required: true }}
+                  />
+                </IonItem>
+                <div className="mensagem-erro">{errors?.senha?.message}</div>
+                <IonButton expand="full" type="submit">
+                  Entrar
+                </IonButton>
+              </form>
+            </IonCardContent>
+          </IonCard>
         </main>
       </IonContent>
     </IonPage>
