@@ -29,7 +29,7 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: "Alunos",
+    title: "Alunos matriculados",
     url: "/alunos",
     iosIcon: personOutline,
     mdIcon: personSharp,

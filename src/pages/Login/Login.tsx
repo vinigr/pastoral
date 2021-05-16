@@ -53,6 +53,7 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen>
+        <main>
         <IonCard className="card">
           <IonCardContent>
             <IonCardHeader>
@@ -115,6 +116,7 @@ const Login: React.FC = () => {
             </form>
           </IonCardContent>
         </IonCard>
+        </main>
       </IonContent>
     </IonPage>
   );
