@@ -10,13 +10,18 @@ import {
   IonHeader,
   IonInput,
   IonItem,
+  IonLabel,
   IonMenuButton,
   IonTitle,
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect } from "react";
-import { formatarCNPJ, formatarTelefone } from "../../utils/formatarStrings";
+import {
+  formatarCNPJ,
+  formatarCelular,
+  formatarTelefone,
+} from "../../utils/formatarStrings";
 
 import buscarInformacoesInstituicao from "../../usecases/buscarInformacoesInstituicao";
 import salvarInformacoesInstituicao from "../../usecases/salvarInformacoesInstituicao";
@@ -58,8 +63,6 @@ const Instituicao: React.FC = () => {
 
   const buscarInformacoes = async () => {
     const instituicao = await buscarInformacoesInstituicao();
-
-    console.log(instituicao);
 
     if (instituicao) {
       setValue("nome", instituicao?.nome);
@@ -129,6 +132,7 @@ const Instituicao: React.FC = () => {
         <div className="container">
           <form onSubmit={handleSubmit(onSubmit)}>
             <IonItem>
+              <IonLabel position="floating">Nome</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -154,6 +158,7 @@ const Instituicao: React.FC = () => {
             </IonItem>
             <div className="mensagem-erro">{errors?.nome?.message}</div>
             <IonItem>
+              <IonLabel position="floating">CNPJ</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -180,6 +185,7 @@ const Instituicao: React.FC = () => {
             </IonItem>
             <div className="mensagem-erro">{errors?.cnpj?.message}</div>
             <IonItem>
+              <IonLabel position="floating">Endereço</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -205,6 +211,7 @@ const Instituicao: React.FC = () => {
             </IonItem>
             <div className="mensagem-erro">{errors?.endereco?.message}</div>
             <IonItem>
+              <IonLabel position="floating">E-mail</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -230,6 +237,7 @@ const Instituicao: React.FC = () => {
             </IonItem>
             <div className="mensagem-erro">{errors?.email?.message}</div>
             <IonItem>
+              <IonLabel position="floating">Telefone</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -239,7 +247,10 @@ const Instituicao: React.FC = () => {
                       onChange({
                         target: {
                           name: "telefone",
-                          value: formatarTelefone(e?.detail?.value),
+                          value:
+                            e?.detail?.value?.length === 15
+                              ? formatarCelular(e?.detail?.value)
+                              : formatarTelefone(e?.detail?.value || ""),
                         },
                       });
                     }}
@@ -255,7 +266,9 @@ const Instituicao: React.FC = () => {
               />
             </IonItem>
             <div className="mensagem-erro">{errors?.telefone?.message}</div>
-            <IonButton type="submit">Salvar</IonButton>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <IonButton type="submit">Salvar</IonButton>
+            </div>
           </form>
         </div>
       </IonContent>

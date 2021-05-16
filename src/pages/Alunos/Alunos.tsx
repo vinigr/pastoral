@@ -19,8 +19,11 @@ import { add, create, trash } from "ionicons/icons";
 
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import { formatarCpf } from "../../utils/formatarStrings";
+import { useHistory } from "react-router-dom";
 
 const Alunos: React.FC = () => {
+  const { push } = useHistory();
+
   const [alunos, setAlunos] = useState([]);
 
   useEffect(() => {
@@ -81,7 +84,7 @@ const Alunos: React.FC = () => {
           </IonList>
         </div>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton>
+          <IonFabButton onClick={() => push("matricula")}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
