@@ -46,6 +46,9 @@ const App: React.FC = () => {
                 <Route path="/matricula" exact={true}>
                   <FormularioMatricula />
                 </Route>
+                <Route path="/matricula/:id">
+                  <FormularioMatricula />
+                </Route>
                 <Route path="/oficinas" exact={true}>
                   <Oficinas />
                 </Route>

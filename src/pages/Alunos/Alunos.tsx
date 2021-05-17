@@ -71,7 +71,10 @@ const Alunos: React.FC = () => {
                     <p>Responsável: {aluno.nomeResponsavel}</p>
                   </IonText>
                 </IonLabel>
-                <IonButton slot="end">
+                <IonButton
+                  slot="end"
+                  onClick={() => push(`matricula/${aluno?.id}`)}
+                >
                   <IonIcon icon={create} slot="start" />
                   Editar
                 </IonButton>

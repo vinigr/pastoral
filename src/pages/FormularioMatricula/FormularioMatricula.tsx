@@ -21,6 +21,7 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
+import React, { useEffect } from "react";
 import {
   formatarCelular,
   formatarCpf,
@@ -28,8 +29,10 @@ import {
   formatarTelefone,
 } from "../../utils/formatarStrings";
 
-import React from "react";
+import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
 import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
+import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
+import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
@@ -75,12 +78,13 @@ const schema = Yup.object().shape({
     "A ocupação profissional é obrigatória"
   ),
   rgResponsavel: Yup.string().required("O RG é obrigatório"),
-  rendaFamiliar: Yup.string().required("A rendaFamiliar é obrigatória"),
+  rendaFamiliar: Yup.string().required("A renda familiar é obrigatória"),
   religiao: Yup.string().required("A religião é obrigatória"),
 });
 
 const FormularioMatricula: React.FC = () => {
   const [present] = useIonToast();
+  let { id } = useParams<{ id?: string }>() ?? {};
 
   const {
     control,
@@ -91,6 +95,54 @@ const FormularioMatricula: React.FC = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (id) {
+      buscarInformacoes();
+    }
+  }, [id]);
+
+  const buscarInformacoes = async () => {
+    const alunoMatricula = await buscarInformacoesMatriculaAluno();
+
+    setValue("nome", alunoMatricula?.nome);
+    setValue("cpf", alunoMatricula?.cpf);
+    setValue("dataNascimento", alunoMatricula?.dataNascimento);
+    setValue("rg", alunoMatricula?.rg);
+    setValue("dataExpedicao", alunoMatricula?.dataExpedicao);
+    setValue("endereco", alunoMatricula?.endereco);
+    setValue("naturalidade", alunoMatricula?.naturalidade);
+    setValue("nacionalidade", alunoMatricula?.nacionalidade);
+    setValue("termoCN", alunoMatricula?.termoCN);
+    setValue("folhaCN", alunoMatricula?.folhaCN);
+    setValue("livroCN", alunoMatricula?.livroCN);
+    setValue("email", alunoMatricula?.email);
+    setValue("telefone", alunoMatricula?.telefone);
+    setValue("temParente", alunoMatricula?.temParente);
+    setValue("nomeParente", alunoMatricula?.nomeParente);
+    setValue("nomeContatoUrgencia", alunoMatricula?.nomeContatoUrgencia);
+    setValue(
+      "telefoneContatoUrgencia",
+      alunoMatricula?.telefoneContatoUrgencia
+    );
+    setValue("parentesco", alunoMatricula?.parentesco);
+    setValue("nomeResponsavel", alunoMatricula?.nomeResponsavel);
+    setValue(
+      "cpfResponsavel",
+      formatarCpf(alunoMatricula?.cpfResponsavel || "")
+    );
+    setValue("enderecoResponsavel", alunoMatricula?.enderecoResponsavel);
+    setValue("telefoneResponsavel", alunoMatricula?.telefoneResponsavel);
+    setValue(
+      "ocupacaoProfissionalResponsavel",
+      alunoMatricula?.ocupacaoProfissionalResponsavel
+    );
+    setValue("bolsaSocial", alunoMatricula?.bolsaSocial);
+    setValue("nis", alunoMatricula?.nis);
+    setValue("rgResponsavel", alunoMatricula?.rgResponsavel);
+    setValue("rendaFamiliar", alunoMatricula?.rendaFamiliar);
+    setValue("religiao", alunoMatricula?.religiao);
+  };
 
   const temParente = watch("temParente", false);
   const bolsaSocial = watch("bolsaSocial", false);
@@ -125,7 +177,7 @@ const FormularioMatricula: React.FC = () => {
     rendaFamiliar,
     religiao,
   }: any) => {
-    const resultado = await cadastrarMatriculaEAluno({
+    const dados = {
       nome,
       cpf: cpf.replace(/[^0-9]+/g, ""),
       dataNascimento,
@@ -154,19 +206,39 @@ const FormularioMatricula: React.FC = () => {
       rgResponsavel,
       rendaFamiliar,
       religiao,
-    });
-    if (resultado) {
+    };
+
+    if (id) {
+      const resultado = await editarMatriculaEAluno(id, dados);
+
+      if (resultado) {
+        return present({
+          message: "Matrícula salva com sucesso!",
+          color: "success",
+          duration: 2000,
+        });
+      }
       return present({
-        message: "Matrícula salva com sucesso!",
-        color: "success",
+        message: "Falha ao salvar matrícula! Por favor, tente novamente",
+        color: "danger",
+        duration: 2000,
+      });
+    } else {
+      const resultado = await cadastrarMatriculaEAluno(dados);
+
+      if (resultado) {
+        return present({
+          message: "Matrícula salva com sucesso!",
+          color: "success",
+          duration: 2000,
+        });
+      }
+      return present({
+        message: "Falha ao salvar matrícula! Por favor, tente novamente",
+        color: "danger",
         duration: 2000,
       });
     }
-    return present({
-      message: "Falha ao salvar matrícula! Por favor, tente novamente",
-      color: "danger",
-      duration: 2000,
-    });
   };
 
   return (
@@ -538,7 +610,7 @@ const FormularioMatricula: React.FC = () => {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <IonCheckbox
-                      checked={value}
+                      checked={value ? true : false}
                       value={value}
                       onIonChange={(e) => {
                         onChange({
@@ -859,7 +931,7 @@ const FormularioMatricula: React.FC = () => {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <IonCheckbox
-                      checked={value}
+                      checked={value ? true : false}
                       value={value}
                       onIonChange={(e) => {
                         onChange({
