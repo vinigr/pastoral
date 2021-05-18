@@ -23,6 +23,7 @@ import Instituicao from "./pages/Instituicao/Instituicao";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login/Login";
 import Menu from "./components/Menu/Menu";
+import Oficina from "./pages/Oficina/Oficina";
 import Oficinas from "./pages/Oficinas/Oficinas";
 
 const App: React.FC = () => {
@@ -51,6 +52,12 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/oficinas" exact={true}>
                   <Oficinas />
+                </Route>
+                <Route path="/oficina" exact={true}>
+                  <Oficina />
+                </Route>
+                <Route path="/oficina/:id">
+                  <Oficina />
                 </Route>
                 <Route path="/instituicao" exact={true}>
                   <Instituicao />

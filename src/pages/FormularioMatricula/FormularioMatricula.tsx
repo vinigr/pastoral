@@ -103,7 +103,7 @@ const FormularioMatricula: React.FC = () => {
   }, [id]);
 
   const buscarInformacoes = async () => {
-    const alunoMatricula = await buscarInformacoesMatriculaAluno();
+    const alunoMatricula = await buscarInformacoesMatriculaAluno(id);
 
     setValue("nome", alunoMatricula?.nome);
     setValue("cpf", alunoMatricula?.cpf);

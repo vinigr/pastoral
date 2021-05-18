@@ -1,9 +1,9 @@
 import { chamarFuncaoElectron } from "../utils/chamarFuncaoElectron";
 import { isElectron } from "../utils/isElectron";
 
-export default async function buscarInformacoesMatriculaAluno() {
+export default async function buscarInformacoesMatriculaAluno(id) {
   if (isElectron()) {
-    return await chamarFuncaoElectron("buscarInformacoesMatriculaAluno");
+    return await chamarFuncaoElectron("buscarInformacoesMatriculaAluno", id);
   } else {
     return {
       id: "",
