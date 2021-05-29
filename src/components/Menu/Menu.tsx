@@ -12,6 +12,9 @@ import {
 import {
   businessOutline,
   businessSharp,
+  fileTray,
+  fileTrayOutline,
+  fileTraySharp,
   libraryOutline,
   librarySharp,
   personOutline,
@@ -29,10 +32,16 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: "Alunos matriculados",
+    title: "Alunos",
     url: "/alunos",
     iosIcon: personOutline,
     mdIcon: personSharp,
+  },
+  {
+    title: "Matrículas",
+    url: "/matriculas",
+    iosIcon: fileTrayOutline,
+    mdIcon: fileTraySharp,
   },
   {
     title: "Oficinas",

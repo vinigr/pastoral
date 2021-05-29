@@ -17,23 +17,22 @@ import {
 import React, { useEffect, useState } from "react";
 import { add, create, trash } from "ionicons/icons";
 
-import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
-import { formatarCpf } from "../../utils/formatarStrings";
+import buscarMatriculas from "../../usecases/buscarMatriculas";
 import { useHistory } from "react-router-dom";
 
-const Alunos: React.FC = () => {
+const Matriculas: React.FC = () => {
   const { push } = useHistory();
 
-  const [alunos, setAlunos] = useState([]);
+  const [matriculas, setMatriculas] = useState([]);
 
   useEffect(() => {
-    buscarAlunos();
+    listarMatriculas();
   }, []);
 
-  const buscarAlunos = async () => {
-    const alunosMatriculados = await buscarAlunosMatriculados();
+  const listarMatriculas = async () => {
+    const alunosMatriculados = await buscarMatriculas();
 
-    setAlunos(alunosMatriculados);
+    setMatriculas(alunosMatriculados);
   };
 
   return (
@@ -43,7 +42,7 @@ const Alunos: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Alunos</IonTitle>
+          <IonTitle>Matrículas</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -53,27 +52,27 @@ const Alunos: React.FC = () => {
             <IonButtons slot="start">
               <IonMenuButton />
             </IonButtons>
-            <IonTitle size="large">Alunos</IonTitle>
+            <IonTitle size="large">Matrículas</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div className="container">
           <IonList>
-            {alunos.map((aluno) => (
-              <IonItem key={aluno.id}>
+            {matriculas.map((matricula) => (
+              <IonItem key={matricula.id}>
                 <IonLabel className="ion-text-wrap">
                   <IonText color="dark" style={{ fontWeight: "bold" }}>
-                    <h2>{aluno.nome}</h2>
+                    <h2>{matricula.nome}</h2>
                   </IonText>
                   <IonText color="medium">
-                    <p>CPF: {formatarCpf(aluno.cpf)}</p>
+                    <p>Escola: {matricula.escola}</p>
                   </IonText>
                   <IonText color="medium">
-                    <p>Responsável: {aluno.nomeResponsavel}</p>
+                    <p>Série: {matricula.serie}</p>
                   </IonText>
                 </IonLabel>
                 <IonButton
                   slot="end"
-                  onClick={() => push(`aluno/${aluno?.id}`)}
+                  onClick={() => push(`matricula/${matricula?.id}`)}
                 >
                   <IonIcon icon={create} slot="start" />
                   Editar
@@ -87,7 +86,7 @@ const Alunos: React.FC = () => {
           </IonList>
         </div>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => push("aluno")}>
+          <IonFabButton onClick={() => push("matricula")}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
@@ -96,4 +95,4 @@ const Alunos: React.FC = () => {
   );
 };
 
-export default Alunos;
+export default Matriculas;

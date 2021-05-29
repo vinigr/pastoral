@@ -1,66 +1,23 @@
 import { chamarFuncaoElectron } from "../utils/chamarFuncaoElectron";
 import { isElectron } from "../utils/isElectron";
 
+interface Dados {
+  idAluno?: number;
+  aluno?: any;
+  responsavel?: any;
+  matricula: any;
+}
+
 export default async function cadastrarMatriculaEAluno({
-  nome,
-  cpf,
-  dataNascimento,
-  rg,
-  dataExpedicao,
-  endereco,
-  naturalidade,
-  nacionalidade,
-  termoCN,
-  folhaCN,
-  livroCN,
-  email,
-  telefone,
-  temParente,
-  nomeParente,
-  nomeContatoUrgencia,
-  telefoneContatoUrgencia,
-  parentesco,
-  nomeResponsavel,
-  cpfResponsavel,
-  enderecoResponsavel,
-  telefoneResponsavel,
-  ocupacaoProfissionalResponsavel,
-  bolsaSocial,
-  nis,
-  rgResponsavel,
-  rendaFamiliar,
-  religiao,
-}) {
+  idAluno,
+  aluno,
+  responsavel,
+}: Dados) {
   if (isElectron()) {
-    return await chamarFuncaoElectron("salvarInformacoesInstituicao", {
-      nome,
-      cpf,
-      dataNascimento,
-      rg,
-      dataExpedicao,
-      endereco,
-      naturalidade,
-      nacionalidade,
-      termoCN,
-      folhaCN,
-      livroCN,
-      email,
-      telefone,
-      temParente,
-      nomeParente,
-      nomeContatoUrgencia,
-      telefoneContatoUrgencia,
-      parentesco,
-      nomeResponsavel,
-      cpfResponsavel,
-      enderecoResponsavel,
-      telefoneResponsavel,
-      ocupacaoProfissionalResponsavel,
-      bolsaSocial,
-      nis,
-      rgResponsavel,
-      rendaFamiliar,
-      religiao,
+    return await chamarFuncaoElectron("cadastrarMatriculaEAluno", {
+      idAluno,
+      aluno,
+      responsavel,
     });
   } else {
     return true;

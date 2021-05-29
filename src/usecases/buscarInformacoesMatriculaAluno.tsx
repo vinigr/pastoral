@@ -6,35 +6,15 @@ export default async function buscarInformacoesMatriculaAluno(id) {
     return await chamarFuncaoElectron("buscarInformacoesMatriculaAluno", id);
   } else {
     return {
-      id: "",
-      nome: "Teste",
-      cpf: "000000000000",
-      dataNascimento: "07/01/2000",
-      rg: "",
-      dataExpedicao: "",
-      endereco: "",
-      naturalidade: "Vitória da Conquista",
-      nacionalidade: "Brasileira",
-      termoCN: "",
-      folhaCN: "",
-      livroCN: "",
-      email: "",
-      telefone: "00000000000",
-      temParente: true,
-      nomeParente: "",
-      nomeContatoUrgencia: "",
-      telefoneContatoUrgencia: "777777777777",
-      parentesco: "mae",
-      nomeResponsavel: "",
-      cpfResponsavel: "00000000000",
-      enderecoResponsavel: "",
-      telefoneResponsavel: "",
-      ocupacaoProfissionalResponsavel: "",
-      bolsaSocial: "",
-      nis: "",
-      rgResponsavel: "",
-      rendaFamiliar: "",
-      religiao: "",
+      aluno: {
+        id: 2,
+        nome: "Carlos",
+      },
+      matricula: {
+        escola: "COEDUC",
+        serie: "4",
+        turno: "matutino",
+      },
     };
   }
 }
