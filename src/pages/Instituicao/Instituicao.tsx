@@ -32,7 +32,7 @@ const schema = Yup.object().shape({
   cnpj: Yup.string()
     .required("O CNPJ é obrigatório")
     .matches(
-      /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2})$/,
+      /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2})$/,
       "CNPJ inválido"
     ),
   endereco: Yup.string().required("O endereço é obrigatório"),
@@ -59,6 +59,7 @@ const Instituicao: React.FC = () => {
 
   useEffect(() => {
     buscarInformacoes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const buscarInformacoes = async () => {

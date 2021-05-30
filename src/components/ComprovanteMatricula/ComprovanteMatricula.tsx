@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 
 import buscarInformacoesCompletas from "../../usecases/buscarInformacoesCompletasMatricula";
 import buscarInformacoesInstituicao from "../../usecases/buscarInformacoesInstituicao";
@@ -9,42 +9,44 @@ interface Props {
   id?: number;
 }
 
-const ComprovanteMatricula = React.forwardRef(({ id }: Props, ref: any) => {
-  const [instituicao, setInstituicao] = useState<any>();
-  const [dadosMatricula, setDadosMatricula] = useState<any>();
+const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
+  ({ id }, ref) => {
+    const [instituicao, setInstituicao] = useState<any>();
+    const [dadosMatricula, setDadosMatricula] = useState<any>();
 
-  useEffect(() => {
-    buscarInformacoes();
-  }, []);
+    useEffect(() => {
+      buscarInformacoes();
+    }, []);
 
-  useEffect(() => {
-    buscarDadosMatricula();
-  }, [id]);
+    useEffect(() => {
+      buscarDadosMatricula();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
 
-  const buscarInformacoes = async () => {
-    const instituicao = await buscarInformacoesInstituicao();
+    const buscarInformacoes = async () => {
+      const instituicao = await buscarInformacoesInstituicao();
 
-    setInstituicao(instituicao);
-  };
+      setInstituicao(instituicao);
+    };
 
-  const buscarDadosMatricula = async () => {
-    const dados = await buscarInformacoesCompletas(id);
+    const buscarDadosMatricula = async () => {
+      const dados = await buscarInformacoesCompletas(id);
 
-    setDadosMatricula(dados);
-  };
+      setDadosMatricula(dados);
+    };
 
-  const tratarTipoResponsavelAluno = (responsavel: string) => {
-    return {
-      mae: "Mãe",
-      pai: "Pai",
-      avo: "Avó/Avô",
-      outros: "Outros",
-    }[responsavel];
-  };
+    const tratarTipoResponsavelAluno = (responsavel: string) => {
+      return {
+        mae: "Mãe",
+        pai: "Pai",
+        avo: "Avó/Avô",
+        outros: "Outros",
+      }[responsavel];
+    };
 
-  return (
-    <div ref={ref}>
+    return (
       <div
+        ref={ref}
         style={{
           height: "29.7cm",
           width: "21cm",
@@ -1011,8 +1013,8 @@ const ComprovanteMatricula = React.forwardRef(({ id }: Props, ref: any) => {
           {instituicao?.endereco} - Fone: {instituicao?.telefone}
         </h4>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default ComprovanteMatricula;

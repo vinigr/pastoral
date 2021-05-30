@@ -100,6 +100,7 @@ const FormAluno: React.FC = () => {
     if (id) {
       buscarInformacoes();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const buscarInformacoes = async () => {

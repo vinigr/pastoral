@@ -12,7 +12,6 @@ import {
 import {
   businessOutline,
   businessSharp,
-  fileTray,
   fileTrayOutline,
   fileTraySharp,
   libraryOutline,

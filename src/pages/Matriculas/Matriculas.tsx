@@ -23,10 +23,11 @@ import { useHistory } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 
 const Matriculas: React.FC = () => {
-  const relatorioExportar: any = useRef();
+  const componentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => relatorioExportar?.current,
+    content: () => componentRef.current,
+    documentTitle: "AwesomeFileName",
   });
 
   const { push } = useHistory();
@@ -47,7 +48,7 @@ const Matriculas: React.FC = () => {
 
   return (
     <>
-      <IonHeader>
+      <IonHeader ref={componentRef}>
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
@@ -84,7 +85,7 @@ const Matriculas: React.FC = () => {
                   slot="end"
                   onClick={() => {
                     setIdMatriculaImprimir(matricula.id);
-                    console.log(relatorioExportar.current);
+                    // console.log(componentRef.current);
                     handlePrint();
                   }}
                 >
@@ -112,12 +113,9 @@ const Matriculas: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        <div style={{ display: "none" }}>
-          <ComprovanteMatricula
-            ref={relatorioExportar}
-            id={idMatriculaImprimir}
-          />
-        </div>
+        {/* <div style={{ display: "none" }}> */}
+        <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />
+        {/* </div> */}
       </IonContent>
     </>
   );
