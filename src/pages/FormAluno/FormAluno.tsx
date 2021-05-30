@@ -30,15 +30,13 @@ import {
 } from "../../utils/formatarStrings";
 
 import buscarInformacoesAluno from "../../usecases/buscarInformacoesAluno";
-import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
-import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
 import editarAluno from "../../usecases/editarAluno";
-import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
 import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
+  sexo: Yup.string().required("A escolha do sexo é obrigatória"),
   cpf: Yup.string()
     .required("O CPF é obrigatório")
     .matches(/^\d{3}.?\d{3}.?\d{3}-?\d{2}$/, "CPF inválido"),
@@ -108,6 +106,7 @@ const FormAluno: React.FC = () => {
     const alunoMatricula = await buscarInformacoesAluno(id);
 
     setValue("nome", alunoMatricula?.nome);
+    setValue("sexo", alunoMatricula?.sexo);
     setValue("cpf", alunoMatricula?.cpf);
     setValue("dataNascimento", alunoMatricula?.dataNascimento);
     setValue("rg", alunoMatricula?.rg);
@@ -151,6 +150,7 @@ const FormAluno: React.FC = () => {
 
   const onSubmit = async ({
     nome,
+    sexo,
     cpf,
     dataNascimento,
     rg,
@@ -182,6 +182,7 @@ const FormAluno: React.FC = () => {
     const dados = {
       aluno: {
         nome,
+        sexo,
         cpf: cpf.replace(/[^0-9]+/g, ""),
         dataNascimento,
         rg,
@@ -201,9 +202,9 @@ const FormAluno: React.FC = () => {
           /[^0-9]+/g,
           ""
         ),
-        parentesco,
       },
       responsavel: {
+        parentesco,
         nome: nomeResponsavel,
         cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
         endereco: enderecoResponsavel,
@@ -276,6 +277,41 @@ const FormAluno: React.FC = () => {
             />
           </IonItem>
           <div className="mensagem-erro">{errors?.nome?.message}</div>
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <IonRadioGroup
+                value={value}
+                onIonChange={(e) => {
+                  onChange({
+                    target: {
+                      name: "sexo",
+                      value: e?.detail?.value,
+                    },
+                    type: "text",
+                  });
+                }}
+                onBlur={onBlur}
+              >
+                <IonListHeader>
+                  <IonLabel>Sexo</IonLabel>
+                </IonListHeader>
+                <IonItem>
+                  <IonLabel>Masculino</IonLabel>
+                  <IonRadio value="masculino" />
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Feminino</IonLabel>
+                  <IonRadio value="feminino" />
+                </IonItem>
+              </IonRadioGroup>
+            )}
+            name="sexo"
+            rules={{ required: true }}
+          />
+
+          <div className="mensagem-erro">{errors?.sexo?.message}</div>
 
           <IonRow>
             <IonItem style={{ marginRight: 10, marginBottom: 4 }}>

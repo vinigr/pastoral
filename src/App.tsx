@@ -18,6 +18,7 @@ import { IonApp, IonPage, IonRouterOutlet, IonSplitPane } from "@ionic/react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 import Alunos from "./pages/Alunos/Alunos";
+import ComprovanteMatricula from "./components/ComprovanteMatricula/ComprovanteMatricula";
 import FormAluno from "./pages/FormAluno/FormAluno";
 import FormularioMatricula from "./pages/FormularioMatricula/FormularioMatricula";
 import Instituicao from "./pages/Instituicao/Instituicao";
@@ -69,6 +70,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/instituicao" exact={true}>
                   <Instituicao />
+                </Route>
+                <Route path="/relatorio" exact={true}>
+                  <ComprovanteMatricula />
                 </Route>
               </Switch>
             </IonPage>

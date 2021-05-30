@@ -14,16 +14,26 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { add, create, trash } from "ionicons/icons";
 
+import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
 import { useHistory } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
 
 const Matriculas: React.FC = () => {
+  const relatorioExportar: any = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => relatorioExportar?.current,
+  });
+
   const { push } = useHistory();
 
   const [matriculas, setMatriculas] = useState([]);
+
+  const [idMatriculaImprimir, setIdMatriculaImprimir] = useState();
 
   useEffect(() => {
     listarMatriculas();
@@ -72,6 +82,17 @@ const Matriculas: React.FC = () => {
                 </IonLabel>
                 <IonButton
                   slot="end"
+                  onClick={() => {
+                    setIdMatriculaImprimir(matricula.id);
+                    console.log(relatorioExportar.current);
+                    handlePrint();
+                  }}
+                >
+                  <IonIcon icon={create} slot="start" />
+                  Imprimir comprovante
+                </IonButton>
+                <IonButton
+                  slot="end"
                   onClick={() => push(`matricula/${matricula?.id}`)}
                 >
                   <IonIcon icon={create} slot="start" />
@@ -90,6 +111,13 @@ const Matriculas: React.FC = () => {
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
+
+        <div style={{ display: "none" }}>
+          <ComprovanteMatricula
+            ref={relatorioExportar}
+            id={idMatriculaImprimir}
+          />
+        </div>
       </IonContent>
     </>
   );

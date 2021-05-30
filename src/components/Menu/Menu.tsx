@@ -55,6 +55,12 @@ const appPages: AppPage[] = [
     iosIcon: businessOutline,
     mdIcon: businessSharp,
   },
+  {
+    title: "Teste relatório",
+    url: "/relatorio",
+    iosIcon: businessOutline,
+    mdIcon: businessSharp,
+  },
 ];
 
 const Menu: React.FC = () => {

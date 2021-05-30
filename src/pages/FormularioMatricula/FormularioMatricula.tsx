@@ -40,6 +40,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
   escola: Yup.string().required("A escola é obrigatória"),
+  sexo: Yup.string().required("A escolha do sexo é obrigatória"),
   serie: Yup.string().required("A série é obrigatória"),
   turno: Yup.string().required("O turno é obrigatório"),
   nome: Yup.string().required("O nome é obrigatório"),
@@ -159,6 +160,7 @@ const FormularioMatricula: React.FC = () => {
 
   const onSubmit = async ({
     nome,
+    sexo,
     cpf,
     dataNascimento,
     rg,
@@ -193,6 +195,7 @@ const FormularioMatricula: React.FC = () => {
     const dados = {
       aluno: {
         nome,
+        sexo,
         cpf: cpf.replace(/[^0-9]+/g, ""),
         dataNascimento,
         rg,
@@ -212,9 +215,9 @@ const FormularioMatricula: React.FC = () => {
           /[^0-9]+/g,
           ""
         ),
-        parentesco,
       },
       responsavel: {
+        parentesco,
         nome: nomeResponsavel,
         cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
         endereco: enderecoResponsavel,
@@ -463,6 +466,41 @@ const FormularioMatricula: React.FC = () => {
                 />
               </IonItem>
               <div className="mensagem-erro">{errors?.nome?.message}</div>
+
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <IonRadioGroup
+                    value={value}
+                    onIonChange={(e) => {
+                      onChange({
+                        target: {
+                          name: "sexo",
+                          value: e?.detail?.value,
+                        },
+                        type: "text",
+                      });
+                    }}
+                    onBlur={onBlur}
+                  >
+                    <IonListHeader>
+                      <IonLabel>Sexo</IonLabel>
+                    </IonListHeader>
+                    <IonItem>
+                      <IonLabel>Masculino</IonLabel>
+                      <IonRadio value="masculino" />
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel>Feminino</IonLabel>
+                      <IonRadio value="feminino" />
+                    </IonItem>
+                  </IonRadioGroup>
+                )}
+                name="sexo"
+                rules={{ required: true }}
+              />
+
+              <div className="mensagem-erro">{errors?.sexo?.message}</div>
 
               <IonRow>
                 <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
