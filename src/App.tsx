@@ -44,6 +44,9 @@ const App: React.FC = () => {
             <Menu />
             <IonPage id="main">
               <Switch>
+                <Route path="/aluno" exact={true}>
+                  <FormAluno />
+                </Route>
                 <Route path="/alunos" exact={true}>
                   <Alunos />
                 </Route>
