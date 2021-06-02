@@ -13,14 +13,19 @@ import {
   IonTitle,
   IonToolbar,
   useIonToast,
+  IonSearchbar,
+  IonList
 } from "@ionic/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import buscarOficina from "../../usecases/buscarOficina";
 import cadastrarOficina from "../../usecases/cadastrarOficina";
 import editarOficina from "../../usecases/editarOficina";
 import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
+// import pesquisarAlunos from '../../usecases/pesquisarAlunos';
+import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
+import { array } from "yup/lib/locale";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -32,6 +37,13 @@ const schema = Yup.object().shape({
 const Oficina: React.FC = () => {
   const [present] = useIonToast();
   let { id } = useParams<{ id?: string }>() ?? {};
+
+  // const [novoAluno, setNovoAluno] = useState<boolean>(false)
+  // const [alunoSelecionado, setAlunoSelecionado] = useState<{ id: number; nome: string }>();
+  const [alunoSelecionado, setAlunoSelecionado] = useState([]);
+
+  const [pesquisa, setPesquisa] = useState("");
+  const [alunos, setAlunos] = useState([])
 
   const {
     control,
@@ -47,6 +59,28 @@ const Oficina: React.FC = () => {
       buscarInformacoes();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (pesquisa) {
+      alunosMatriculados(pesquisa)
+    } else {
+      setAlunos([])
+    }
+  },[pesquisa])
+
+  const alunosMatriculados = async (itemPesquisa) => {
+
+    const alunosMatriculadosFiltro = await buscarAlunosMatriculados(itemPesquisa)
+
+    setAlunos(alunosMatriculadosFiltro)
+  }
+
+  function adicionarAlunos(aluno){
+    const alunosMatriculados = Array.from(alunoSelecionado)
+    alunosMatriculados.push({id:aluno.id,nome: aluno.nome})
+    setAlunoSelecionado(alunosMatriculados)
+    console.log(aluno)
+  }
 
   const buscarInformacoes = async () => {
     const oficina = await buscarOficina(id);
@@ -229,9 +263,41 @@ const Oficina: React.FC = () => {
           </IonItem>
           <div className="mensagem-erro">{errors?.nivel?.message}</div>
 
+          {alunoSelecionado && (
+          <IonItem>
+              <IonLabel>Alunos:</IonLabel>
+              {alunoSelecionado.map((aluno) => (
+              <IonLabel>{aluno?.nome}</IonLabel>
+              ))}
+            </IonItem>
+            )}
+            <>
+              <IonSearchbar
+                placeholder="Pesquisar aluno Matriculado"
+                onIonChange={(e) => setPesquisa(e.detail.value!)}
+              />
+              <IonList>
+                {alunos.map((aluno) => (
+                  <IonItem
+                    button
+                    key={aluno.id}
+                    onClick={() => {
+                      setPesquisa("");
+                      adicionarAlunos(aluno);
+                      setAlunos([]);
+                    }}
+                  >
+                    {aluno.nome}
+                  </IonItem>
+                ))}
+              </IonList>
+            </>
+        
+
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <IonButton type="submit">Salvar</IonButton>
           </div>
+
         </form>
       </div>
     </IonContent>
