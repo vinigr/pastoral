@@ -10,6 +10,10 @@ export default async function pesquisarAlunos(termoPesquisa) {
         id: 1,
         nome: "José Antônio",
       },
+      {
+        id: 2,
+        nome: "Xico",
+      }
     ];
 
     const regex = new RegExp(`${termoPesquisa.trim()}`, "i");
