@@ -10,22 +10,22 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonList,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
   useIonToast,
-  IonSearchbar,
-  IonList
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
 
+import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import buscarOficina from "../../usecases/buscarOficina";
 import cadastrarOficina from "../../usecases/cadastrarOficina";
 import editarOficina from "../../usecases/editarOficina";
-import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
+
 // import pesquisarAlunos from '../../usecases/pesquisarAlunos';
-import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
-import { array } from "yup/lib/locale";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -36,6 +36,7 @@ const schema = Yup.object().shape({
 
 const Oficina: React.FC = () => {
   const [present] = useIonToast();
+  const { push } = useHistory();
   let { id } = useParams<{ id?: string }>() ?? {};
 
   // const [novoAluno, setNovoAluno] = useState<boolean>(false)
@@ -43,7 +44,7 @@ const Oficina: React.FC = () => {
   const [alunoSelecionado, setAlunoSelecionado] = useState([]);
 
   const [pesquisa, setPesquisa] = useState("");
-  const [alunos, setAlunos] = useState([])
+  const [alunos, setAlunos] = useState([]);
 
   const {
     control,
@@ -62,24 +63,25 @@ const Oficina: React.FC = () => {
 
   useEffect(() => {
     if (pesquisa) {
-      alunosMatriculados(pesquisa)
+      alunosMatriculados(pesquisa);
     } else {
-      setAlunos([])
+      setAlunos([]);
     }
-  },[pesquisa])
+  }, [pesquisa]);
 
   const alunosMatriculados = async (itemPesquisa) => {
+    const alunosMatriculadosFiltro = await buscarAlunosMatriculados(
+      itemPesquisa
+    );
 
-    const alunosMatriculadosFiltro = await buscarAlunosMatriculados(itemPesquisa)
+    setAlunos(alunosMatriculadosFiltro);
+  };
 
-    setAlunos(alunosMatriculadosFiltro)
-  }
-
-  function adicionarAlunos(aluno){
-    const alunosMatriculados = Array.from(alunoSelecionado)
-    alunosMatriculados.push({id:aluno.id,nome: aluno.nome})
-    setAlunoSelecionado(alunosMatriculados)
-    console.log(aluno)
+  function adicionarAlunos(aluno) {
+    const alunosMatriculados = Array.from(alunoSelecionado);
+    alunosMatriculados.push({ id: aluno.id, nome: aluno.nome });
+    setAlunoSelecionado(alunosMatriculados);
+    console.log(aluno);
   }
 
   const buscarInformacoes = async () => {
@@ -115,11 +117,13 @@ const Oficina: React.FC = () => {
       const resultado = await editarOficina(id, dados);
 
       if (resultado) {
-        return present({
+        present({
           message: "Oficina salva com sucesso!",
           color: "success",
           duration: 2000,
         });
+
+        return push("/oficinas");
       }
       return present({
         message: "Falha ao salvar oficina! Por favor, tente novamente",
@@ -130,11 +134,13 @@ const Oficina: React.FC = () => {
       const resultado = await cadastrarOficina(dados);
 
       if (resultado) {
-        return present({
+        present({
           message: "Oficina cadastrada com sucesso!",
           color: "success",
           duration: 2000,
         });
+
+        return push("/oficinas");
       }
 
       return present({
@@ -263,41 +269,54 @@ const Oficina: React.FC = () => {
           </IonItem>
           <div className="mensagem-erro">{errors?.nivel?.message}</div>
 
+          <IonSearchbar
+            placeholder="Pesquisar aluno Matriculado"
+            onIonChange={(e) => setPesquisa(e.detail.value!)}
+          />
+
           {alunoSelecionado && (
-          <IonItem>
+            <>
               <IonLabel>Alunos:</IonLabel>
               {alunoSelecionado.map((aluno) => (
-              <IonLabel>{aluno?.nome}</IonLabel>
-              ))}
-            </IonItem>
-            )}
-            <>
-              <IonSearchbar
-                placeholder="Pesquisar aluno Matriculado"
-                onIonChange={(e) => setPesquisa(e.detail.value!)}
-              />
-              <IonList>
-                {alunos.map((aluno) => (
-                  <IonItem
-                    button
-                    key={aluno.id}
+                <IonItem>
+                  <IonLabel>{aluno?.nome}</IonLabel>
+                  <IonButton
+                    slot="end"
+                    color="danger"
                     onClick={() => {
-                      setPesquisa("");
-                      adicionarAlunos(aluno);
-                      setAlunos([]);
+                      const alunos = alunoSelecionado.filter(
+                        (a) => aluno.id !== a.id
+                      );
+                      setAlunoSelecionado(alunos);
                     }}
                   >
-                    {aluno.nome}
-                  </IonItem>
-                ))}
-              </IonList>
+                    X
+                  </IonButton>
+                </IonItem>
+              ))}
             </>
-        
+          )}
+          <>
+            <IonList>
+              {alunos.map((aluno) => (
+                <IonItem
+                  button
+                  key={aluno.id}
+                  onClick={() => {
+                    setPesquisa("");
+                    adicionarAlunos(aluno);
+                    setAlunos([]);
+                  }}
+                >
+                  {aluno.nome}
+                </IonItem>
+              ))}
+            </IonList>
+          </>
 
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <IonButton type="submit">Salvar</IonButton>
           </div>
-
         </form>
       </div>
     </IonContent>

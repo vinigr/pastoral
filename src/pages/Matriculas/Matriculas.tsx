@@ -113,9 +113,9 @@ const Matriculas: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        {/* <div style={{ display: "none" }}> */}
-        <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />
-        {/* </div> */}
+        <div style={{ display: "none" }}>
+          <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />
+        </div>
       </IonContent>
     </>
   );

@@ -100,7 +100,7 @@ const FormAluno: React.FC = () => {
     if (id) {
       buscarInformacoes();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const buscarInformacoes = async () => {
@@ -1065,22 +1065,22 @@ const FormAluno: React.FC = () => {
               />
             </IonItem>
             <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-              <IonLabel position="floating">Religião</IonLabel>
+              <IonLabel position="floating">Permite catequese</IonLabel>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
+                  <IonCheckbox
+                    checked={value ? true : false}
                     value={value}
                     onIonChange={(e) => {
                       onChange({
                         target: {
                           name: "religiao",
-                          value: e?.detail?.value,
+                          value: e?.detail?.checked,
                         },
                       });
                     }}
                     onBlur={onBlur}
-                    clearInput
                   />
                 )}
                 name="religiao"

@@ -86,11 +86,11 @@ const Alunos: React.FC = () => {
             ))}
           </IonList>
         </div>
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+        {/* <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={() => push("aluno")}>
             <IonIcon icon={add} />
           </IonFabButton>
-        </IonFab>
+        </IonFab> */}
       </IonContent>
     </>
   );

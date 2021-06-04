@@ -31,16 +31,16 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: "Alunos",
-    url: "/alunos",
-    iosIcon: personOutline,
-    mdIcon: personSharp,
-  },
-  {
     title: "Matrículas",
     url: "/matriculas",
     iosIcon: fileTrayOutline,
     mdIcon: fileTraySharp,
+  },
+  {
+    title: "Alunos",
+    url: "/alunos",
+    iosIcon: personOutline,
+    mdIcon: personSharp,
   },
   {
     title: "Oficinas",
@@ -51,12 +51,6 @@ const appPages: AppPage[] = [
   {
     title: "Instituição",
     url: "/instituicao",
-    iosIcon: businessOutline,
-    mdIcon: businessSharp,
-  },
-  {
-    title: "Teste relatório",
-    url: "/relatorio",
     iosIcon: businessOutline,
     mdIcon: businessSharp,
   },

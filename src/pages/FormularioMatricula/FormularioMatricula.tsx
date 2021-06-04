@@ -30,12 +30,12 @@ import {
   formatarDinheiro,
   formatarTelefone,
 } from "../../utils/formatarStrings";
+import { useHistory, useParams } from "react-router";
 
 import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
 import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
 import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
 import pesquisarAlunos from "../../usecases/pesquisarAlunos";
-import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
@@ -97,6 +97,7 @@ const schemaMatricula = Yup.object().shape({
 
 const FormularioMatricula: React.FC = () => {
   const [present] = useIonToast();
+  const { push } = useHistory();
   let { id } = useParams<{ id?: string }>() ?? {};
 
   const [novoAluno, setNovoAluno] = useState<boolean>(false);
@@ -240,11 +241,13 @@ const FormularioMatricula: React.FC = () => {
     const resultado = await cadastrarMatriculaEAluno(dados);
 
     if (resultado) {
-      return present({
+      present({
         message: "Matrícula salva com sucesso!",
         color: "success",
         duration: 2000,
       });
+
+      return push("/matriculas");
     }
     return present({
       message: "Falha ao salvar matrícula! Por favor, tente novamente",
@@ -271,11 +274,13 @@ const FormularioMatricula: React.FC = () => {
     });
 
     if (resultado) {
-      return present({
+      present({
         message: "Matrícula salva com sucesso!",
         color: "success",
         duration: 2000,
       });
+
+      return push("/matriculas");
     }
     return present({
       message: "Falha ao salvar matrícula! Por favor, tente novamente",
@@ -1268,27 +1273,29 @@ const FormularioMatricula: React.FC = () => {
                   />
                 </IonItem>
                 <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">Religião</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "religiao",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="religiao"
-                    rules={{ required: true }}
-                  />
+                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
+                    <IonLabel position="floating">Permite catequese</IonLabel>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <IonCheckbox
+                          checked={value ? true : false}
+                          value={value}
+                          onIonChange={(e) => {
+                            onChange({
+                              target: {
+                                name: "religiao",
+                                value: e?.detail?.checked,
+                              },
+                            });
+                          }}
+                          onBlur={onBlur}
+                        />
+                      )}
+                      name="religiao"
+                      rules={{ required: true }}
+                    />
+                  </IonItem>
                 </IonItem>
               </IonRow>
 
