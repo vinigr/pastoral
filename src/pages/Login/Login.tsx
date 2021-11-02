@@ -16,6 +16,7 @@ import {
   Text,
   InputGroup,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 
 import React from "react";
@@ -30,6 +31,7 @@ const schema = Yup.object().shape({
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const {
     handleSubmit,
@@ -49,8 +51,14 @@ const Login: React.FC = () => {
     const resultado = await fazerLogin(usuario, senha);
 
     if (resultado) {
-      navigate("/matriculas");
+      return navigate("/matriculas");
     }
+
+    return toast({
+      title: "Usuário ou senha incorretos!",
+      status: "error",
+      duration: 2000,
+    });
   };
 
   return (
