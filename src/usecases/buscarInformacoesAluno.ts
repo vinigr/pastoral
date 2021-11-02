@@ -10,7 +10,7 @@ export default async function buscarInformacoesAluno(id) {
       nome: "Teste",
       sexo: "masculino",
       cpf: "000000000000",
-      dataNascimento: "07/01/2000",
+      dataNascimento: "2000-01-07",
       rg: "",
       dataExpedicao: "",
       endereco: "",

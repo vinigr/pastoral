@@ -3,28 +3,15 @@ import * as Yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import {
   IonButton,
-  IonCheckbox,
-  IonInput,
   IonItem,
-  IonItemDivider,
-  IonItemGroup,
   IonLabel,
   IonList,
-  IonListHeader,
-  IonRadio,
-  IonRadioGroup,
-  IonRow,
   IonSearchbar,
   IonTitle,
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import {
-  formatarCelular,
-  formatarCpf,
-  formatarDinheiro,
-  formatarTelefone,
-} from "../../utils/formatarStrings";
+import { formatarDinheiro } from "../../utils/formatarStrings";
 import { useNavigate, useParams } from "react-router-dom";
 
 import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
@@ -32,7 +19,19 @@ import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
 import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
 import pesquisarAlunos from "../../usecases/pesquisarAlunos";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Text } from "@chakra-ui/react";
+import {
+  Checkbox,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+
+import InputMask from "react-input-mask";
 
 const schema = Yup.object().shape({
   escola: Yup.string().required("A escola é obrigatória"),
@@ -66,7 +65,7 @@ const schema = Yup.object().shape({
     "O nome de contato de urgência é obrigatório"
   ),
   telefoneContatoUrgencia: Yup.string().required(
-    "O telefonem do contato de urgência é obrigatório"
+    "O telefone do contato de urgência é obrigatório"
   ),
   parentesco: Yup.string().required(
     "É necessário informar quem é o responsável"
@@ -106,15 +105,18 @@ const FormularioMatricula: React.FC = () => {
 
   const {
     control,
+    register: register1,
     handleSubmit,
     watch,
     formState: { errors },
+    setValue: setValue1,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const {
     control: control2,
+    register: register2,
     handleSubmit: handleSubmit2,
     setValue: setValue2,
     formState: { errors: errors2 },
@@ -292,17 +294,16 @@ const FormularioMatricula: React.FC = () => {
       </Text>
       <div>
         {!id && (
-          <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-            <IonLabel position="floating">Cadastrar novo aluno</IonLabel>
-            <IonCheckbox
-              checked={novoAluno ? true : false}
-              value={novoAluno.toString()}
-              onIonChange={(e) => {
-                setNovoAluno(e?.detail?.checked);
-                setAlunoSelecionado(undefined);
-              }}
-            />
-          </IonItem>
+          <Checkbox
+            defaultChecked={novoAluno ? true : false}
+            value={novoAluno.toString()}
+            onChange={(e) => {
+              setNovoAluno(e.target.checked);
+              setAlunoSelecionado(undefined);
+            }}
+          >
+            Cadastrar novo aluno
+          </Checkbox>
         )}
         {alunoSelecionado && (
           <IonItem>
@@ -345,958 +346,424 @@ const FormularioMatricula: React.FC = () => {
             <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
               Dados da matrícula
             </IonTitle>
-            <IonItem>
-              <IonLabel position="floating">Escola</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "escola",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    placeholder="Escola"
-                    onBlur={onBlur}
-                    clearInput
-                  />
-                )}
-                name="escola"
-                rules={{ required: true }}
-              />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.escola?.message}</div>
-
-            <IonItem>
-              <IonLabel position="floating">Série</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "serie",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    placeholder="Série"
-                    onBlur={onBlur}
-                    clearInput
-                  />
-                )}
-                name="serie"
-                rules={{ required: true }}
-              />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.serie?.message}</div>
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <IonRadioGroup
-                  value={value}
-                  onIonChange={(e) => {
-                    onChange({
-                      target: {
-                        name: "turno",
-                        value: e?.detail?.value,
-                      },
-                      type: "text",
-                    });
-                  }}
-                  onBlur={onBlur}
-                >
-                  <IonListHeader>
-                    <IonLabel>Turno</IonLabel>
-                  </IonListHeader>
-                  <IonItem>
-                    <IonLabel>Matutino</IonLabel>
-                    <IonRadio value="matutino" />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>Vespertino</IonLabel>
-                    <IonRadio value="vespertino" />
-                  </IonItem>
-                </IonRadioGroup>
-              )}
-              name="turno"
-              rules={{ required: true }}
-            />
-            <div className="mensagem-erro">{errors?.turno?.message}</div>
+            <Stack spacing={4}>
+              <FormControl isInvalid={errors.escola}>
+                <FormLabel>Escola</FormLabel>
+                <Input type="text" {...register1("escola")} />
+                <FormErrorMessage>{errors?.escola?.message}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={errors.serie}>
+                <FormLabel>Série</FormLabel>
+                <Input type="text" {...register1("serie")} />
+                <FormErrorMessage>{errors?.serie?.message}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={errors.turno}>
+                <FormLabel>Turno</FormLabel>
+                <Controller
+                  render={() => (
+                    <RadioGroup name="turno">
+                      <Stack
+                        direction="row"
+                        onChange={(e: any) => {
+                          setValue1("turno", e.target.value);
+                        }}
+                      >
+                        <Radio value="matutino">Matutino</Radio>
+                        <Radio value="vespertino">Vespertino</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  )}
+                  name="turno"
+                  control={control}
+                />
+                <FormErrorMessage>{errors?.turno?.message}</FormErrorMessage>
+              </FormControl>
+            </Stack>
 
             <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
               Dados do aluno
             </IonTitle>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <IonItem>
-                <IonLabel position="floating">Nome</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "nome",
-                            value: e?.detail?.value,
-                          },
-                          type: "text",
-                        });
-                      }}
-                      placeholder="Nome"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="nome"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors?.nome?.message}</div>
-
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonRadioGroup
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "sexo",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    onBlur={onBlur}
-                  >
-                    <IonListHeader>
-                      <IonLabel>Sexo</IonLabel>
-                    </IonListHeader>
-                    <IonItem>
-                      <IonLabel>Masculino</IonLabel>
-                      <IonRadio value="masculino" />
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Feminino</IonLabel>
-                      <IonRadio value="feminino" />
-                    </IonItem>
-                  </IonRadioGroup>
-                )}
-                name="sexo"
-                rules={{ required: true }}
-              />
-
-              <div className="mensagem-erro">{errors?.sexo?.message}</div>
-
-              <IonRow>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">CPF</IonLabel>
+              <Stack spacing={4}>
+                <FormControl isInvalid={errors.nome}>
+                  <FormLabel>Nome</FormLabel>
+                  <Input type="text" {...register1("nome")} />
+                  <FormErrorMessage>{errors?.nome?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors.sexo}>
+                  <FormLabel>Sexo</FormLabel>
                   <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "cpf",
-                              value: formatarCpf(e?.detail?.value || ""),
-                            },
-                          });
+                    render={({ field: { value } }) => (
+                      <RadioGroup
+                        defaultValue={value}
+                        name="sexo"
+                        onChange={(e) => {
+                          setValue1("sexo", e);
                         }}
-                        onBlur={onBlur}
-                        type="text"
-                        clearInput
-                        maxlength={14}
-                      />
+                      >
+                        <Stack direction="row">
+                          <Radio value="masculino">Masculino</Radio>
+                          <Radio value="feminino">Feminino</Radio>
+                        </Stack>
+                      </RadioGroup>
                     )}
-                    name="cpf"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">Data de nascimento</IonLabel>
-                  <Controller
+                    name="sexo"
                     control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "dataNascimento",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="dataNascimento"
-                    rules={{ required: true }}
                   />
-                </IonItem>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">RG</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "rg",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="rg"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Data de expedição</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "dataExpedicao",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        placeholder=""
-                        type="date"
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="dataExpedicaog"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-              </IonRow>
+                  <FormErrorMessage>{errors?.sexo?.message}</FormErrorMessage>
+                </FormControl>
 
-              <div className="mensagem-erro">{errors?.cpf?.message}</div>
-              <div className="mensagem-erro">
-                {errors?.dataNascimento?.message}
-              </div>
-              <div className="mensagem-erro">{errors?.rg?.message}</div>
-              <div className="mensagem-erro">
-                {errors?.dataExpedicao?.message}
-              </div>
-              <IonItem>
-                <IonLabel position="floating">Endereço</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "endereco",
-                            value: e?.detail?.value,
-                          },
-                        });
-                      }}
-                      placeholder="Endereço"
-                      onBlur={onBlur}
+                <Stack direction="row">
+                  <FormControl isInvalid={errors.cpf}>
+                    <FormLabel>CPF</FormLabel>
+                    <Input
                       type="text"
-                      clearInput
+                      {...register1("cpf")}
+                      as={InputMask}
+                      mask="999.999.999-99"
+                      maskChar={null}
                     />
-                  )}
-                  name="endereco"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors?.endereco?.message}</div>
-              <IonRow>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">Naturalidade</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "naturalidade",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="naturalidade"
-                    rules={{ required: true }}
+                    <FormErrorMessage>{errors?.cpf?.message}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.dataNascimento}>
+                    <FormLabel>Data de nascimento</FormLabel>
+                    <Input type="date" {...register1("dataNascimento")} />
+                    <FormErrorMessage>
+                      {errors?.dataNascimento?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.rg}>
+                    <FormLabel>RG</FormLabel>
+                    <Input type="text" {...register1("rg")} />
+                    <FormErrorMessage>{errors?.rg?.message}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={errors.dataExpedicao}>
+                    <FormLabel>Data de expedição</FormLabel>
+                    <Input type="date" {...register1("dataExpedicao")} />
+                    <FormErrorMessage>
+                      {errors?.dataExpedicao?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                </Stack>
+
+                <FormControl isInvalid={errors.endereco}>
+                  <FormLabel>Endereço</FormLabel>
+                  <Input type="text" {...register1("endereco")} />
+                  <FormErrorMessage>
+                    {errors?.endereco?.message}
+                  </FormErrorMessage>
+                </FormControl>
+
+                <Stack direction="row">
+                  <FormControl isInvalid={errors.naturalidade}>
+                    <FormLabel>Naturalidade</FormLabel>
+                    <Input type="text" {...register1("naturalidade")} />
+                    <FormErrorMessage>
+                      {errors?.naturalidade?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                  <FormControl isInvalid={errors.nacionalidade}>
+                    <FormLabel>Nacionalidade</FormLabel>
+                    <Input type="text" {...register1("nacionalidade")} />
+                    <FormErrorMessage>
+                      {errors?.nacionalidade?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                </Stack>
+
+                <Stack>
+                  <FormLabel fontSize={20}>Certidão de nascimento</FormLabel>
+
+                  <Stack direction="row">
+                    <FormControl isInvalid={errors.termoCN}>
+                      <FormLabel>Termo</FormLabel>
+                      <Input type="text" {...register1("termoCN")} />
+                      <FormErrorMessage>
+                        {errors?.termoCN?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.folhaCN}>
+                      <FormLabel>Folha</FormLabel>
+                      <Input type="text" {...register1("folhaCN")} />
+                      <FormErrorMessage>
+                        {errors?.folhaCN?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.livroCN}>
+                      <FormLabel>Livro</FormLabel>
+                      <Input type="text" {...register1("livroCN")} />
+                      <FormErrorMessage>
+                        {errors?.livroCN?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Stack>
+                </Stack>
+
+                <FormControl isInvalid={errors.email}>
+                  <FormLabel>E-mail</FormLabel>
+                  <Input type="email" {...register1("email")} />
+                  <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+                </FormControl>
+
+                <FormControl isInvalid={errors.telefone}>
+                  <FormLabel>Telefone</FormLabel>
+                  <Input
+                    type="text"
+                    {...register1("telefone")}
+                    as={InputMask}
+                    mask="(99) 9999-9999"
                   />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Nacionalidade</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "nacionalidade",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="nacionalidade"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-              </IonRow>
-              <div className="mensagem-erro">
-                {errors?.naturalidade?.message}
-              </div>
-              <div className="mensagem-erro">
-                {errors?.nacionalidade?.message}
-              </div>
+                  <FormErrorMessage>
+                    {errors?.telefone?.message}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <IonItemGroup>
-                <IonRow className="ion-align-items-center">
-                  <IonItemDivider>
-                    <IonLabel> Certidão de nascimento</IonLabel>
-                  </IonItemDivider>
-
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">Termo</IonLabel>
+                <Stack spacing={4}>
+                  <FormControl isInvalid={errors.temParente}>
                     <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonInput
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "termoCN",
-                                value: e?.detail?.value,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                          clearInput
-                        />
-                      )}
-                      name="termoCN"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">Folha</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonInput
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "folhaCN",
-                                value: e?.detail?.value,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                          clearInput
-                        />
-                      )}
-                      name="folhaCN"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="floating">Livro</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonInput
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "livroCN",
-                                value: e?.detail?.value,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                          clearInput
-                        />
-                      )}
-                      name="livroCN"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                </IonRow>
-              </IonItemGroup>
-
-              <div className="mensagem-erro">{errors?.termoCN?.message}</div>
-              <div className="mensagem-erro">{errors?.folhaCN?.message}</div>
-              <div className="mensagem-erro">{errors?.livroCN?.message}</div>
-              <IonItem>
-                <IonLabel position="floating">E-mail</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "email",
-                            value: e?.detail?.value,
-                          },
-                        });
-                      }}
-                      placeholder="E-mail"
-                      onBlur={onBlur}
-                      type="email"
-                      clearInput
-                    />
-                  )}
-                  name="email"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors?.email?.message}</div>
-              <IonItem>
-                <IonLabel position="floating">Telefone</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "telefone",
-                            value:
-                              e?.detail?.value?.length === 15
-                                ? formatarCelular(e?.detail?.value)
-                                : formatarTelefone(e?.detail?.value || ""),
-                          },
-                        });
-                      }}
-                      placeholder="Telefone"
-                      onBlur={onBlur}
-                      type="text"
-                      clearInput
-                      maxlength={15}
-                    />
-                  )}
-                  name="telefone"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-
-              <div className="mensagem-erro">{errors?.telefone?.message}</div>
-
-              <IonItemGroup>
-                <IonRow className="ion-align-items-center">
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">
-                      Tem parente na pastoral
-                    </IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonCheckbox
-                          checked={value ? true : false}
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "temParente",
-                                value: e?.detail?.checked,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                        />
+                      render={({ field: { value } }) => (
+                        <Checkbox
+                          defaultChecked={value}
+                          onChange={(e) =>
+                            setValue1("temParente", e.target.checked)
+                          }
+                        >
+                          Tem parente na pastoral
+                        </Checkbox>
                       )}
                       name="temParente"
-                      rules={{ required: true }}
+                      control={control}
                     />
-                  </IonItem>
+                    <FormErrorMessage>
+                      {errors?.temParente?.message}
+                    </FormErrorMessage>
+                  </FormControl>
 
                   {temParente && (
-                    <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                      <IonLabel position="floating">
-                        Especificar o nome
-                      </IonLabel>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <IonInput
-                            value={value}
-                            onIonChange={(e) => {
-                              onChange({
-                                target: {
-                                  name: "nomeParente",
-                                  value: e?.detail?.value,
-                                },
-                              });
-                            }}
-                            onBlur={onBlur}
-                            clearInput
-                          />
-                        )}
-                        name="nomeParente"
-                        rules={{ required: true }}
-                      />
-                    </IonItem>
+                    <FormControl isInvalid={errors.nomeParente}>
+                      <FormLabel>Especificar o nome do parente</FormLabel>
+                      <Input type="text" {...register1("nomeParente")} />
+                      <FormErrorMessage>
+                        {errors?.nomeParente?.message}
+                      </FormErrorMessage>
+                    </FormControl>
                   )}
-                </IonRow>
-              </IonItemGroup>
+                </Stack>
 
-              <div className="mensagem-erro">{errors?.temParente?.message}</div>
+                <Stack>
+                  <FormLabel>Contato de urgência</FormLabel>
 
-              <IonItemGroup>
-                <IonItemDivider>
-                  <IonLabel>Contato de urgência</IonLabel>
-                </IonItemDivider>
-                <IonRow className="ion-align-items-center">
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">Nome</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonInput
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "nomeContatoUrgencia",
-                                value: e?.detail?.value,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                          clearInput
-                        />
-                      )}
-                      name="nomeContatoUrgencia"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="floating">Celular</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonInput
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "telefoneContatoUrgencia",
-                                value:
-                                  e?.detail?.value?.length === 15
-                                    ? formatarCelular(e?.detail?.value)
-                                    : formatarTelefone(e?.detail?.value || ""),
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                          clearInput
-                          maxlength={15}
-                        />
-                      )}
-                      name="telefoneContatoUrgencia"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                </IonRow>
-              </IonItemGroup>
-
-              <div className="mensagem-erro">
-                {errors?.nomeContatoUrgencia?.message}
-              </div>
-
-              <div className="mensagem-erro">
-                {errors?.telefoneContatoUrgencia?.message}
-              </div>
-
-              <IonTitle
-                style={{ marginTop: 10, marginBottom: 10, paddingInline: 0 }}
-              >
-                Dados do responsável
-              </IonTitle>
-
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonRadioGroup
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "parentesco",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    onBlur={onBlur}
-                  >
-                    <IonListHeader>
-                      <IonLabel>Responsável pelo aluno</IonLabel>
-                    </IonListHeader>
-                    <IonItem>
-                      <IonLabel>Pai</IonLabel>
-                      <IonRadio value="pai" />
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Mãe</IonLabel>
-                      <IonRadio value="mae" />
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Avô/Avó</IonLabel>
-                      <IonRadio value="avo" />
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Outros</IonLabel>
-                      <IonRadio value="outros" />
-                    </IonItem>
-                  </IonRadioGroup>
-                )}
-                name="parentesco"
-                rules={{ required: true }}
-              />
-
-              <div className="mensagem-erro">{errors?.parentesco?.message}</div>
-
-              <IonItem style={{ marginTop: 10 }}>
-                <IonLabel position="floating">Nome</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "nomeResponsavel",
-                            value: e?.detail?.value,
-                          },
-                          type: "text",
-                        });
-                      }}
-                      placeholder="Nome"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="nomeResponsavel"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">
-                {errors?.nomeResponsavel?.message}
-              </div>
-
-              <IonRow>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">CPF</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "cpfResponsavel",
-                              value: formatarCpf(e?.detail?.value || ""),
-                            },
-                          });
-                        }}
-                        placeholder="CPF"
-                        onBlur={onBlur}
+                  <Stack direction="row">
+                    <FormControl isInvalid={errors.nomeContatoUrgencia}>
+                      <FormLabel>Nome</FormLabel>
+                      <Input
                         type="text"
-                        clearInput
-                        maxlength={14}
+                        {...register1("nomeContatoUrgencia")}
                       />
-                    )}
-                    name="cpfResponsavel"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">RG</IonLabel>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "rgResponsavel",
-                              value: e?.detail?.value,
-                            },
-                          });
-                        }}
-                        onBlur={onBlur}
-                        clearInput
+                      <FormErrorMessage>
+                        {errors?.nomeContatoUrgencia?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.telefoneContatoUrgencia}>
+                      <FormLabel>Celular</FormLabel>
+                      <Input
+                        type="text"
+                        {...register1("telefoneContatoUrgencia")}
+                        as={InputMask}
+                        mask="(99) 99999-9999"
                       />
-                    )}
-                    name="rgResponsavel"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-              </IonRow>
+                      <FormErrorMessage>
+                        {errors?.telefoneContatoUrgencia?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Stack>
+                </Stack>
 
-              {errors?.cpfResponsavel?.message && (
-                <div className="mensagem-erro">
-                  {errors?.cpfResponsavel?.message}
-                </div>
-              )}
-              <div className="mensagem-erro">
-                {errors?.rgResponsavel?.message}
-              </div>
-              <IonItem>
-                <IonLabel position="floating">Endereço</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "enderecoResponsavel",
-                            value: e?.detail?.value,
-                          },
-                        });
-                      }}
-                      placeholder="Endereço"
-                      onBlur={onBlur}
-                      type="text"
-                      clearInput
-                    />
-                  )}
-                  name="enderecoResponsavel"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">
-                {errors?.enderecoResponsavel?.message}
-              </div>
+                <Stack>
+                  <FormLabel fontSize={20}>Dados do responsável</FormLabel>
 
-              <IonItem>
-                <IonLabel position="floating">Telefone</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "telefoneResponsavel",
-                            value:
-                              e?.detail?.value?.length === 15
-                                ? formatarCelular(e?.detail?.value)
-                                : formatarTelefone(e?.detail?.value || ""),
-                          },
-                        });
-                      }}
-                      placeholder="Telefone"
-                      onBlur={onBlur}
-                      type="text"
-                      clearInput
-                      maxlength={15}
-                    />
-                  )}
-                  name="telefoneResponsavel"
-                  rules={{ required: true }}
-                />
-              </IonItem>
+                  <Stack spacing={4}>
+                    <FormControl isInvalid={errors.parentesco}>
+                      <FormLabel>Responsável pelo aluno</FormLabel>
+                      <Controller
+                        render={({ field: { value } }) => (
+                          <RadioGroup name="parentesco" defaultValue={value}>
+                            <Stack
+                              spacing={2}
+                              direction="row"
+                              onChange={(e: any) => {
+                                setValue1("parentesco", e.target.value);
+                              }}
+                            >
+                              <Radio value="pai">Pai</Radio>
+                              <Radio value="mae">Mãe</Radio>
+                              <Radio value="avo">Avô/Avó</Radio>
+                              <Radio value="outros">Outros</Radio>
+                            </Stack>
+                          </RadioGroup>
+                        )}
+                        name="parentesco"
+                        control={control}
+                      />
+                      <FormErrorMessage>
+                        {errors?.parentesco?.message}
+                      </FormErrorMessage>
+                    </FormControl>
 
-              <div className="mensagem-erro">
-                {errors?.telefoneResponsavel?.message}
-              </div>
+                    <FormControl isInvalid={errors.nomeResponsavel}>
+                      <FormLabel>Nome</FormLabel>
+                      <Input type="text" {...register1("nomeResponsavel")} />
+                      <FormErrorMessage>
+                        {errors?.nomeResponsavel?.message}
+                      </FormErrorMessage>
+                    </FormControl>
 
-              <IonItemGroup>
-                <IonRow className="ion-align-items-center">
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">Possui bolsa social</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonCheckbox
-                          checked={value ? true : false}
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "bolsaSocial",
-                                value: e?.detail?.checked,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
+                    <Stack direction="row">
+                      <FormControl isInvalid={errors.cpfResponsavel}>
+                        <FormLabel>CPF</FormLabel>
+                        <Input
+                          type="text"
+                          {...register1("cpfResponsavel")}
+                          as={InputMask}
+                          mask="999.999.999-99"
+                          maskChar={null}
                         />
+                        <FormErrorMessage>
+                          {errors?.cpfResponsavel?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl isInvalid={errors.rgResponsavel}>
+                        <FormLabel>RG</FormLabel>
+                        <Input type="text" {...register1("rgResponsavel")} />
+                        <FormErrorMessage>
+                          {errors?.rgResponsavel?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </Stack>
+
+                    <FormControl isInvalid={errors.enderecoResponsavel}>
+                      <FormLabel>Endereço</FormLabel>
+                      <Input
+                        type="text"
+                        {...register1("enderecoResponsavel")}
+                      />
+                      <FormErrorMessage>
+                        {errors?.enderecoResponsavel?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.telefoneResponsavel}>
+                      <FormLabel>Celular</FormLabel>
+                      <Input
+                        type="text"
+                        {...register1("telefoneResponsavel")}
+                        as={InputMask}
+                        mask="(99) 99999-9999"
+                      />
+                      <FormErrorMessage>
+                        {errors?.telefoneResponsavel?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Stack>
+                </Stack>
+
+                <Stack spacing={4}>
+                  <FormControl isInvalid={errors.bolsaSocial}>
+                    <Controller
+                      render={({ field: { value } }) => (
+                        <Checkbox
+                          defaultChecked={value}
+                          onChange={(e) =>
+                            setValue1("bolsaSocial", e.target.checked)
+                          }
+                        >
+                          Possui bolsa social
+                        </Checkbox>
                       )}
                       name="bolsaSocial"
-                      rules={{ required: true }}
+                      control={control}
                     />
-                  </IonItem>
+                    <FormErrorMessage>
+                      {errors?.bolsaSocial?.message}
+                    </FormErrorMessage>
+                  </FormControl>
 
                   {bolsaSocial && (
-                    <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                      <IonLabel position="floating">NIS</IonLabel>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <IonInput
-                            value={value}
-                            onIonChange={(e) => {
-                              onChange({
-                                target: {
-                                  name: "nis",
-                                  value: e?.detail?.value?.replace(/\D/g, ""),
-                                },
-                              });
-                            }}
-                            onBlur={onBlur}
-                            clearInput
-                          />
-                        )}
-                        name="nis"
-                        rules={{ required: true }}
-                      />
-                    </IonItem>
+                    <FormControl isInvalid={errors.nis}>
+                      <FormLabel>NIS</FormLabel>
+                      <Input type="text" {...register1("nis")} />
+                      <FormErrorMessage>
+                        {errors?.nis?.message}
+                      </FormErrorMessage>
+                    </FormControl>
                   )}
-                </IonRow>
-              </IonItemGroup>
-              <div className="mensagem-erro">{errors?.temParente?.message}</div>
+                </Stack>
 
-              <IonItem>
-                <IonLabel position="floating">Ocupação profissional</IonLabel>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "ocupacaoProfissionalResponsavel",
-                            value: e?.detail?.value,
-                          },
-                        });
-                      }}
-                      onBlur={onBlur}
-                      type="text"
-                      clearInput
-                      maxlength={15}
-                    />
-                  )}
-                  name="ocupacaoProfissionalResponsavel"
-                  rules={{ required: true }}
-                />
-              </IonItem>
+                <FormControl isInvalid={errors.ocupacaoProfissionalResponsavel}>
+                  <FormLabel>Ocupação profissional</FormLabel>
+                  <Input
+                    type="text"
+                    {...register1("ocupacaoProfissionalResponsavel")}
+                  />
+                  <FormErrorMessage>
+                    {errors?.ocupacaoProfissionalResponsavel?.message}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <div className="mensagem-erro">
-                {errors?.ocupacaoProfissionalResponsavel?.message}
-              </div>
-
-              <IonRow>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonLabel position="floating">Renda familiar</IonLabel>
+                <FormControl isInvalid={errors.rendaFamiliar}>
+                  <FormLabel>Renda familiar</FormLabel>
                   <Controller
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
+                      <Input
                         value={value}
-                        onIonChange={(e) => {
+                        onChange={(e) => {
                           onChange({
                             target: {
                               name: "rendaFamiliar",
-                              value: formatarDinheiro(e?.detail?.value || ""),
+                              value: formatarDinheiro(e?.target?.value || ""),
                             },
                           });
                         }}
                         onBlur={onBlur}
                         type="text"
-                        clearInput
                       />
                     )}
                     name="rendaFamiliar"
                     rules={{ required: true }}
                   />
-                </IonItem>
-                <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                  <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
-                    <IonLabel position="floating">Permite catequese</IonLabel>
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <IonCheckbox
-                          checked={value ? true : false}
-                          value={value}
-                          onIonChange={(e) => {
-                            onChange({
-                              target: {
-                                name: "religiao",
-                                value: e?.detail?.checked,
-                              },
-                            });
-                          }}
-                          onBlur={onBlur}
-                        />
-                      )}
-                      name="religiao"
-                      rules={{ required: true }}
-                    />
-                  </IonItem>
-                </IonItem>
-              </IonRow>
+                  <FormErrorMessage>
+                    {errors?.rendaFamiliar?.message}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <div className="mensagem-erro">
-                {errors?.rendaFamiliar?.message}
-              </div>
-
-              {errors?.religiao?.message && (
-                <div className="mensagem-erro">{errors?.religiao?.message}</div>
-              )}
+                <FormControl isInvalid={errors.religiao}>
+                  <Controller
+                    render={({ field: { value } }) => (
+                      <Checkbox
+                        defaultChecked={value}
+                        onChange={(e) =>
+                          setValue1("religiao", e.target.checked)
+                        }
+                      >
+                        Permite catequese
+                      </Checkbox>
+                    )}
+                    name="religiao"
+                    control={control}
+                  />
+                  <FormErrorMessage>
+                    {errors?.religiao?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </Stack>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <IonButton type="submit">Salvar</IonButton>
@@ -1304,99 +771,48 @@ const FormularioMatricula: React.FC = () => {
             </form>
           </>
         )}
+
         {!novoAluno && pesquisa.length === 0 && (
           <div>
             <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
               Dados da matrícula
             </IonTitle>
             <form onSubmit={handleSubmit2(onSubmitMatricula)}>
-              <IonItem>
-                <IonLabel position="floating">Escola</IonLabel>
-                <Controller
-                  control={control2}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "escola",
-                            value: e?.detail?.value,
-                          },
-                          type: "text",
-                        });
-                      }}
-                      placeholder="Escola"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="escola"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors2?.escola?.message}</div>
-
-              <IonItem>
-                <IonLabel position="floating">Série</IonLabel>
-                <Controller
-                  control={control2}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <IonInput
-                      value={value}
-                      onIonChange={(e) => {
-                        onChange({
-                          target: {
-                            name: "serie",
-                            value: e?.detail?.value,
-                          },
-                          type: "text",
-                        });
-                      }}
-                      placeholder="Série"
-                      onBlur={onBlur}
-                      clearInput
-                    />
-                  )}
-                  name="serie"
-                  rules={{ required: true }}
-                />
-              </IonItem>
-              <div className="mensagem-erro">{errors2?.serie?.message}</div>
-
-              <Controller
-                control={control2}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonRadioGroup
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "turno",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    onBlur={onBlur}
-                  >
-                    <IonListHeader>
-                      <IonLabel>Turno</IonLabel>
-                    </IonListHeader>
-                    <IonItem>
-                      <IonLabel>Matutino</IonLabel>
-                      <IonRadio value="matutino" />
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Vespertino</IonLabel>
-                      <IonRadio value="vespertino" />
-                    </IonItem>
-                  </IonRadioGroup>
-                )}
-                name="turno"
-                rules={{ required: true }}
-              />
-              <div className="mensagem-erro">{errors2?.turno?.message}</div>
+              <Stack spacing={4}>
+                <FormControl isInvalid={errors2?.escola}>
+                  <FormLabel>Escola</FormLabel>
+                  <Input type="text" {...register2("escola")} />
+                  <FormErrorMessage>
+                    {errors2?.escola?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors2?.serie}>
+                  <FormLabel>Série</FormLabel>
+                  <Input type="text" {...register2("serie")} />
+                  <FormErrorMessage>{errors2?.serie?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors2?.turno}>
+                  <FormLabel>Turno</FormLabel>
+                  <Controller
+                    render={() => (
+                      <RadioGroup name="turno">
+                        <Stack
+                          direction="row"
+                          onChange={(e: any) => {
+                            setValue2("turno", e.target.value);
+                          }}
+                        >
+                          <Radio value="matutino">Matutino</Radio>
+                          <Radio value="vespertino">Vespertino</Radio>
+                        </Stack>
+                      </RadioGroup>
+                    )}
+                    name="turno"
+                    control={control2}
+                  />
+                  <FormErrorMessage>{errors2?.turno?.message}</FormErrorMessage>
+                </FormControl>
+              </Stack>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <IonButton type="submit">Salvar</IonButton>
