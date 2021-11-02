@@ -1,7 +1,13 @@
 import { app, ipcMain } from "electron";
+import path from "path"
 
 import { createCapacitorElectronApp } from "@capacitor-community/electron";
 import { promisify } from "util";
+import electronReload from "electron-reload";
+
+electronReload(path.resolve(__dirname, ".."), {
+  electron: path.resolve(__dirname, "..", 'node_modules', '.bin', 'electron')
+})
 
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./matricula.db");
