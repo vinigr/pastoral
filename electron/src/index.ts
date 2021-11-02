@@ -70,4 +70,10 @@ ipcMain.handle("fazerLogin", async (_event, args) => {
   return existeUsuario;
 });
 
+ipcMain.handle("buscarAlunosMatriculados", async (_event, term) => {
+  const alunos = await buscarAlunosMatriculados(term)
+
+  return ;
+});
+
 // Define any IPC or other custom functionality below here
