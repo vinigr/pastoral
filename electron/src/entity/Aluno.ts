@@ -1,0 +1,88 @@
+import { Entity, Column, PrimaryColumn } from 'typeorm'
+
+@Entity()
+export class Aluno {
+  @PrimaryColumn()
+  id: number
+
+  @Column()
+  nome: string
+
+  @Column("character")
+  sexo: string
+
+  @Column()
+  cpf: string
+
+  @Column("datetime")
+  data_nascimento: Date
+
+  @Column()
+  rg: string
+
+  @Column("datetime")
+  data_expedicao_rg: Date
+
+  @Column()
+  endereco: string
+
+  @Column()
+  naturalidade: string
+
+  @Column()
+  nacionalidade: string
+
+  @Column()
+  certidao_nascimento_termo: string
+
+  @Column()
+  certidao_nascimento_folha: string
+
+  @Column()
+  certidao_nascimento_livro: string
+
+  @Column()
+  email: string
+
+  @Column()
+  telefone: string
+
+  @Column()
+  tem_parente: boolean
+
+  @Column()
+  nome_parente: string
+
+  @Column()
+  contato_nome: string
+
+  @Column()
+  contato_telefone: string
+
+  @Column()
+  responsavel_tipo: string
+
+  @Column()
+  responsavel_cpf: string
+
+  @Column()
+  responsavel_rg: string
+
+  @Column()
+  responsavel_endereco: string
+
+  @Column()
+  responsavel_telefone: string
+
+  @Column()
+  responsavel_recebe_auxilio: boolean
+
+  @Column()
+  responsavel_profissao: string
+
+  @Column("decimal")
+  renda_familiar: number
+
+  @Column()
+  permite_catequese: boolean
+}

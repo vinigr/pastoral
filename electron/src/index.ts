@@ -8,6 +8,7 @@ import electronReload from "electron-reload";
 import { createConnection } from "typeorm";
 
 import { Usuario } from "./entity/Usuario"
+import { Aluno } from "./entity/Aluno"
 
 import { fazerLogin } from "./use-cases/fazer-login"
 
@@ -30,7 +31,8 @@ app.on("ready", () => {
       type: "sqlite",
       database: "matriculas.db",
       entities: [
-        Usuario
+        Usuario,
+        Aluno
       ],
       synchronize: true,
       logging: false
@@ -60,7 +62,7 @@ app.on("activate", function () {
   if (myCapacitorApp.getMainWindow().isDestroyed()) myCapacitorApp.init();
 });
 
-ipcMain.handle("fazerLogin", async (event, args) => {
+ipcMain.handle("fazerLogin", async (_event, args) => {
   const { usuario, senha } = args;
 
   const existeUsuario = await fazerLogin(usuario, senha)
