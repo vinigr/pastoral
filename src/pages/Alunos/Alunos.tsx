@@ -2,8 +2,6 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
   IonIcon,
   IonItem,
@@ -15,14 +13,14 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { add, create, trash } from "ionicons/icons";
+import { create, trash } from "ionicons/icons";
 
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import { formatarCpf } from "../../utils/formatarStrings";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Alunos: React.FC = () => {
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const [alunos, setAlunos] = useState([]);
 
@@ -47,7 +45,7 @@ const Alunos: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonButtons slot="start">
@@ -73,7 +71,7 @@ const Alunos: React.FC = () => {
                 </IonLabel>
                 <IonButton
                   slot="end"
-                  onClick={() => push(`aluno/${aluno?.id}`)}
+                  onClick={() => navigate(`aluno/${aluno?.id}`)}
                 >
                   <IonIcon icon={create} slot="start" />
                   Editar
@@ -91,7 +89,7 @@ const Alunos: React.FC = () => {
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab> */}
-      </IonContent>
+      </>
     </>
   );
 };

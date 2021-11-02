@@ -121,7 +121,7 @@ const Instituicao: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonButtons slot="start">
@@ -272,7 +272,7 @@ const Instituicao: React.FC = () => {
             </div>
           </form>
         </div>
-      </IonContent>
+      </>
     </>
   );
 };

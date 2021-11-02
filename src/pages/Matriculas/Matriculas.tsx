@@ -19,7 +19,7 @@ import { add, create, trash } from "ionicons/icons";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 
 const Matriculas: React.FC = () => {
@@ -30,7 +30,7 @@ const Matriculas: React.FC = () => {
     documentTitle: "AwesomeFileName",
   });
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const [matriculas, setMatriculas] = useState([]);
 
@@ -57,7 +57,7 @@ const Matriculas: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonButtons slot="start">
@@ -94,7 +94,7 @@ const Matriculas: React.FC = () => {
                 </IonButton>
                 <IonButton
                   slot="end"
-                  onClick={() => push(`matricula/${matricula?.id}`)}
+                  onClick={() => navigate(`matricula/${matricula?.id}`)}
                 >
                   <IonIcon icon={create} slot="start" />
                   Editar
@@ -108,7 +108,7 @@ const Matriculas: React.FC = () => {
           </IonList>
         </div>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => push("matricula")}>
+          <IonFabButton onClick={() => navigate("/matricula")}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
@@ -116,7 +116,7 @@ const Matriculas: React.FC = () => {
         <div style={{ display: "none" }}>
           <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />
         </div>
-      </IonContent>
+      </>
     </>
   );
 };

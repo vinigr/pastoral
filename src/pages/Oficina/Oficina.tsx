@@ -17,7 +17,7 @@ import {
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import buscarOficina from "../../usecases/buscarOficina";
@@ -36,8 +36,8 @@ const schema = Yup.object().shape({
 
 const Oficina: React.FC = () => {
   const [present] = useIonToast();
-  const { push } = useHistory();
-  let { id } = useParams<{ id?: string }>() ?? {};
+  const navigate = useNavigate();
+  let { id } = useParams() ?? {};
 
   // const [novoAluno, setNovoAluno] = useState<boolean>(false)
   // const [alunoSelecionado, setAlunoSelecionado] = useState<{ id: number; nome: string }>();
@@ -123,7 +123,7 @@ const Oficina: React.FC = () => {
           duration: 2000,
         });
 
-        return push("/oficinas");
+        return navigate("/oficinas");
       }
       return present({
         message: "Falha ao salvar oficina! Por favor, tente novamente",
@@ -140,7 +140,7 @@ const Oficina: React.FC = () => {
           duration: 2000,
         });
 
-        return push("/oficinas");
+        return navigate("/oficinas");
       }
 
       return present({

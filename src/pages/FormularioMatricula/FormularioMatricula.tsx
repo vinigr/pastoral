@@ -30,7 +30,7 @@ import {
   formatarDinheiro,
   formatarTelefone,
 } from "../../utils/formatarStrings";
-import { useHistory, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 
 import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
 import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
@@ -97,8 +97,8 @@ const schemaMatricula = Yup.object().shape({
 
 const FormularioMatricula: React.FC = () => {
   const [present] = useIonToast();
-  const { push } = useHistory();
-  let { id } = useParams<{ id?: string }>() ?? {};
+  const navigate = useNavigate();
+  let { id } = useParams() ?? {};
 
   const [novoAluno, setNovoAluno] = useState<boolean>(false);
   const [alunoSelecionado, setAlunoSelecionado] =
@@ -247,7 +247,7 @@ const FormularioMatricula: React.FC = () => {
         duration: 2000,
       });
 
-      return push("/matriculas");
+      return navigate("/matriculas");
     }
     return present({
       message: "Falha ao salvar matrícula! Por favor, tente novamente",
@@ -280,7 +280,7 @@ const FormularioMatricula: React.FC = () => {
         duration: 2000,
       });
 
-      return push("/matriculas");
+      return navigate("/matriculas");
     }
     return present({
       message: "Falha ao salvar matrícula! Por favor, tente novamente",

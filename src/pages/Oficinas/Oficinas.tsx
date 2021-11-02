@@ -18,10 +18,10 @@ import React, { useEffect, useState } from "react";
 import { add, create, trash } from "ionicons/icons";
 
 import buscarOficinas from "../../usecases/buscarOficinas";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const Oficinas: React.FC = () => {
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const [oficinas, setOficinas] = useState([]);
 
@@ -46,7 +46,7 @@ const Oficinas: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonButtons slot="start">
@@ -75,7 +75,7 @@ const Oficinas: React.FC = () => {
                 </IonLabel>
                 <IonButton
                   slot="end"
-                  onClick={() => push(`oficina/${oficina?.id}`)}
+                  onClick={() => navigate(`oficina/${oficina?.id}`)}
                 >
                   <IonIcon icon={create} slot="start" />
                   Editar
@@ -89,11 +89,11 @@ const Oficinas: React.FC = () => {
           </IonList>
         </div>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => push("oficina")}>
+          <IonFabButton onClick={() => navigate("/oficina")}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
-      </IonContent>
+      </>
     </>
   );
 };
