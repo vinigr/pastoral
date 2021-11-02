@@ -1,6 +1,8 @@
 {
   "compileOnSave": true,
-  "include": ["./src/*"],
+  "include": [
+    "./src/*"
+  ],
   "compilerOptions": {
     "outDir": "./build",
     "importHelpers": true,
@@ -8,6 +10,8 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowJs": true
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
   }
 }
