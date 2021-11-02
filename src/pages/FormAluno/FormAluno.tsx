@@ -2,12 +2,8 @@ import * as Yup from "yup";
 
 import { Controller, useForm } from "react-hook-form";
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonCheckbox,
-  IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonItemDivider,
@@ -18,7 +14,6 @@ import {
   IonRadioGroup,
   IonRow,
   IonTitle,
-  IonToolbar,
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect } from "react";
@@ -29,10 +24,12 @@ import {
   formatarTelefone,
 } from "../../utils/formatarStrings";
 
+import { useParams } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Text, Box } from "@chakra-ui/react";
+
 import buscarInformacoesAluno from "../../usecases/buscarInformacoesAluno";
 import editarAluno from "../../usecases/editarAluno";
-import { useParams } from "react-router";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -84,7 +81,7 @@ const schema = Yup.object().shape({
 
 const FormAluno: React.FC = () => {
   const [present] = useIonToast();
-  let { id } = useParams<{ id?: string }>() ?? {};
+  let { id } = useParams() ?? {};
 
   const {
     control,
@@ -238,15 +235,10 @@ const FormAluno: React.FC = () => {
   };
 
   return (
-    <IonContent>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton />
-          </IonButtons>
-          <IonTitle>Aluno</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <Box>
+      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+        Aluno
+      </Text>
       <div>
         <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
           Dados do aluno
@@ -1100,7 +1092,7 @@ const FormAluno: React.FC = () => {
           </div>
         </form>
       </div>
-    </IonContent>
+    </Box>
   );
 };
 

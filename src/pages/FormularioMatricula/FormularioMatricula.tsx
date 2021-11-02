@@ -2,12 +2,8 @@ import * as Yup from "yup";
 
 import { Controller, useForm } from "react-hook-form";
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonCheckbox,
-  IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonItemDivider,
@@ -20,7 +16,6 @@ import {
   IonRow,
   IonSearchbar,
   IonTitle,
-  IonToolbar,
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
@@ -37,6 +32,7 @@ import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
 import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
 import pesquisarAlunos from "../../usecases/pesquisarAlunos";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Text } from "@chakra-ui/react";
 
 const schema = Yup.object().shape({
   escola: Yup.string().required("A escola é obrigatória"),
@@ -290,15 +286,10 @@ const FormularioMatricula: React.FC = () => {
   };
 
   return (
-    <IonContent>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton />
-          </IonButtons>
-          <IonTitle>Matrícula</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+        Matrícula
+      </Text>
       <div>
         {!id && (
           <IonItem style={{ marginRight: 10, marginBottom: 4 }}>
@@ -1414,7 +1405,7 @@ const FormularioMatricula: React.FC = () => {
           </div>
         )}
       </div>
-    </IonContent>
+    </>
   );
 };
 

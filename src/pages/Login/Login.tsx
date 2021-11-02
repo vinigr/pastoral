@@ -3,7 +3,6 @@ import "./styles.css";
 import * as Yup from "yup";
 
 import { useForm } from "react-hook-form";
-import { useIonRouter } from "@ionic/react";
 
 import {
   Flex,

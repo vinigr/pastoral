@@ -6,7 +6,6 @@ import { Controller, useForm } from "react-hook-form";
 import {
   IonButton,
   IonButtons,
-  IonContent,
   IonHeader,
   IonInput,
   IonItem,

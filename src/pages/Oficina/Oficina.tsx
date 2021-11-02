@@ -2,18 +2,12 @@ import * as Yup from "yup";
 
 import { Controller, useForm } from "react-hook-form";
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonSearchbar,
-  IonTitle,
-  IonToolbar,
   useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
@@ -24,8 +18,7 @@ import buscarOficina from "../../usecases/buscarOficina";
 import cadastrarOficina from "../../usecases/cadastrarOficina";
 import editarOficina from "../../usecases/editarOficina";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-// import pesquisarAlunos from '../../usecases/pesquisarAlunos';
+import { Text } from "@chakra-ui/react";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -59,6 +52,7 @@ const Oficina: React.FC = () => {
     if (id) {
       buscarInformacoes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -152,15 +146,10 @@ const Oficina: React.FC = () => {
   };
 
   return (
-    <IonContent>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton />
-          </IonButtons>
-          <IonTitle>Oficina</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+        Oficina
+      </Text>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <IonItem>
@@ -319,7 +308,7 @@ const Oficina: React.FC = () => {
           </div>
         </form>
       </div>
-    </IonContent>
+    </>
   );
 };
 

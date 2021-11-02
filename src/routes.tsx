@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ComprovanteMatricula from "./components/ComprovanteMatricula/ComprovanteMatricula";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Alunos from "./pages/Alunos/Alunos";
@@ -16,8 +16,8 @@ const RoutesApp = () => {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="/" element={<Dashboard />}>
-          <Route path="/aluno" element={<FormAluno />} />
           <Route path="/alunos" element={<Alunos />} />
+          <Route path="/aluno" element={<FormAluno />} />
           <Route path="/aluno/:id" element={<FormAluno />} />
 
           <Route path="/matriculas" element={<Matriculas />} />

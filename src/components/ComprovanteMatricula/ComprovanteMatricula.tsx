@@ -48,7 +48,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
       <div
         ref={ref}
         style={{
-          height: "29.7cm",
+          height: "29cm",
           width: "21cm",
           padding: 20,
         }}
