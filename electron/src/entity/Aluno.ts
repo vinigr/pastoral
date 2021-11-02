@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm'
+import { Matricula } from './Matricula'
 
 @Entity()
 export class Aluno {
@@ -14,13 +15,13 @@ export class Aluno {
   @Column()
   cpf: string
 
-  @Column("datetime")
+  @Column("date")
   data_nascimento: Date
 
   @Column()
   rg: string
 
-  @Column("datetime")
+  @Column("date")
   data_expedicao_rg: Date
 
   @Column()
@@ -85,4 +86,7 @@ export class Aluno {
 
   @Column()
   permite_catequese: boolean
+
+  @OneToMany(() => Matricula, matricula => matricula.aluno)
+  matriculas: Matricula[]
 }

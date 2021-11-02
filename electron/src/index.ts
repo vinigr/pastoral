@@ -9,6 +9,9 @@ import { createConnection } from "typeorm";
 
 import { Usuario } from "./entity/Usuario"
 import { Aluno } from "./entity/Aluno"
+import { Instituicao } from "./entity/Instituicao"
+import { Oficina } from "./entity/Oficina"
+import { Matricula } from "./entity/Matricula"
 
 import { fazerLogin } from "./use-cases/fazer-login"
 
@@ -32,18 +35,15 @@ app.on("ready", () => {
       database: "matriculas.db",
       entities: [
         Usuario,
-        Aluno
+        Aluno,
+        Instituicao,
+        Oficina,
+        Matricula
       ],
       synchronize: true,
       logging: false
     }
   )
-  /*db.serialize(function () {
-    db.run("CREATE TABLE IF NOT EXISTS ALUNO (NOME VARCHAR, SEXO VARCHAR, CPF VARCHAR, DATA_NASCIMENTO DATE, RG VARCHAR, DATA_EXPEDICAO_RG DATE, ENDERECO TEXT, NATURALIDADE VARCHAR, NACIONALIDADE VARCHAR, CERTIDAO_NASCIMENTO_TERMO VARCHAR, CERTIDAO_NASCIMENTO_FOLHA VARCHAR, CERTIDAO_NASCIMENTO_LIVRO VARCHAR, EMAIL VARCHAR, TELEFONE VARCHAR, TEM_PARENTE TINYINT, NOME_PARENTE VARCHAR, CONTATO_NOME VARCHAR, CONTATO_TELEFONE VARCHAR, RESPONSAVEL_TIPO CHARACTER, RESPONSAVEL_CPF VARCHAR, RESPONSAVEL_RG VARCHAR, RESPONSAVEL_ENDERECO TEXT, RESPONSAVEL_TELEFONE VARCHAR, RESPONSAVEL_RECEBE_AUXILIO, RESPONSAVEL_PROFISSAO, VARCHAR RENDA_FAMILIAR DECIMAL, PERMITE_CATEQUESE TINYINT);");
-    db.run("CREATE TABLE IF NOT EXISTS INSTITUICAO (NOME VARCHAR, CNPJ VARCHAR, ENDERECO VARCHAR, EMAIL VARCHAR, TELEFONE VARCHAR);");
-    [x] db.run("CREATE TABLE IF NOT EXISTS USUARIOS (USUARIO VARCHAR, SENHA VARCHAR);");
-    db.run("CREATE TABLE IF NOT EXISTS OFICINA (NOME VARCHAR, PROFESSOR VARCHAR, NIVEL VARCHAR, HORARIO DATETIME);");
-  });*/
 });
 
 // Quit when all windows are closed.
