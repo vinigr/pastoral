@@ -5,20 +5,13 @@ import { Aluno } from "../entity/Aluno"
 export async function buscarAlunosMatriculados(term?: string) {
   const alunoRepo = getRepository(Aluno)
 
-  const whereClause = term ? {
-    matriculas: {
-      ano: new Date().getFullYear()
-    }
-  } : [{ nome: Like(`%${term}%`) }, {
-    matriculas: {
-      ano: new Date().getFullYear()
-    }
-  }]
-
-  const whereClause2 = qb => {
+  const whereClause = qb => {
     qb.where('matricula.ano = :ano', {
       ano: new Date().getFullYear()
     })
+    if (term) {
+      qb.andWhere('aluno.nome like :termo', { termo: `%${term}%` })
+    }
   }
 
   const alunos = await alunoRepo.find({
@@ -28,7 +21,7 @@ export async function buscarAlunosMatriculados(term?: string) {
         matricula: "matricula"
       }
     },
-    where: whereClause2
+    where: whereClause
   })
 
   return alunos

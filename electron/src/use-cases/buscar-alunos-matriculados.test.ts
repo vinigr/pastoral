@@ -79,3 +79,55 @@ test('retorna array com aluno se encontra alunos com matricula do ano', async ()
 
   expect(alunos?.length).toBeTruthy()
 })
+
+test('retorna array vazio se encontra aluno sem matricula do ano', async () => {
+  const alunosRepo = getRepository(Aluno)
+  const matriculasRepo = getRepository(Matricula)
+
+  const aluno: Aluno = criaAluno()
+
+  const matricula: Matricula = criaMatricula(aluno)
+  matricula.ano = 2000
+
+  await alunosRepo.save(aluno)
+
+  await matriculasRepo.save(matricula)
+
+  const alunos = await buscarAlunosMatriculados()
+
+  expect(alunos).toEqual([])
+})
+
+test('retorna array vazio se encontra aluno sem o termo correto', async () => {
+  const alunosRepo = getRepository(Aluno)
+  const matriculasRepo = getRepository(Matricula)
+
+  const aluno: Aluno = criaAluno()
+
+  const matricula: Matricula = criaMatricula(aluno)
+
+  await alunosRepo.save(aluno)
+
+  await matriculasRepo.save(matricula)
+
+  const alunos = await buscarAlunosMatriculados("termo errado")
+
+  expect(alunos).toEqual([])
+})
+
+test('retorna array com aluno se encontra aluno com o termo correto', async () => {
+  const alunosRepo = getRepository(Aluno)
+  const matriculasRepo = getRepository(Matricula)
+
+  const aluno: Aluno = criaAluno()
+
+  const matricula: Matricula = criaMatricula(aluno)
+
+  await alunosRepo.save(aluno)
+
+  await matriculasRepo.save(matricula)
+
+  const alunos = await buscarAlunosMatriculados(aluno.nome)
+
+  expect(alunos?.length).toBeTruthy()
+})
