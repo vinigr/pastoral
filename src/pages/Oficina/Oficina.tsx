@@ -115,6 +115,7 @@ const Oficina: React.FC = () => {
         toast({
           title: "Oficina salva com sucesso!",
           status: "success",
+          position: "top-right",
           duration: 2000,
         });
 
@@ -123,6 +124,7 @@ const Oficina: React.FC = () => {
       return toast({
         title: "Falha ao salvar oficina! Por favor, tente novamente",
         status: "error",
+        position: "top-right",
         duration: 2000,
       });
     } else {
@@ -132,6 +134,7 @@ const Oficina: React.FC = () => {
         toast({
           title: "Oficina cadastrada com sucesso!",
           status: "success",
+          position: "top-right",
           duration: 2000,
         });
 
@@ -141,6 +144,7 @@ const Oficina: React.FC = () => {
       return toast({
         title: "Falha ao cadastrar oficina! Por favor, tente novamente",
         status: "error",
+        position: "top-right",
         duration: 2000,
       });
     }

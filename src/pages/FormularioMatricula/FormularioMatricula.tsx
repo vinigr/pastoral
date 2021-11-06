@@ -91,7 +91,7 @@ const schemaMatricula = Yup.object().shape({
 });
 
 const FormularioMatricula: React.FC = () => {
-  const [present] = useIonToast();
+  const toast = useToast();
   const navigate = useNavigate();
   let { id } = useParams() ?? {};
 
@@ -239,26 +239,29 @@ const FormularioMatricula: React.FC = () => {
     const resultado = await cadastrarMatriculaEAluno(dados);
 
     if (resultado) {
-      present({
-        message: "Matrícula salva com sucesso!",
-        color: "success",
+      toast({
+        title: "Matrícula salva com sucesso!",
+        status: "success",
+        position: "top-right",
         duration: 2000,
       });
 
       return navigate("/matriculas");
     }
-    return present({
-      message: "Falha ao salvar matrícula! Por favor, tente novamente",
-      color: "danger",
+    return toast({
+      title: "Falha ao salvar matrícula! Por favor, tente novamente",
+      status: "error",
+      position: "top-right",
       duration: 2000,
     });
   };
 
   const onSubmitMatricula = async ({ escola, serie, turno }) => {
     if (!alunoSelecionado) {
-      return present({
-        message: "Por favor, selecione um aluno",
-        color: "danger",
+      return toast({
+        title: "Por favor, selecione um aluno",
+        status: "error",
+        position: "top-right",
         duration: 2000,
       });
     }
@@ -272,17 +275,19 @@ const FormularioMatricula: React.FC = () => {
     });
 
     if (resultado) {
-      present({
-        message: "Matrícula salva com sucesso!",
-        color: "success",
+      toast({
+        title: "Matrícula salva com sucesso!",
+        status: "success",
+        position: "top-right",
         duration: 2000,
       });
 
       return navigate("/matriculas");
     }
-    return present({
-      message: "Falha ao salvar matrícula! Por favor, tente novamente",
-      color: "danger",
+    return toast({
+      title: "Falha ao salvar matrícula! Por favor, tente novamente",
+      status: "error",
+      position: "top-right",
       duration: 2000,
     });
   };

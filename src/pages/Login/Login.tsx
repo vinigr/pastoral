@@ -17,12 +17,15 @@ import {
   InputGroup,
   FormErrorMessage,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 
 import React from "react";
 import fazerLogin from "../../usecases/fazerLogin";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+
+import pastoralLogo from "../../assets/images/pastoral-menor.jpg";
 
 const schema = Yup.object().shape({
   usuario: Yup.string().required("O usuário é necessário"),
@@ -57,20 +60,24 @@ const Login: React.FC = () => {
     return toast({
       title: "Usuário ou senha incorretos!",
       status: "error",
+      position: "top-right",
       duration: 2000,
     });
   };
 
   return (
-    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"gray.50"}>
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Pastoral do menor</Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            Login
-          </Text>
-        </Stack>
-        <Box rounded={"lg"} bg={"white"} boxShadow={"lg"} p={8}>
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg="white">
+      <Stack
+        spacing={8}
+        mx={"auto"}
+        maxW={"lg"}
+        py={12}
+        px={6}
+        justify="center"
+        align={"center"}
+      >
+        <Image src={pastoralLogo} width={200} />
+        <Box rounded={"lg"} bg={"white"} boxShadow={"lg"} p={8} width={"3xl"}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <FormControl id="usuario" isInvalid={errors.usuario}>

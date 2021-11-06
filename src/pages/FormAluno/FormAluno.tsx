@@ -20,6 +20,7 @@ import {
   RadioGroup,
   Stack,
   Radio,
+  useToast,
 } from "@chakra-ui/react";
 
 import buscarInformacoesAluno from "../../usecases/buscarInformacoesAluno";
@@ -74,7 +75,7 @@ const schema = Yup.object().shape({
 });
 
 const FormAluno: React.FC = () => {
-  const [present] = useIonToast();
+  const toast = useToast();
   let { id } = useParams() ?? {};
 
   const [aluno, setAluno] = useState();
@@ -219,15 +220,17 @@ const FormAluno: React.FC = () => {
       const resultado = await editarAluno(id, dados);
 
       if (resultado) {
-        return present({
-          message: "Matrícula salva com sucesso!",
-          color: "success",
+        return toast({
+          title: "Matrícula salva com sucesso!",
+          status: "success",
+          position: "top-right",
           duration: 2000,
         });
       }
-      return present({
-        message: "Falha ao salvar matrícula! Por favor, tente novamente",
-        color: "danger",
+      return toast({
+        title: "Falha ao salvar matrícula! Por favor, tente novamente",
+        status: "error",
+        position: "top-right",
         duration: 2000,
       });
     }
