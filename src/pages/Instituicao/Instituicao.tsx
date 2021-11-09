@@ -95,6 +95,7 @@ const Instituicao: React.FC = () => {
       return toast({
         title: "Informações salvas com sucesso!",
         status: "success",
+        position: "top-right",
         duration: 2000,
       });
     }
@@ -102,6 +103,7 @@ const Instituicao: React.FC = () => {
     return toast({
       title: "Falha ao salvar informações! Por favor, tente novamente",
       status: "error",
+      position: "top-right",
       duration: 2000,
     });
   };
