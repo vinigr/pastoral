@@ -17,6 +17,7 @@ import { fazerLogin } from "./use-cases/fazer-login"
 import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados"
 import { buscarAluno } from "./use-cases/buscar-aluno"
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno"
+import { buscarMatricula } from "./use-cases/buscar-matricula"
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
 
 
@@ -98,4 +99,9 @@ ipcMain.handle("buscarInformacoesInstituicao", async (_event) => {
   return instituicao
 })
 
+ipcMain.handle("buscarInformacoesMatriculaAluno", async (_event, idMatricula) => {
+  const aluno = await buscarMatricula(idMatricula)
+
+  return aluno
+})
 // Define any IPC or other custom functionality below here
