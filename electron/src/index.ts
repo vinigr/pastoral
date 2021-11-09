@@ -19,6 +19,7 @@ import { buscarAluno } from "./use-cases/buscar-aluno"
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno"
 import { buscarMatricula } from "./use-cases/buscar-matricula"
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
+import { listarMatriculas } from "./use-cases/listar-matriculas"
 
 
 electronReload(path.resolve(__dirname, ".."), {
@@ -104,4 +105,12 @@ ipcMain.handle("buscarInformacoesMatriculaAluno", async (_event, idMatricula) =>
 
   return aluno
 })
+
+ipcMain.handle("buscarMatriculas", async (_event) => {
+  const matriculas = await listarMatriculas()
+
+  return matriculas
+})
+
+
 // Define any IPC or other custom functionality below here
