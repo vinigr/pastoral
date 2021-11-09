@@ -2,30 +2,26 @@ import "./styles.css";
 
 import * as Yup from "yup";
 
-import { Controller, useForm } from "react-hook-form";
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonMenuButton,
-  IonTitle,
-  IonToolbar,
-  useIonToast,
-} from "@ionic/react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect } from "react";
 import {
-  formatarCNPJ,
-  formatarCelular,
-  formatarTelefone,
-} from "../../utils/formatarStrings";
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+
+import InputMask from "react-input-mask";
+
+import { formatarCNPJ, formatarTelefone } from "../../utils/formatarStrings";
 
 import buscarInformacoesInstituicao from "../../usecases/buscarInformacoesInstituicao";
 import salvarInformacoesInstituicao from "../../usecases/salvarInformacoesInstituicao";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -46,10 +42,10 @@ const schema = Yup.object().shape({
 });
 
 const Instituicao: React.FC = () => {
-  const [present] = useIonToast();
+  const toast = useToast();
 
   const {
-    control,
+    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -96,183 +92,74 @@ const Instituicao: React.FC = () => {
     });
 
     if (resultado) {
-      return present({
-        message: "Informações salvas com sucesso!",
-        color: "success",
+      return toast({
+        title: "Informações salvas com sucesso!",
+        status: "success",
+        position: "top-right",
         duration: 2000,
       });
     }
 
-    return present({
-      message: "Falha ao salvar informações! Por favor, tente novamente",
-      color: "danger",
+    return toast({
+      title: "Falha ao salvar informações! Por favor, tente novamente",
+      status: "error",
+      position: "top-right",
       duration: 2000,
     });
   };
 
   return (
     <>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Instituicão</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonMenuButton />
-            </IonButtons>
-            <IonTitle size="large">Instituicão</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <div className="container">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <IonItem>
-              <IonLabel position="floating">Nome</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "nome",
-                          value: e?.detail?.value,
-                        },
-                        type: "text",
-                      });
-                    }}
-                    placeholder="Nome"
-                    onBlur={onBlur}
-                    clearInput
-                  />
-                )}
-                name="nome"
-                rules={{ required: true }}
+      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+        Instituição
+      </Text>
+      <div className="container">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={4}>
+            <FormControl isInvalid={errors.nome}>
+              <FormLabel>Nome</FormLabel>
+              <Input type="text" {...register("nome")} />
+              <FormErrorMessage>{errors?.nome?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.cnpj}>
+              <FormLabel>CNPJ</FormLabel>
+              <Input
+                type="text"
+                {...register("cnpj")}
+                as={InputMask}
+                mask="99.999.999/9999-99"
+                maskChar={null}
               />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.nome?.message}</div>
-            <IonItem>
-              <IonLabel position="floating">CNPJ</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "cnpj",
-                          value: formatarCNPJ(e?.detail?.value),
-                        },
-                      });
-                    }}
-                    placeholder="CNPJ"
-                    onBlur={onBlur}
-                    type="text"
-                    clearInput
-                    maxlength={18}
-                  />
-                )}
-                name="cnpj"
-                rules={{ required: true }}
+              <FormErrorMessage>{errors?.cnpj?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.endereco}>
+              <FormLabel>Endereço</FormLabel>
+              <Input {...register("endereco")} type="text" />
+              <FormErrorMessage>{errors?.endereco?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.email}>
+              <FormLabel>E-mail</FormLabel>
+              <Input {...register("email")} type="text" />
+              <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.telefone}>
+              <FormLabel>Telefone</FormLabel>
+              <Input
+                type="text"
+                {...register("telefone")}
+                as={InputMask}
+                mask="(99) 9999-9999"
               />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.cnpj?.message}</div>
-            <IonItem>
-              <IonLabel position="floating">Endereço</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "endereco",
-                          value: e?.detail?.value,
-                        },
-                      });
-                    }}
-                    placeholder="Endereço"
-                    onBlur={onBlur}
-                    type="text"
-                    clearInput
-                  />
-                )}
-                name="endereco"
-                rules={{ required: true }}
-              />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.endereco?.message}</div>
-            <IonItem>
-              <IonLabel position="floating">E-mail</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "email",
-                          value: e?.detail?.value,
-                        },
-                      });
-                    }}
-                    placeholder="E-mail"
-                    onBlur={onBlur}
-                    type="email"
-                    clearInput
-                  />
-                )}
-                name="email"
-                rules={{ required: true }}
-              />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.email?.message}</div>
-            <IonItem>
-              <IonLabel position="floating">Telefone</IonLabel>
-              <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <IonInput
-                    value={value}
-                    onIonChange={(e) => {
-                      onChange({
-                        target: {
-                          name: "telefone",
-                          value:
-                            e?.detail?.value?.length === 15
-                              ? formatarCelular(e?.detail?.value)
-                              : formatarTelefone(e?.detail?.value || ""),
-                        },
-                      });
-                    }}
-                    placeholder="Telefone"
-                    onBlur={onBlur}
-                    type="text"
-                    clearInput
-                    maxlength={14}
-                  />
-                )}
-                name="telefone"
-                rules={{ required: true }}
-              />
-            </IonItem>
-            <div className="mensagem-erro">{errors?.telefone?.message}</div>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <IonButton type="submit">Salvar</IonButton>
-            </div>
-          </form>
-        </div>
-      </IonContent>
+              <FormErrorMessage>{errors?.telefone?.message}</FormErrorMessage>
+            </FormControl>
+          </Stack>
+          <Stack alignItems="flex-end" mt={10}>
+            <Button type="submit" bg="#373861" color="white">
+              Salvar
+            </Button>
+          </Stack>
+        </form>
+      </div>
     </>
   );
 };

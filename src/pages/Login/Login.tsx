@@ -2,23 +2,30 @@ import "./styles.css";
 
 import * as Yup from "yup";
 
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonContent,
-  IonInput,
-  IonItem,
-  IonPage,
-  useIonRouter,
-} from "@ionic/react";
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  InputGroup,
+  FormErrorMessage,
+  useToast,
+  Image,
+} from "@chakra-ui/react";
 
 import React from "react";
 import fazerLogin from "../../usecases/fazerLogin";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+
+import pastoralLogo from "../../assets/images/pastoral-menor.jpg";
 
 const schema = Yup.object().shape({
   usuario: Yup.string().required("O usuário é necessário"),
@@ -26,11 +33,12 @@ const schema = Yup.object().shape({
 });
 
 const Login: React.FC = () => {
-  const { push } = useIonRouter();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const {
-    control,
     handleSubmit,
+    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -46,80 +54,65 @@ const Login: React.FC = () => {
     const resultado = await fazerLogin(usuario, senha);
 
     if (resultado) {
-      push("/matriculas");
+      return navigate("/matriculas");
     }
+
+    return toast({
+      title: "Usuário ou senha incorretos!",
+      status: "error",
+      position: "top-right",
+      duration: 2000,
+    });
   };
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <main>
-          <IonCard className="card">
-            <IonCardContent>
-              <IonCardHeader>
-                <IonCardTitle>Login</IonCardTitle>
-              </IonCardHeader>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <IonItem>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "usuario",
-                              value: e?.detail?.value,
-                            },
-                            type: "text",
-                          });
-                        }}
-                        placeholder="Usuário"
-                        onBlur={onBlur}
-                        clearInput
-                      />
-                    )}
-                    name="usuario"
-                    rules={{ required: true }}
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg="white">
+      <Stack
+        spacing={8}
+        mx={"auto"}
+        maxW={"lg"}
+        py={12}
+        px={6}
+        justify="center"
+        align={"center"}
+      >
+        <Image src={pastoralLogo} width={200} />
+        <Box rounded={"lg"} bg={"white"} boxShadow={"lg"} p={8} width={"3xl"}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={4}>
+              <FormControl id="usuario" isInvalid={errors.usuario}>
+                <FormLabel>Usuário</FormLabel>
+                <Input type="text" {...register("usuario")} />
+                <FormErrorMessage>{errors?.usuario?.message}</FormErrorMessage>
+              </FormControl>
+              <FormControl id="senha" isInvalid={errors.senha}>
+                <FormLabel>Senha</FormLabel>
+                <InputGroup>
+                  <Input
+                    type="password"
+                    {...register("senha")}
+                    autoComplete="current-password"
                   />
-                </IonItem>
-                <div className="mensagem-erro">{errors?.usuario?.message}</div>
-                <IonItem>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <IonInput
-                        value={value}
-                        onIonChange={(e) => {
-                          onChange({
-                            target: {
-                              name: "senha",
-                              value: e?.detail?.value,
-                            },
-                            type: "password",
-                          });
-                        }}
-                        placeholder="Senha"
-                        onBlur={onBlur}
-                        type="password"
-                        clearInput
-                      />
-                    )}
-                    name="senha"
-                    rules={{ required: true }}
-                  />
-                </IonItem>
-                <div className="mensagem-erro">{errors?.senha?.message}</div>
-                <IonButton expand="full" type="submit">
+                </InputGroup>
+                <FormErrorMessage>{errors?.senha?.message}</FormErrorMessage>
+              </FormControl>
+              <Stack spacing={10}>
+                <Button
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                  type="submit"
+                >
                   Entrar
-                </IonButton>
-              </form>
-            </IonCardContent>
-          </IonCard>
-        </main>
-      </IonContent>
-    </IonPage>
+                </Button>
+              </Stack>
+            </Stack>
+          </form>
+        </Box>
+      </Stack>
+    </Flex>
   );
 };
 
