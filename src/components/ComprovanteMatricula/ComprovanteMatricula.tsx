@@ -48,7 +48,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
       <div
         ref={ref}
         style={{
-          height: "29.7cm",
+          height: "29cm",
           width: "21cm",
           padding: 20,
         }}
@@ -84,10 +84,10 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
               Fundada em 19.03.1996
             </h2>
             <h3 style={{ margin: 0, fontSize: 14 }}>
-              Declaração de Utilizada Pública: Lei Municipal nª 927/98
+              Declaração de Utilidade Pública: Lei Municipal nª 927/98
             </h3>
             <h3 style={{ margin: 0, fontSize: 14 }}>
-              Declaração de Utilizada Pública: Lei Estadual nª 8.914/03
+              Declaração de Utilidade Pública: Lei Estadual nª 8.914/03
             </h3>
             <h3 style={{ margin: 0, fontSize: 14 }}>
               Certificação Federal: Portaria CNAS 62/15
