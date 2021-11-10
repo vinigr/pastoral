@@ -21,6 +21,6 @@ export class Oficina {
 
   @ManyToMany(() => Aluno)
   @JoinTable()
-  categories: Aluno[];
+  alunos: Aluno[];
 
 }

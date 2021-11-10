@@ -18,6 +18,7 @@ import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados
 import { buscarAluno } from "./use-cases/buscar-aluno"
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno"
 import { buscarMatricula } from "./use-cases/buscar-matricula"
+import { buscarOficina } from "./use-cases/buscar-oficina"
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
 import { listarMatriculas } from "./use-cases/listar-matriculas"
 
@@ -110,6 +111,12 @@ ipcMain.handle("buscarMatriculas", async (_event) => {
   const matriculas = await listarMatriculas()
 
   return matriculas
+})
+
+ipcMain.handle("buscarOficina", async (_event, idOficina) => {
+  const oficina = await buscarOficina(idOficina)
+
+  return oficina
 })
 
 
