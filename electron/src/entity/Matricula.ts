@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm'
+import { Entity, Column, PrimaryColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Aluno } from './Aluno'
 
 @Entity()
 export class Matricula {
+  @PrimaryGeneratedColumn()
   @PrimaryColumn()
   id: number
 

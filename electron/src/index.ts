@@ -19,6 +19,7 @@ import { buscarAluno } from "./use-cases/buscar-aluno"
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno"
 import { buscarMatricula } from "./use-cases/buscar-matricula"
 import { buscarOficina } from "./use-cases/buscar-oficina"
+import { criarOficina } from "./use-cases/criar-oficina"
 import { listarOficinas } from "./use-cases/listar-oficinas"
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
 import { listarMatriculas } from "./use-cases/listar-matriculas"
@@ -126,5 +127,10 @@ ipcMain.handle("buscarOficinas", async (_event) => {
   return oficinas
 })
 
+ipcMain.handle("cadastrarOficina", async (_event, oficina) => {
+  const oficinaCriada = await criarOficina(oficina)
+
+  return oficinaCriada
+})
 
 // Define any IPC or other custom functionality below here
