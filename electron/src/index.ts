@@ -134,8 +134,8 @@ ipcMain.handle("cadastrarOficina", async (_event, oficina) => {
   return oficinaCriada
 })
 
-ipcMain.handle("editarOficina", async (_event, oficina) => {
-  const oficinaAtualizada = await editarOficina(oficina)
+ipcMain.handle("editarOficina", async (_event, id, oficina) => {
+  const oficinaAtualizada = await editarOficina(id, oficina)
 
   return oficinaAtualizada
 })

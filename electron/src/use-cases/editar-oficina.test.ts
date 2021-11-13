@@ -20,11 +20,10 @@ describe('editar oficina', () => {
     const oficinaCriada = await repo.save(entidadeOficina)
 
     const edicao = {
-      ...oficinaCriada,
       nome: "novo nome"
     }
 
-    const oficinaEditada = await editarOficina(edicao)
+    const oficinaEditada = await editarOficina(oficinaCriada.id, edicao)
 
     const oficinas = await repo.find()
 
