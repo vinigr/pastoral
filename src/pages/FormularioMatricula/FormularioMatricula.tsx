@@ -15,7 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
 import cadastrarMatriculaEAluno from "../../usecases/cadastrarMatriculaEAluno";
-import editarMatriculaEAluno from "../../usecases/editarMatriculaEAluno";
+import editarMatricula from "../../usecases/editarMatricula";
 import pesquisarAlunos from "../../usecases/pesquisarAlunos";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -266,12 +266,10 @@ const FormularioMatricula: React.FC = () => {
       });
     }
 
-    const resultado = await editarMatriculaEAluno(id, {
-      matricula: {
-        escola,
-        turno,
-        serie,
-      },
+    const resultado = await editarMatricula(id, {
+      escola,
+      turno,
+      serie,
     });
 
     if (resultado) {
