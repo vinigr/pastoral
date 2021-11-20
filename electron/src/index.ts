@@ -1,10 +1,8 @@
 import { app, ipcMain } from "electron";
-import path from "path"
 
 import "reflect-metadata";
 
 import { createCapacitorElectronApp } from "@capacitor-community/electron";
-import electronReload from "electron-reload";
 import { createConnection } from "typeorm";
 
 import { Usuario } from "./entity/Usuario"
@@ -24,11 +22,6 @@ import { editarOficina } from "./use-cases/editar-oficina"
 import { listarOficinas } from "./use-cases/listar-oficinas"
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
 import { listarMatriculas } from "./use-cases/listar-matriculas"
-
-
-electronReload(path.resolve(__dirname, ".."), {
-  electron: path.resolve(__dirname, "..", 'node_modules', '.bin', 'electron')
-})
 
 // The MainWindow object can be accessed via myCapacitorApp.getMainWindow()
 const myCapacitorApp = createCapacitorElectronApp();
@@ -102,6 +95,12 @@ ipcMain.handle("buscarInformacoesInstituicao", async (_event) => {
   const instituicao = await buscarInformacoesInstituicao()
 
   return instituicao
+})
+
+ipcMain.handle("salvarInformacoesInstituicao", async (_event, instituicao) => {
+  const instituicaoSalva = {}//await salvarInformacoesInstituicao(instituicao)
+
+  return instituicaoSalva
 })
 
 ipcMain.handle("buscarInformacoesMatriculaAluno", async (_event, idMatricula) => {
