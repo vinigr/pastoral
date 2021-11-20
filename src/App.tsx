@@ -15,8 +15,13 @@ import "./theme/variables.css";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import Routes from "./routes";
+import { useEffect } from "react";
 
 const App: React.FC = () => {
+  useEffect(() => {
+    localStorage.removeItem("logado");
+  }, []);
+
   return (
     <ChakraProvider>
       <Routes />

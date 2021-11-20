@@ -12,8 +12,6 @@ import {
   Input,
   Stack,
   Button,
-  Heading,
-  Text,
   InputGroup,
   FormErrorMessage,
   useToast,
@@ -54,6 +52,8 @@ const Login: React.FC = () => {
     const resultado = await fazerLogin(usuario, senha);
 
     if (resultado) {
+      localStorage.setItem("logado", "true");
+
       return navigate("/matriculas");
     }
 

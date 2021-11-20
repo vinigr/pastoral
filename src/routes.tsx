@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import ComprovanteMatricula from "./components/ComprovanteMatricula/ComprovanteMatricula";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Alunos from "./pages/Alunos/Alunos";
@@ -10,26 +16,32 @@ import Matriculas from "./pages/Matriculas/Matriculas";
 import Oficina from "./pages/Oficina/Oficina";
 import Oficinas from "./pages/Oficinas/Oficinas";
 
+const PrivateRoute = (props: any) => {
+  return localStorage.getItem("logado") ? <Outlet /> : <Navigate to="/login" />;
+};
+
 const RoutesApp = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="/" element={<Dashboard />}>
-          <Route path="/alunos" element={<Alunos />} />
-          <Route path="/aluno" element={<FormAluno />} />
-          <Route path="/aluno/:id" element={<FormAluno />} />
+        <Route path="/" element={<PrivateRoute />}>
+          <Route path="/" element={<Dashboard />}>
+            <Route path="/alunos" element={<Alunos />} />
+            <Route path="/aluno" element={<FormAluno />} />
+            <Route path="/aluno/:id" element={<FormAluno />} />
 
-          <Route path="/matriculas" element={<Matriculas />} />
-          <Route path="/matricula" element={<FormularioMatricula />} />
-          <Route path="/matricula/:id" element={<FormularioMatricula />} />
+            <Route path="/matriculas" element={<Matriculas />} />
+            <Route path="/matricula" element={<FormularioMatricula />} />
+            <Route path="/matricula/:id" element={<FormularioMatricula />} />
 
-          <Route path="/oficinas" element={<Oficinas />} />
-          <Route path="/oficina" element={<Oficina />} />
-          <Route path="/oficina/:id" element={<Oficina />} />
+            <Route path="/oficinas" element={<Oficinas />} />
+            <Route path="/oficina" element={<Oficina />} />
+            <Route path="/oficina/:id" element={<Oficina />} />
 
-          <Route path="/instituicao" element={<Instituicao />} />
-          <Route path="/relatorio" element={<ComprovanteMatricula />} />
+            <Route path="/instituicao" element={<Instituicao />} />
+            <Route path="/relatorio" element={<ComprovanteMatricula />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
