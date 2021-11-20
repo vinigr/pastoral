@@ -1,57 +1,96 @@
-import { app, ipcMain } from "electron";
-
-import "reflect-metadata";
-
-import { createCapacitorElectronApp } from "@capacitor-community/electron";
+import type { CapacitorElectronConfig } from "@capacitor-community/electron";
+import {
+  getCapacitorElectronConfig,
+  setupElectronDeepLinking,
+} from "@capacitor-community/electron";
+import type { MenuItemConstructorOptions } from "electron";
+import { app, ipcMain, MenuItem } from "electron";
+import electronIsDev from "electron-is-dev";
+import unhandled from "electron-unhandled";
+import { autoUpdater } from "electron-updater";
 import { createConnection } from "typeorm";
+import { Aluno } from "./entity/Aluno";
+import { Instituicao } from "./entity/Instituicao";
+import { Matricula } from "./entity/Matricula";
+import { Oficina } from "./entity/Oficina";
+import { Usuario } from "./entity/Usuario";
+import {
+  ElectronCapacitorApp,
+  setupContentSecurityPolicy,
+  setupReloadWatcher,
+} from "./setup";
+import { buscarAluno } from "./use-cases/buscar-aluno";
+import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados";
+import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao";
+import { buscarMatricula } from "./use-cases/buscar-matricula";
+import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno";
+import { buscarOficina } from "./use-cases/buscar-oficina";
+import { criarOficina } from "./use-cases/criar-oficina";
+import { editarOficina } from "./use-cases/editar-oficina";
+import { fazerLogin } from "./use-cases/fazer-login";
+import { listarMatriculas } from "./use-cases/listar-matriculas";
+import { listarOficinas } from "./use-cases/listar-oficinas";
 
-import { Usuario } from "./entity/Usuario"
-import { Aluno } from "./entity/Aluno"
-import { Instituicao } from "./entity/Instituicao"
-import { Oficina } from "./entity/Oficina"
-import { Matricula } from "./entity/Matricula"
+// Graceful handling of unhandled errors.
+unhandled();
 
-import { fazerLogin } from "./use-cases/fazer-login"
-import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados"
-import { buscarAluno } from "./use-cases/buscar-aluno"
-import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno"
-import { buscarMatricula } from "./use-cases/buscar-matricula"
-import { buscarOficina } from "./use-cases/buscar-oficina"
-import { criarOficina } from "./use-cases/criar-oficina"
-import { editarOficina } from "./use-cases/editar-oficina"
-import { listarOficinas } from "./use-cases/listar-oficinas"
-import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao"
-import { listarMatriculas } from "./use-cases/listar-matriculas"
+// Define our menu templates (these are optional)
+const trayMenuTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
+  new MenuItem({ label: "Quit App", role: "quit" }),
+];
+const appMenuBarMenuTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
+  { role: process.platform === "darwin" ? "appMenu" : "fileMenu" },
+  { role: "viewMenu" },
+];
 
-// The MainWindow object can be accessed via myCapacitorApp.getMainWindow()
-const myCapacitorApp = createCapacitorElectronApp();
+// Get Config options from capacitor.config
+const capacitorFileConfig: CapacitorElectronConfig =
+  getCapacitorElectronConfig();
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some Electron APIs can only be used after this event occurs.
-app.on("ready", () => {
-  myCapacitorApp.init();
+// Initialize our app. You can pass menu templates into the app here.
+// const myCapacitorApp = new ElectronCapacitorApp(capacitorFileConfig);
+const myCapacitorApp = new ElectronCapacitorApp(
+  capacitorFileConfig,
+  trayMenuTemplate,
+  appMenuBarMenuTemplate
+);
 
-  createConnection(
-    {
-      type: "sqlite",
-      database: "matriculas.db",
-      entities: [
-        Usuario,
-        Aluno,
-        Instituicao,
-        Oficina,
-        Matricula
-      ],
-      synchronize: true,
-      logging: false
-    }
-  )
-});
+// If deeplinking is enabled then we will set it up here.
+if (capacitorFileConfig.electron?.deepLinkingEnabled) {
+  setupElectronDeepLinking(myCapacitorApp, {
+    customProtocol:
+      capacitorFileConfig.electron.deepLinkingCustomProtocol ??
+      "mycapacitorapp",
+  });
+}
 
-// Quit when all windows are closed.
+// If we are in Dev mode, use the file watcher components.
+if (electronIsDev) {
+  setupReloadWatcher(myCapacitorApp);
+}
+
+// Run Application
+(async () => {
+  // Wait for electron app to be ready.
+  await app.whenReady();
+  // Security - Set Content-Security-Policy based on whether or not we are in dev mode.
+  setupContentSecurityPolicy(myCapacitorApp.getCustomURLScheme());
+  // Initialize our app, build windows, and load content.
+  await myCapacitorApp.init();
+
+  createConnection({
+    type: "sqlite",
+    database: "matriculas.db",
+    entities: [Usuario, Aluno, Instituicao, Oficina, Matricula],
+    synchronize: true,
+    logging: false,
+  });
+  // Check for updates if we are in a packaged app.
+  autoUpdater.checkForUpdatesAndNotify();
+})();
+
+// Handle when all of our windows are close (platforms have their own expectations).
 app.on("window-all-closed", function () {
-  //db.close();
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
@@ -59,84 +98,90 @@ app.on("window-all-closed", function () {
   }
 });
 
-app.on("activate", function () {
+// When the dock icon is clicked.
+app.on("activate", async function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (myCapacitorApp.getMainWindow().isDestroyed()) myCapacitorApp.init();
+  if (myCapacitorApp.getMainWindow().isDestroyed()) {
+    await myCapacitorApp.init();
+  }
 });
+
+// Place all ipc or other electron api calls and custom functionality under this line
 
 ipcMain.handle("fazerLogin", async (_event, args) => {
   const { usuario, senha } = args;
 
-  const existeUsuario = await fazerLogin(usuario, senha)
+  const existeUsuario = await fazerLogin(usuario, senha);
 
   return existeUsuario;
 });
 
 ipcMain.handle("buscarAlunosMatriculados", async (_event, term) => {
-  const alunos = await buscarAlunosMatriculados(term)
+  const alunos = await buscarAlunosMatriculados(term);
 
   return alunos;
 });
 
 ipcMain.handle("buscarInformacoesAluno", async (_event, id) => {
-  const aluno = await buscarAluno(id)
+  const aluno = await buscarAluno(id);
 
-  return aluno
-})
+  return aluno;
+});
 
 ipcMain.handle("buscarInformacoesCompletas", async (_event, idMatricula) => {
-  const aluno = await buscarMatriculaComAluno(idMatricula)
+  const aluno = await buscarMatriculaComAluno(idMatricula);
 
-  return aluno
-})
+  return aluno;
+});
 
 ipcMain.handle("buscarInformacoesInstituicao", async (_event) => {
-  const instituicao = await buscarInformacoesInstituicao()
+  const instituicao = await buscarInformacoesInstituicao();
 
-  return instituicao
-})
+  return instituicao;
+});
 
 ipcMain.handle("salvarInformacoesInstituicao", async (_event, instituicao) => {
-  const instituicaoSalva = {}//await salvarInformacoesInstituicao(instituicao)
+  const instituicaoSalva = {}; //await salvarInformacoesInstituicao(instituicao)
 
-  return instituicaoSalva
-})
+  return instituicaoSalva;
+});
 
-ipcMain.handle("buscarInformacoesMatriculaAluno", async (_event, idMatricula) => {
-  const aluno = await buscarMatricula(idMatricula)
+ipcMain.handle(
+  "buscarInformacoesMatriculaAluno",
+  async (_event, idMatricula) => {
+    const aluno = await buscarMatricula(idMatricula);
 
-  return aluno
-})
+    return aluno;
+  }
+);
 
 ipcMain.handle("buscarMatriculas", async (_event) => {
-  const matriculas = await listarMatriculas()
+  const matriculas = await listarMatriculas();
 
-  return matriculas
-})
+  return matriculas;
+});
 
 ipcMain.handle("buscarOficina", async (_event, idOficina) => {
-  const oficina = await buscarOficina(idOficina)
+  const oficina = await buscarOficina(idOficina);
 
-  return oficina
-})
+  return oficina;
+});
 
 ipcMain.handle("buscarOficinas", async (_event) => {
-  const oficinas = await listarOficinas()
+  const oficinas = await listarOficinas();
 
-  return oficinas
-})
+  return oficinas;
+});
 
 ipcMain.handle("cadastrarOficina", async (_event, oficina) => {
-  const oficinaCriada = await criarOficina(oficina)
+  const oficinaCriada = await criarOficina(oficina);
 
-  return oficinaCriada
-})
+  return oficinaCriada;
+});
 
 ipcMain.handle("editarOficina", async (_event, id, oficina) => {
-  const oficinaAtualizada = await editarOficina(id, oficina)
+  const oficinaAtualizada = await editarOficina(id, oficina);
 
-  return oficinaAtualizada
-})
-
-// Define any IPC or other custom functionality below here
+  return oficinaAtualizada;
+});

@@ -2,22 +2,36 @@
   "name": "pastoral",
   "version": "1.0.0",
   "description": "An Amazing Capacitor App",
-  "main": "./build/index.js",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "MIT",
+  "main": "build/src/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && electron-rebuild",
+    "electron:start-live": "node ./live-runner.js",
+    "electron:start": "npm run build && electron --inspect=5858 ./",
+    "electron:pack": "npm run build && electron-builder build --dir -c ./electron-builder.config.json",
+    "electron:make": "npm run build && electron-builder build -c ./electron-builder.config.json -p always",
     "test": "jest -i",
-    "test:dev": "jest -i --watch",
-    "electron:start": "npm run build && electron ./",
-    "electron:pack": "npm run build && electron-builder build --dir",
-    "electron:build-windows": "npm run build && electron-builder build --windows",
-    "electron:build-mac": "npm run build && electron-builder build --mac"
+    "test:dev": "jest -i --watch"
   },
   "dependencies": {
-    "@capacitor-community/electron": "^1.3.1",
+    "@capacitor-community/electron": "^4.0.1",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
-    "reflect-metadata": "^0.1.13",
+    "chokidar": "~3.5.2",
+    "electron-is-dev": "~2.0.0",
+    "electron-serve": "~1.1.0",
+    "electron-unhandled": "~3.0.2",
+    "electron-updater": "~4.3.9",
+    "electron-window-state": "~5.0.3",
     "sqlite3": "^5.0.2",
-    "typeorm": "^0.2.38",
+    "typeorm": "^0.2.41",
     "typeorm-test-transactions": "^3.6.1"
   },
   "devDependencies": {
@@ -29,36 +43,14 @@
     "@babel/preset-typescript": "^7.16.0",
     "@types/jest": "^27.0.2",
     "babel-jest": "^27.3.1",
-    "electron": "~10.3.1",
-    "electron-builder": "^22.9.1",
+    "electron": "~13.1.9",
+    "electron-builder": "~22.11.7",
+    "electron-rebuild": "~2.3.5",
     "jest": "^27.3.1",
-    "typescript": "~4.0.5"
+    "typescript": "~4.3.5"
   },
   "keywords": [
     "capacitor",
     "electron"
-  ],
-  "author": "",
-  "license": "MIT",
-  "build": {
-    "appId": "com.example.capacitor-app",
-    "productName": "Capacitor App",
-    "files": [
-      "assets/*",
-      "build/*",
-      "preloader.js",
-      "plugins/*",
-      "capacitor.config.json",
-      "app/**"
-    ],
-    "mac": {
-      "category": "public.app-category.developer-tools",
-      "target": "dmg",
-      "icon": "appIcon.png"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "appIcon.ico"
-    }
-  }
+  ]
 }

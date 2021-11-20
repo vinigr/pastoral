@@ -86,7 +86,7 @@ const Login: React.FC = () => {
                 <FormErrorMessage>{errors?.usuario?.message}</FormErrorMessage>
               </FormControl>
               <FormControl id="senha" isInvalid={errors.senha}>
-                <FormLabel>Senha</FormLabel>
+                {/* <FormLabel>Senha</FormLabel> */}
                 <InputGroup>
                   <Input
                     type="password"

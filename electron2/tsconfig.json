@@ -1,6 +1,8 @@
 {
   "compileOnSave": true,
-  "include": ["./src/**/*", "./capacitor.config.ts", "./capacitor.config.js"],
+  "include": [
+    "./src/*"
+  ],
   "compilerOptions": {
     "outDir": "./build",
     "importHelpers": true,
@@ -8,10 +10,8 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types"],
     "allowJs": true,
-    "rootDir": ".",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   }
 }
