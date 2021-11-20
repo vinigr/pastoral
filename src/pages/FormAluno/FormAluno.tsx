@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 import { Controller, useForm } from "react-hook-form";
-import { IonButton, IonTitle, useIonToast } from "@ionic/react";
+import { IonButton, IonTitle } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { formatarCpf, formatarDinheiro } from "../../utils/formatarStrings";
 

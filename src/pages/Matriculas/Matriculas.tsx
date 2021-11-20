@@ -1,7 +1,5 @@
 import {
   IonButton,
-  IonFab,
-  IonFabButton,
   IonIcon,
   IonItem,
   IonLabel,
@@ -9,8 +7,8 @@ import {
   IonText,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
-import { add, create, trash } from "ionicons/icons";
-import { Text } from "@chakra-ui/react";
+import { create, trash } from "ionicons/icons";
+import { Button, Flex, Text } from "@chakra-ui/react";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
@@ -43,9 +41,16 @@ const Matriculas: React.FC = () => {
 
   return (
     <>
-      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
-        Matrículas
-      </Text>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        onClick={() => navigate("/matricula")}
+      >
+        <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+          Matrículas
+        </Text>
+        <Button>Adicionar</Button>
+      </Flex>
       <div className="container">
         <IonList>
           {matriculas.map((matricula) => (
@@ -86,11 +91,6 @@ const Matriculas: React.FC = () => {
           ))}
         </IonList>
       </div>
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
-        <IonFabButton onClick={() => navigate("/matricula")}>
-          <IonIcon icon={add} />
-        </IonFabButton>
-      </IonFab>
 
       <div style={{ display: "none" }}>
         <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />

@@ -1,7 +1,5 @@
 import {
   IonButton,
-  IonFab,
-  IonFabButton,
   IonIcon,
   IonItem,
   IonLabel,
@@ -9,8 +7,8 @@ import {
   IonText,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { add, create, trash } from "ionicons/icons";
-import { Text } from "@chakra-ui/react";
+import { create, trash } from "ionicons/icons";
+import { Button, Flex, Text } from "@chakra-ui/react";
 
 import buscarOficinas from "../../usecases/buscarOficinas";
 import { useNavigate } from "react-router-dom";
@@ -32,9 +30,17 @@ const Oficinas: React.FC = () => {
 
   return (
     <>
-      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
-        Oficinas
-      </Text>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        onClick={() => navigate("/oficina")}
+      >
+        <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+          Oficinas
+        </Text>
+        <Button>Adicionar</Button>
+      </Flex>
+      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}></Text>
       <div className="container">
         <IonList>
           {oficinas.map((oficina) => (
@@ -68,11 +74,6 @@ const Oficinas: React.FC = () => {
           ))}
         </IonList>
       </div>
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
-        <IonFabButton onClick={() => navigate("/oficina")}>
-          <IonIcon icon={add} />
-        </IonFabButton>
-      </IonFab>
     </>
   );
 };
