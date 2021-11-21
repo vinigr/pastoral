@@ -26,6 +26,7 @@ import { buscarMatricula } from "./use-cases/buscar-matricula";
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno";
 import { buscarOficina } from "./use-cases/buscar-oficina";
 import { criarOficina } from "./use-cases/criar-oficina";
+import { editarMatricula } from "./use-cases/editar-matricula";
 import { editarOficina } from "./use-cases/editar-oficina";
 import { fazerLogin } from "./use-cases/fazer-login";
 import { listarMatriculas } from "./use-cases/listar-matriculas";
@@ -185,4 +186,10 @@ ipcMain.handle("editarOficina", async (_event, id, oficina) => {
   const oficinaAtualizada = await editarOficina(id, oficina);
 
   return oficinaAtualizada;
+});
+
+ipcMain.handle("editarMatricula", async (_event, id, matricula) => {
+  const matriculaAtualizada = await editarMatricula(id, matricula);
+
+  return matriculaAtualizada;
 });
