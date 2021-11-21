@@ -30,6 +30,7 @@ import { editarOficina } from "./use-cases/editar-oficina";
 import { fazerLogin } from "./use-cases/fazer-login";
 import { listarMatriculas } from "./use-cases/listar-matriculas";
 import { listarOficinas } from "./use-cases/listar-oficinas";
+import { salvarInformacoesInstituicao } from "./use-cases/salvar-informacoes-instituicao";
 
 // Graceful handling of unhandled errors.
 unhandled();
@@ -142,7 +143,7 @@ ipcMain.handle("buscarInformacoesInstituicao", async (_event) => {
 });
 
 ipcMain.handle("salvarInformacoesInstituicao", async (_event, instituicao) => {
-  const instituicaoSalva = {}; //await salvarInformacoesInstituicao(instituicao)
+  const instituicaoSalva = await salvarInformacoesInstituicao(instituicao);
 
   return instituicaoSalva;
 });
