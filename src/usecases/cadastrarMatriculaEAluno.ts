@@ -4,22 +4,20 @@ import { isElectron } from "../utils/isElectron";
 interface Dados {
   idAluno?: number;
   aluno?: any;
-  responsavel?: any;
   matricula: any;
 }
 
 export default async function cadastrarMatriculaEAluno({
   idAluno,
   aluno,
-  responsavel,
+  matricula,
 }: Dados) {
   if (isElectron()) {
     return await chamarFuncaoElectron("cadastrarMatriculaEAluno", {
       idAluno,
       aluno,
-      responsavel,
+      matricula,
     });
-  } else {
-    return true;
   }
+  return true;
 }
