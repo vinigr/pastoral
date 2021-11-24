@@ -114,6 +114,40 @@ const FormularioMatricula: React.FC = () => {
     setValue: setValue1,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      nome: "Teste",
+      sexo: "masculino",
+      cpf: "07800048548",
+      dataNascimento: "07/01/2000",
+      rg: "1062",
+      dataExpedicao: "07/01/2000",
+      endereco: "fkodsjmfiopds",
+      naturalidade: "jmkcdsjmf",
+      nacionalidade: "iopdjksofkds",
+      termoCN: "jikofdjsio",
+      folhaCN: "dfsjifko",
+      livroCN: "fdsofk",
+      email: "teste@gmail.com",
+      telefone: "7799999999",
+      temParente: true,
+      nomeParente: "",
+      nomeContatoUrgencia: "",
+      telefoneContatoUrgencia: "7799999999",
+      parentesco: "pai",
+      nomeResponsavel: "fjindkosjf",
+      cpfResponsavel: "07800048548",
+      enderecoResponsavel: "jmfdkos",
+      telefoneResponsavel: "564905060",
+      ocupacaoProfissionalResponsavel: "ocupado",
+      bolsaSocial: true,
+      nis: "54050",
+      rgResponsavel: "40515",
+      rendaFamiliar: "100",
+      religiao: false,
+      escola: "jkfdspiok",
+      turno: "matutino",
+      serie: "kfidsjkfiod",
+    },
   });
 
   const {
@@ -152,9 +186,9 @@ const FormularioMatricula: React.FC = () => {
 
     setAlunoSelecionado(alunoMatricula.aluno);
 
-    setValue2("escola", alunoMatricula?.matricula?.escola);
-    setValue2("serie", alunoMatricula?.matricula?.serie);
-    setValue2("turno", alunoMatricula?.matricula?.turno);
+    setValue2("escola", alunoMatricula?.escola);
+    setValue2("serie", alunoMatricula?.serie);
+    setValue2("turno", alunoMatricula?.turno);
   };
 
   const temParente = watch("temParente", false);
@@ -221,7 +255,7 @@ const FormularioMatricula: React.FC = () => {
         responsavel_telefone: telefoneResponsavel,
         responsavel_profissao: ocupacaoProfissionalResponsavel,
         responsavel_recebe_auxilio: bolsaSocial ?? false,
-        nis,
+        responsavel_nis: nis,
         responsavel_rg: rgResponsavel,
         renda_familiar: rendaFamiliar,
         permite_catequese: religiao ?? false,
@@ -351,17 +385,17 @@ const FormularioMatricula: React.FC = () => {
               Dados da matrícula
             </IonTitle>
             <Stack spacing={4}>
-              <FormControl isInvalid={errors.escola}>
+              <FormControl isInvalid={Boolean(errors.escola)}>
                 <FormLabel>Escola</FormLabel>
                 <Input type="text" {...register1("escola")} />
                 <FormErrorMessage>{errors?.escola?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.serie}>
+              <FormControl isInvalid={Boolean(errors.serie)}>
                 <FormLabel>Série</FormLabel>
                 <Input type="text" {...register1("serie")} />
                 <FormErrorMessage>{errors?.serie?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.turno}>
+              <FormControl isInvalid={Boolean(errors.turno)}>
                 <FormLabel>Turno</FormLabel>
                 <Controller
                   render={() => (
@@ -389,12 +423,12 @@ const FormularioMatricula: React.FC = () => {
             </IonTitle>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={4}>
-                <FormControl isInvalid={errors.nome}>
+                <FormControl isInvalid={Boolean(errors.nome)}>
                   <FormLabel>Nome</FormLabel>
                   <Input type="text" {...register1("nome")} />
                   <FormErrorMessage>{errors?.nome?.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.sexo}>
+                <FormControl isInvalid={Boolean(errors.sexo)}>
                   <FormLabel>Sexo</FormLabel>
                   <Controller
                     render={({ field: { value } }) => (
@@ -418,7 +452,7 @@ const FormularioMatricula: React.FC = () => {
                 </FormControl>
 
                 <Stack direction="row">
-                  <FormControl isInvalid={errors.cpf}>
+                  <FormControl isInvalid={Boolean(errors.cpf)}>
                     <FormLabel>CPF</FormLabel>
                     <Input
                       type="text"
@@ -430,7 +464,7 @@ const FormularioMatricula: React.FC = () => {
                     <FormErrorMessage>{errors?.cpf?.message}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl isInvalid={errors.dataNascimento}>
+                  <FormControl isInvalid={Boolean(errors.dataNascimento)}>
                     <FormLabel>Data de nascimento</FormLabel>
                     <Input type="date" {...register1("dataNascimento")} />
                     <FormErrorMessage>
@@ -438,13 +472,13 @@ const FormularioMatricula: React.FC = () => {
                     </FormErrorMessage>
                   </FormControl>
 
-                  <FormControl isInvalid={errors.rg}>
+                  <FormControl isInvalid={Boolean(errors.rg)}>
                     <FormLabel>RG</FormLabel>
                     <Input type="text" {...register1("rg")} />
                     <FormErrorMessage>{errors?.rg?.message}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl isInvalid={errors.dataExpedicao}>
+                  <FormControl isInvalid={Boolean(errors.dataExpedicao)}>
                     <FormLabel>Data de expedição</FormLabel>
                     <Input type="date" {...register1("dataExpedicao")} />
                     <FormErrorMessage>
@@ -453,7 +487,7 @@ const FormularioMatricula: React.FC = () => {
                   </FormControl>
                 </Stack>
 
-                <FormControl isInvalid={errors.endereco}>
+                <FormControl isInvalid={Boolean(errors.endereco)}>
                   <FormLabel>Endereço</FormLabel>
                   <Input type="text" {...register1("endereco")} />
                   <FormErrorMessage>
@@ -462,14 +496,14 @@ const FormularioMatricula: React.FC = () => {
                 </FormControl>
 
                 <Stack direction="row">
-                  <FormControl isInvalid={errors.naturalidade}>
+                  <FormControl isInvalid={Boolean(errors.naturalidade)}>
                     <FormLabel>Naturalidade</FormLabel>
                     <Input type="text" {...register1("naturalidade")} />
                     <FormErrorMessage>
                       {errors?.naturalidade?.message}
                     </FormErrorMessage>
                   </FormControl>
-                  <FormControl isInvalid={errors.nacionalidade}>
+                  <FormControl isInvalid={Boolean(errors.nacionalidade)}>
                     <FormLabel>Nacionalidade</FormLabel>
                     <Input type="text" {...register1("nacionalidade")} />
                     <FormErrorMessage>
@@ -482,7 +516,7 @@ const FormularioMatricula: React.FC = () => {
                   <FormLabel fontSize={20}>Certidão de nascimento</FormLabel>
 
                   <Stack direction="row">
-                    <FormControl isInvalid={errors.termoCN}>
+                    <FormControl isInvalid={Boolean(errors.termoCN)}>
                       <FormLabel>Termo</FormLabel>
                       <Input type="text" {...register1("termoCN")} />
                       <FormErrorMessage>
@@ -490,7 +524,7 @@ const FormularioMatricula: React.FC = () => {
                       </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl isInvalid={errors.folhaCN}>
+                    <FormControl isInvalid={Boolean(errors.folhaCN)}>
                       <FormLabel>Folha</FormLabel>
                       <Input type="text" {...register1("folhaCN")} />
                       <FormErrorMessage>
@@ -498,7 +532,7 @@ const FormularioMatricula: React.FC = () => {
                       </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl isInvalid={errors.livroCN}>
+                    <FormControl isInvalid={Boolean(errors.livroCN)}>
                       <FormLabel>Livro</FormLabel>
                       <Input type="text" {...register1("livroCN")} />
                       <FormErrorMessage>
@@ -508,13 +542,13 @@ const FormularioMatricula: React.FC = () => {
                   </Stack>
                 </Stack>
 
-                <FormControl isInvalid={errors.email}>
+                <FormControl isInvalid={Boolean(errors.email)}>
                   <FormLabel>E-mail</FormLabel>
                   <Input type="email" {...register1("email")} />
                   <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={errors.telefone}>
+                <FormControl isInvalid={Boolean(errors.telefone)}>
                   <FormLabel>Telefone</FormLabel>
                   <Input
                     type="text"
@@ -528,7 +562,7 @@ const FormularioMatricula: React.FC = () => {
                 </FormControl>
 
                 <Stack spacing={4}>
-                  <FormControl isInvalid={errors.temParente}>
+                  <FormControl isInvalid={Boolean(errors.temParente)}>
                     <Controller
                       render={({ field: { value } }) => (
                         <Checkbox
@@ -549,7 +583,7 @@ const FormularioMatricula: React.FC = () => {
                   </FormControl>
 
                   {temParente && (
-                    <FormControl isInvalid={errors.nomeParente}>
+                    <FormControl isInvalid={Boolean(errors.nomeParente)}>
                       <FormLabel>Especificar o nome do parente</FormLabel>
                       <Input type="text" {...register1("nomeParente")} />
                       <FormErrorMessage>
@@ -563,7 +597,9 @@ const FormularioMatricula: React.FC = () => {
                   <FormLabel>Contato de urgência</FormLabel>
 
                   <Stack direction="row">
-                    <FormControl isInvalid={errors.nomeContatoUrgencia}>
+                    <FormControl
+                      isInvalid={Boolean(errors.nomeContatoUrgencia)}
+                    >
                       <FormLabel>Nome</FormLabel>
                       <Input
                         type="text"
@@ -574,7 +610,9 @@ const FormularioMatricula: React.FC = () => {
                       </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl isInvalid={errors.telefoneContatoUrgencia}>
+                    <FormControl
+                      isInvalid={Boolean(errors.telefoneContatoUrgencia)}
+                    >
                       <FormLabel>Celular</FormLabel>
                       <Input
                         type="text"
@@ -593,7 +631,7 @@ const FormularioMatricula: React.FC = () => {
                   <FormLabel fontSize={20}>Dados do responsável</FormLabel>
 
                   <Stack spacing={4}>
-                    <FormControl isInvalid={errors.parentesco}>
+                    <FormControl isInvalid={Boolean(errors.parentesco)}>
                       <FormLabel>Responsável pelo aluno</FormLabel>
                       <Controller
                         render={({ field: { value } }) => (
@@ -620,7 +658,7 @@ const FormularioMatricula: React.FC = () => {
                       </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl isInvalid={errors.nomeResponsavel}>
+                    <FormControl isInvalid={Boolean(errors.nomeResponsavel)}>
                       <FormLabel>Nome</FormLabel>
                       <Input type="text" {...register1("nomeResponsavel")} />
                       <FormErrorMessage>
@@ -629,7 +667,7 @@ const FormularioMatricula: React.FC = () => {
                     </FormControl>
 
                     <Stack direction="row">
-                      <FormControl isInvalid={errors.cpfResponsavel}>
+                      <FormControl isInvalid={Boolean(errors.cpfResponsavel)}>
                         <FormLabel>CPF</FormLabel>
                         <Input
                           type="text"
@@ -643,7 +681,7 @@ const FormularioMatricula: React.FC = () => {
                         </FormErrorMessage>
                       </FormControl>
 
-                      <FormControl isInvalid={errors.rgResponsavel}>
+                      <FormControl isInvalid={Boolean(errors.rgResponsavel)}>
                         <FormLabel>RG</FormLabel>
                         <Input type="text" {...register1("rgResponsavel")} />
                         <FormErrorMessage>
@@ -652,7 +690,9 @@ const FormularioMatricula: React.FC = () => {
                       </FormControl>
                     </Stack>
 
-                    <FormControl isInvalid={errors.enderecoResponsavel}>
+                    <FormControl
+                      isInvalid={Boolean(errors.enderecoResponsavel)}
+                    >
                       <FormLabel>Endereço</FormLabel>
                       <Input
                         type="text"
@@ -663,7 +703,9 @@ const FormularioMatricula: React.FC = () => {
                       </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl isInvalid={errors.telefoneResponsavel}>
+                    <FormControl
+                      isInvalid={Boolean(errors.telefoneResponsavel)}
+                    >
                       <FormLabel>Celular</FormLabel>
                       <Input
                         type="text"
@@ -679,7 +721,7 @@ const FormularioMatricula: React.FC = () => {
                 </Stack>
 
                 <Stack spacing={4}>
-                  <FormControl isInvalid={errors.bolsaSocial}>
+                  <FormControl isInvalid={Boolean(errors.bolsaSocial)}>
                     <Controller
                       render={({ field: { value } }) => (
                         <Checkbox
@@ -700,7 +742,7 @@ const FormularioMatricula: React.FC = () => {
                   </FormControl>
 
                   {bolsaSocial && (
-                    <FormControl isInvalid={errors.nis}>
+                    <FormControl isInvalid={Boolean(errors.nis)}>
                       <FormLabel>NIS</FormLabel>
                       <Input type="text" {...register1("nis")} />
                       <FormErrorMessage>
@@ -710,7 +752,9 @@ const FormularioMatricula: React.FC = () => {
                   )}
                 </Stack>
 
-                <FormControl isInvalid={errors.ocupacaoProfissionalResponsavel}>
+                <FormControl
+                  isInvalid={Boolean(errors.ocupacaoProfissionalResponsavel)}
+                >
                   <FormLabel>Ocupação profissional</FormLabel>
                   <Input
                     type="text"
@@ -721,7 +765,7 @@ const FormularioMatricula: React.FC = () => {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={errors.rendaFamiliar}>
+                <FormControl isInvalid={Boolean(errors.rendaFamiliar)}>
                   <FormLabel>Renda familiar</FormLabel>
                   <Controller
                     control={control}
@@ -748,7 +792,7 @@ const FormularioMatricula: React.FC = () => {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={errors.religiao}>
+                <FormControl isInvalid={Boolean(errors.religiao)}>
                   <Controller
                     render={({ field: { value } }) => (
                       <Checkbox
@@ -783,19 +827,19 @@ const FormularioMatricula: React.FC = () => {
             </IonTitle>
             <form onSubmit={handleSubmit2(onSubmitMatricula)}>
               <Stack spacing={4}>
-                <FormControl isInvalid={errors2?.escola}>
+                <FormControl isInvalid={Boolean(errors2?.escola)}>
                   <FormLabel>Escola</FormLabel>
                   <Input type="text" {...register2("escola")} />
                   <FormErrorMessage>
                     {errors2?.escola?.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors2?.serie}>
+                <FormControl isInvalid={Boolean(errors2?.serie)}>
                   <FormLabel>Série</FormLabel>
                   <Input type="text" {...register2("serie")} />
                   <FormErrorMessage>{errors2?.serie?.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors2?.turno}>
+                <FormControl isInvalid={Boolean(errors2?.turno)}>
                   <FormLabel>Turno</FormLabel>
                   <Controller
                     render={() => (
