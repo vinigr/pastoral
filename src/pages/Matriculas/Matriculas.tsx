@@ -57,7 +57,7 @@ const Matriculas: React.FC = () => {
             <IonItem key={matricula.id}>
               <IonLabel className="ion-text-wrap">
                 <IonText color="dark" style={{ fontWeight: "bold" }}>
-                  <h2>{matricula.nome}</h2>
+                  <h2>{matricula.aluno.nome}</h2>
                 </IonText>
                 <IonText color="medium">
                   <p>Escola: {matricula.escola}</p>
