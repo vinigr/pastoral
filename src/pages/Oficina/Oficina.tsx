@@ -172,7 +172,7 @@ const Oficina: React.FC = () => {
 
             <FormControl isInvalid={errors.horario}>
               <FormLabel>Horário</FormLabel>
-              <Input type="time" {...register("horario")} />
+              <Input type="text" {...register("horario")} />
               <FormErrorMessage>{errors?.horario?.message}</FormErrorMessage>
             </FormControl>
 
