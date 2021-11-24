@@ -69,6 +69,8 @@ const criaAluno = (): Aluno => ({
   responsavel_tipo: "",
   responsavel_cpf: "",
   responsavel_rg: "",
+  responsavel_nome: "",
+  responsavel_nis: "",
   responsavel_endereco: "",
   responsavel_telefone: "",
   responsavel_recebe_auxilio: false,

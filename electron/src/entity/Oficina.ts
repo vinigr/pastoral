@@ -16,8 +16,8 @@ export class Oficina {
   @Column()
   nivel: string
 
-  @Column("datetime")
-  horario: Date
+  @Column()
+  horario: string
 
   @ManyToMany(() => Aluno)
   @JoinTable()

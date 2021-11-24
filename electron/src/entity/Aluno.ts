@@ -68,6 +68,12 @@ export class Aluno {
   responsavel_cpf: string
 
   @Column()
+  responsavel_nome: string
+
+  @Column()
+  responsavel_nis: string
+
+  @Column()
   responsavel_rg: string
 
   @Column()
