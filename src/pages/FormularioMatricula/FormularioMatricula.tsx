@@ -269,8 +269,6 @@ const FormularioMatricula: React.FC = () => {
       },
     };
 
-    console.log({ dados });
-
     const resultado = await cadastrarMatriculaEAluno(dados);
 
     if (resultado) {
