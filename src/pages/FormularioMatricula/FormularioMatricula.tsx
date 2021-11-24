@@ -61,6 +61,8 @@ const schema = Yup.object().shape({
   ),
   email: Yup.string().required("O e-mail é obrigatório"),
   telefone: Yup.string().required("O telefone é obrigatório"),
+  temParente: Yup.string(),
+  nomeParente: Yup.string(),
   nomeContatoUrgencia: Yup.string().required(
     "O nome de contato de urgência é obrigatório"
   ),
@@ -81,7 +83,7 @@ const schema = Yup.object().shape({
   ),
   rgResponsavel: Yup.string().required("O RG é obrigatório"),
   rendaFamiliar: Yup.string().required("A renda familiar é obrigatória"),
-  religiao: Yup.string().required("A religião é obrigatória"),
+  religiao: Yup.string(),
 });
 
 const schemaMatricula = Yup.object().shape({
@@ -197,44 +199,43 @@ const FormularioMatricula: React.FC = () => {
         nome,
         sexo,
         cpf: cpf.replace(/[^0-9]+/g, ""),
-        dataNascimento,
+        data_nascimento: dataNascimento,
         rg,
-        dataExpedicao,
+        data_expedicao_rg: dataExpedicao,
         endereco,
         naturalidade,
         nacionalidade,
-        termoCN,
-        folhaCN,
-        livroCN,
+        certidao_nascimento_termo: termoCN,
+        certidao_nascimento_folha: folhaCN,
+        certidao_nascimento_livro: livroCN,
         email,
         telefone: telefone.replace(/[^0-9]+/g, ""),
-        temParente,
-        nomeParente,
-        nomeContatoUrgencia,
-        telefoneContatoUrgencia: telefoneContatoUrgencia.replace(
-          /[^0-9]+/g,
-          ""
-        ),
-      },
-      responsavel: {
-        parentesco,
-        nome: nomeResponsavel,
-        cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
-        endereco: enderecoResponsavel,
-        telefone: telefoneResponsavel,
-        ocupacaoProfissional: ocupacaoProfissionalResponsavel,
-        bolsaSocial,
+        tem_parente: temParente ?? false,
+        nome_parente: nomeParente ?? "",
+        contato_nome: nomeContatoUrgencia,
+        contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),
+        responsavel_tipo: parentesco,
+        responsavel_nome: nomeResponsavel,
+        responsavel_cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
+        responsavel_endereco: enderecoResponsavel,
+        responsavel_telefone: telefoneResponsavel,
+        responsavel_profissao: ocupacaoProfissionalResponsavel,
+        responsavel_recebe_auxilio: bolsaSocial ?? false,
         nis,
-        rg: rgResponsavel,
-        rendaFamiliar,
-        religiao,
+        responsavel_rg: rgResponsavel,
+        renda_familiar: rendaFamiliar,
+        permite_catequese: religiao ?? false,
       },
       matricula: {
         escola,
         turno,
         serie,
+        data: new Date(),
+        ano: new Date().getFullYear(),
       },
     };
+
+    console.log({ dados });
 
     const resultado = await cadastrarMatriculaEAluno(dados);
 
