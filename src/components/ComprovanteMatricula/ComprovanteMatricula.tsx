@@ -32,6 +32,8 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
     const buscarDadosMatricula = async () => {
       const dados = await buscarInformacoesCompletas(id);
 
+      console.log({ dados });
+
       setDadosMatricula(dados);
     };
 
@@ -128,7 +130,12 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                   fontWeight: "bold",
                 }}
               >
-                Data da matrícula - {dadosMatricula?.matricula?.data}
+                Data da matrícula -{" "}
+                {new Date(dadosMatricula?.data).toLocaleDateString("pt-br", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })}
               </h2>
             </div>
             <div
@@ -208,7 +215,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                   marginRight: 20,
                 }}
               >
-                {dadosMatricula?.aluno?.dataNascimento}
+                {dadosMatricula?.aluno?.data_nascimento}
               </h3>
               <h2
                 style={{
@@ -287,7 +294,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.dataExpedicao}
+              {dadosMatricula?.aluno?.data_expedicao_rg}
             </h3>
           </div>
           <div
@@ -402,7 +409,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.termoCN}
+              {dadosMatricula?.aluno?.certidao_nascimento_termo}
             </h3>
 
             <h2
@@ -423,7 +430,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.folhaCN}
+              {dadosMatricula?.aluno?.certidao_nascimento_folha}
             </h3>
             <h2
               style={{
@@ -443,7 +450,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.livroCN}
+              {dadosMatricula?.aluno?.certidao_nascimento_livro}
             </h3>
           </div>
           <div
@@ -469,7 +476,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 margin: 0,
               }}
             >
-              {dadosMatricula?.matricula?.escola}
+              {dadosMatricula?.escola}
             </h3>
           </div>
           <div
@@ -497,7 +504,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.matricula?.serie}
+              {dadosMatricula?.serie}
             </h3>
 
             <h2
@@ -519,7 +526,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 textTransform: "capitalize",
               }}
             >
-              {dadosMatricula?.matricula?.turno}
+              {dadosMatricula?.turno}
             </h3>
           </div>
           <div
@@ -599,7 +606,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.nomeContatoUrgencia}
+              {dadosMatricula?.aluno?.contato_nome}
             </h3>
 
             <h2
@@ -620,7 +627,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.telefoneContatoUrgencia}
+              {dadosMatricula?.aluno?.contato_telefone}
             </h3>
           </div>
         </div>
@@ -664,7 +671,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
               }}
             >
               {tratarTipoResponsavelAluno(
-                dadosMatricula?.responsavel?.parentesco
+                dadosMatricula?.aluno.responsavel_tipo
               )}
             </h2>
           </div>
@@ -691,7 +698,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 margin: 0,
               }}
             >
-              {dadosMatricula?.responsavel?.nome}
+              {dadosMatricula?.aluno.responsavel_nome}
             </h3>
           </div>
           <div
@@ -719,7 +726,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.rg}
+              {dadosMatricula?.aluno.responsavel_rg}
             </h3>
 
             <h2
@@ -740,7 +747,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.cpf}
+              {dadosMatricula?.aluno.responsavel_cpf}
             </h3>
           </div>
           <div
@@ -768,7 +775,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.endereco}
+              {dadosMatricula?.aluno.responsavel_endereco}
             </h3>
           </div>
           <div
@@ -796,7 +803,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.telefone}
+              {dadosMatricula?.aluno.responsavel_telefone}
             </h3>
           </div>
           <div
@@ -824,10 +831,10 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.temParente ? "SIM" : "NÃO"}
+              {dadosMatricula?.aluno?.tem_parente ? "SIM" : "NÃO"}
             </h3>
 
-            {dadosMatricula?.aluno?.temParente && (
+            {dadosMatricula?.aluno?.tem_parente && (
               <>
                 <h2
                   style={{
@@ -847,7 +854,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                     marginRight: 20,
                   }}
                 >
-                  {dadosMatricula?.aluno?.nomeParente}
+                  {dadosMatricula?.aluno?.nome_parente}
                 </h3>
               </>
             )}
@@ -877,7 +884,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.rendaFamiliar}
+              R$ {dadosMatricula?.aluno.renda_familiar / 100}
             </h3>
 
             <h2
@@ -898,10 +905,10 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.bolsaSocial ? "SIM" : "NÃO"}
+              {dadosMatricula?.aluno.responsavel_recebe_auxilio ? "SIM" : "NÃO"}
             </h3>
 
-            {dadosMatricula?.responsavel?.bolsaSocial && (
+            {dadosMatricula?.aluno.responsavel_recebe_auxilio && (
               <>
                 <h2
                   style={{
@@ -921,7 +928,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                     marginRight: 20,
                   }}
                 >
-                  {dadosMatricula?.responsavel?.nis}
+                  {dadosMatricula?.aluno.responsavel_nis}
                 </h3>
               </>
             )}
@@ -951,7 +958,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.ocupacaoProfissional}
+              {dadosMatricula?.aluno.responsavel_profissao}
             </h3>
 
             <h2
@@ -962,7 +969,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 4,
               }}
             >
-              Religião:
+              Permite catequese:
             </h2>
             <h3
               style={{
@@ -972,7 +979,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.responsavel?.religiao}
+              {dadosMatricula?.aluno.permite_catequese ? "SIM" : "NÃO"}
             </h3>
           </div>
           <div
