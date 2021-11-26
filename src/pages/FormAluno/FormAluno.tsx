@@ -104,41 +104,38 @@ const FormAluno: React.FC = () => {
     setValue("nome", alunoMatricula?.nome);
     setValue("sexo", alunoMatricula?.sexo);
     setValue("cpf", alunoMatricula?.cpf);
-    setValue("dataNascimento", alunoMatricula.dataNascimento);
+    setValue("dataNascimento", alunoMatricula.data_nascimento);
     setValue("rg", alunoMatricula?.rg);
-    setValue("dataExpedicao", alunoMatricula?.dataExpedicao);
+    setValue("dataExpedicao", alunoMatricula?.data_expedicao_rg);
     setValue("endereco", alunoMatricula?.endereco);
     setValue("naturalidade", alunoMatricula?.naturalidade);
     setValue("nacionalidade", alunoMatricula?.nacionalidade);
-    setValue("termoCN", alunoMatricula?.termoCN);
-    setValue("folhaCN", alunoMatricula?.folhaCN);
-    setValue("livroCN", alunoMatricula?.livroCN);
+    setValue("termoCN", alunoMatricula?.certidao_nascimento_termo);
+    setValue("folhaCN", alunoMatricula?.certidao_nascimento_folha);
+    setValue("livroCN", alunoMatricula?.certidao_nascimento_livro);
     setValue("email", alunoMatricula?.email);
     setValue("telefone", alunoMatricula?.telefone);
-    setValue("temParente", alunoMatricula?.temParente);
-    setValue("nomeParente", alunoMatricula?.nomeParente);
-    setValue("nomeContatoUrgencia", alunoMatricula?.nomeContatoUrgencia);
-    setValue(
-      "telefoneContatoUrgencia",
-      alunoMatricula?.telefoneContatoUrgencia
-    );
-    setValue("parentesco", alunoMatricula?.parentesco);
-    setValue("nomeResponsavel", alunoMatricula?.nomeResponsavel);
+    setValue("temParente", alunoMatricula?.tem_arente);
+    setValue("nomeParente", alunoMatricula?.nome_parente);
+    setValue("nomeContatoUrgencia", alunoMatricula?.contato_nome);
+    setValue("telefoneContatoUrgencia", alunoMatricula?.contato_telefone);
+    setValue("parentesco", alunoMatricula?.responsavel_tipo);
+    setValue("nomeResponsavel", alunoMatricula?.responsavel_nome);
     setValue(
       "cpfResponsavel",
-      formatarCpf(alunoMatricula?.cpfResponsavel || "")
+      formatarCpf(alunoMatricula?.responsavel_cpf || "")
     );
-    setValue("enderecoResponsavel", alunoMatricula?.enderecoResponsavel);
-    setValue("telefoneResponsavel", alunoMatricula?.telefoneResponsavel);
+    setValue("enderecoResponsavel", alunoMatricula?.responsavel_endereco);
+    setValue("telefoneResponsavel", alunoMatricula?.responsavel_telefone);
     setValue(
       "ocupacaoProfissionalResponsavel",
-      alunoMatricula?.ocupacaoProfissionalResponsavel
+      alunoMatricula?.responsavel_profissao
     );
-    setValue("bolsaSocial", alunoMatricula?.bolsaSocial);
-    setValue("nis", alunoMatricula?.nis);
-    setValue("rgResponsavel", alunoMatricula?.rgResponsavel);
-    setValue("rendaFamiliar", alunoMatricula?.rendaFamiliar);
-    setValue("religiao", alunoMatricula?.religiao);
+    setValue("bolsaSocial", alunoMatricula?.responsavel_recebe_auxilio);
+    setValue("nis", alunoMatricula?.responsavel_nis);
+    setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
+    setValue("rendaFamiliar", alunoMatricula?.renda_familiar);
+    setValue("religiao", alunoMatricula?.permite_catequese);
 
     setAluno(alunoMatricula);
   };
@@ -178,42 +175,35 @@ const FormAluno: React.FC = () => {
     religiao,
   }: any) => {
     const dados = {
-      aluno: {
-        nome,
-        sexo,
-        cpf: cpf.replace(/[^0-9]+/g, ""),
-        dataNascimento,
-        rg,
-        dataExpedicao,
-        endereco,
-        naturalidade,
-        nacionalidade,
-        termoCN,
-        folhaCN,
-        livroCN,
-        email,
-        telefone: telefone.replace(/[^0-9]+/g, ""),
-        temParente,
-        nomeParente,
-        nomeContatoUrgencia,
-        telefoneContatoUrgencia: telefoneContatoUrgencia.replace(
-          /[^0-9]+/g,
-          ""
-        ),
-      },
-      responsavel: {
-        parentesco,
-        nome: nomeResponsavel,
-        cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
-        endereco: enderecoResponsavel,
-        telefone: telefoneResponsavel,
-        ocupacaoProfissional: ocupacaoProfissionalResponsavel,
-        bolsaSocial,
-        nis,
-        rg: rgResponsavel,
-        rendaFamiliar,
-        religiao,
-      },
+      nome,
+      sexo,
+      cpf: cpf.replace(/[^0-9]+/g, ""),
+      data_nascimento: dataNascimento,
+      rg,
+      data_expedicao_rg: dataExpedicao,
+      endereco,
+      naturalidade,
+      nacionalidade,
+      certidao_nascimento_termo: termoCN,
+      certidao_nascimento_folha: folhaCN,
+      certidao_nascimento_livro: livroCN,
+      email,
+      telefone: telefone.replace(/[^0-9]+/g, ""),
+      tem_parente: temParente ?? false,
+      nome_parente: nomeParente ?? "",
+      contato_nome: nomeContatoUrgencia,
+      contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),
+      responsavel_tipo: parentesco,
+      responsavel_nome: nomeResponsavel,
+      responsavel_cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
+      responsavel_endereco: enderecoResponsavel,
+      responsavel_telefone: telefoneResponsavel,
+      responsavel_profissao: ocupacaoProfissionalResponsavel,
+      responsavel_recebe_auxilio: bolsaSocial ?? false,
+      responsavel_nis: nis,
+      responsavel_rg: rgResponsavel,
+      renda_familiar: rendaFamiliar,
+      permite_catequese: religiao ?? false,
     };
 
     if (id) {

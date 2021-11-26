@@ -14,6 +14,7 @@ import ComprovanteMatricula from "../../components/ComprovanteMatricula/Comprova
 import buscarMatriculas from "../../usecases/buscarMatriculas";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import removerMatricula from "../../usecases/removerMatricula";
 
 const Matriculas: React.FC = () => {
   const componentRef = useRef(null);
@@ -39,6 +40,18 @@ const Matriculas: React.FC = () => {
     setMatriculas(alunosMatriculados);
   };
 
+  const remover = async (id) => {
+    const confirmacao = window.confirm(
+      "Tem certeza que deseja remover essa matrícula?"
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    await removerMatricula(id);
+  };
+
   return (
     <>
       <Flex
@@ -57,7 +70,7 @@ const Matriculas: React.FC = () => {
             <IonItem key={matricula.id}>
               <IonLabel className="ion-text-wrap">
                 <IonText color="dark" style={{ fontWeight: "bold" }}>
-                  <h2>{matricula.nome}</h2>
+                  <h2>{matricula.aluno.nome}</h2>
                 </IonText>
                 <IonText color="medium">
                   <p>Escola: {matricula.escola}</p>
@@ -83,7 +96,11 @@ const Matriculas: React.FC = () => {
                 <IonIcon icon={create} slot="start" />
                 Editar
               </IonButton>
-              <IonButton slot="end" color="danger">
+              <IonButton
+                slot="end"
+                color="danger"
+                onClick={() => remover(matricula.id)}
+              >
                 <IonIcon icon={trash} slot="start" />
                 Excluir
               </IonButton>
