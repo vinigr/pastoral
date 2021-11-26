@@ -14,6 +14,7 @@ import ComprovanteMatricula from "../../components/ComprovanteMatricula/Comprova
 import buscarMatriculas from "../../usecases/buscarMatriculas";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import removerMatricula from "../../usecases/removerMatricula";
 
 const Matriculas: React.FC = () => {
   const componentRef = useRef(null);
@@ -37,6 +38,18 @@ const Matriculas: React.FC = () => {
     const alunosMatriculados = await buscarMatriculas();
 
     setMatriculas(alunosMatriculados);
+  };
+
+  const remover = async (id) => {
+    const confirmacao = window.confirm(
+      "Tem certeza que deseja remover essa matrícula?"
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    await removerMatricula(id);
   };
 
   return (
@@ -83,7 +96,11 @@ const Matriculas: React.FC = () => {
                 <IonIcon icon={create} slot="start" />
                 Editar
               </IonButton>
-              <IonButton slot="end" color="danger">
+              <IonButton
+                slot="end"
+                color="danger"
+                onClick={() => remover(matricula.id)}
+              >
                 <IonIcon icon={trash} slot="start" />
                 Excluir
               </IonButton>
