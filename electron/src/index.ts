@@ -33,6 +33,7 @@ import { editarOficina } from "./use-cases/editar-oficina";
 import { fazerLogin } from "./use-cases/fazer-login";
 import { listarMatriculas } from "./use-cases/listar-matriculas";
 import { listarOficinas } from "./use-cases/listar-oficinas";
+import { pesquisarAlunos } from "./use-cases/pesquisar-alunos";
 import { salvarInformacoesInstituicao } from "./use-cases/salvar-informacoes-instituicao";
 
 // Graceful handling of unhandled errors.
@@ -206,4 +207,10 @@ ipcMain.handle("editarAluno", async (_event, id, aluno) => {
   const alunoAtualizado = await editarAluno(id, aluno);
 
   return alunoAtualizado;
+});
+
+ipcMain.handle("pesquisaAlunos", async (_event, term) => {
+  const alunos = await pesquisarAlunos(term);
+
+  return alunos;
 });
