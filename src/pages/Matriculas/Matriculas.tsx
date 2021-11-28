@@ -8,7 +8,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { create, trash } from "ionicons/icons";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text, useToast } from "@chakra-ui/react";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
@@ -17,6 +17,8 @@ import { useReactToPrint } from "react-to-print";
 import removerMatricula from "../../usecases/removerMatricula";
 
 const Matriculas: React.FC = () => {
+  const toast = useToast();
+
   const componentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -49,7 +51,25 @@ const Matriculas: React.FC = () => {
       return;
     }
 
-    await removerMatricula(id);
+    try {
+      await removerMatricula(id);
+
+      toast({
+        title: "Matrícula removida com sucesso!",
+        status: "success",
+        position: "top-right",
+        duration: 2000,
+      });
+
+      setMatriculas(matriculas.filter((matricula) => matricula.id !== id));
+    } catch (error) {
+      return toast({
+        title: "Falha ao remover matrícula! Por favor, tente novamente",
+        status: "error",
+        position: "top-right",
+        duration: 2000,
+      });
+    }
   };
 
   return (
