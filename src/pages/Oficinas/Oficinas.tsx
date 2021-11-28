@@ -8,12 +8,14 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { create, trash, person } from "ionicons/icons";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text, useToast } from "@chakra-ui/react";
 
 import buscarOficinas from "../../usecases/buscarOficinas";
 import { useNavigate } from "react-router-dom";
+import removerOficina from "../../usecases/removerOficina";
 
 const Oficinas: React.FC = () => {
+  const toast = useToast();
   const navigate = useNavigate();
 
   const [oficinas, setOficinas] = useState([]);
@@ -26,6 +28,36 @@ const Oficinas: React.FC = () => {
     const oficinasCadastradas = await buscarOficinas();
 
     setOficinas(oficinasCadastradas);
+  };
+
+  const remover = async (id) => {
+    const confirmacao = window.confirm(
+      "Tem certeza que deseja remover essa oficina?"
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    try {
+      await removerOficina(id);
+
+      toast({
+        title: "Oficina removida com sucesso!",
+        status: "success",
+        position: "top-right",
+        duration: 2000,
+      });
+
+      setOficinas(oficinas.filter((oficina) => oficina.id !== id));
+    } catch (error) {
+      return toast({
+        title: "Falha ao remover oficina! Por favor, tente novamente",
+        status: "error",
+        position: "top-right",
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -73,7 +105,11 @@ const Oficinas: React.FC = () => {
                 <IonIcon icon={create} slot="start" />
                 Editar
               </IonButton>
-              <IonButton slot="end" color="danger">
+              <IonButton
+                slot="end"
+                color="danger"
+                onClick={() => remover(oficina.id)}
+              >
                 <IonIcon icon={trash} slot="start" />
                 Excluir
               </IonButton>
