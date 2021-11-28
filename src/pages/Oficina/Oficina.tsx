@@ -1,27 +1,23 @@
 import * as Yup from "yup";
 
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import buscarOficina from "../../usecases/buscarOficina";
 import cadastrarOficina from "../../usecases/cadastrarOficina";
 import editarOficina from "../../usecases/editarOficina";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  IconButton,
   Input,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 
 const schema = Yup.object().shape({
   nome: Yup.string().required("O nome é obrigatório"),
@@ -34,12 +30,6 @@ const Oficina: React.FC = () => {
   const toast = useToast();
   const navigate = useNavigate();
   let { id } = useParams() ?? {};
-
-  // const [novoAluno, setNovoAluno] = useState<boolean>(false)
-  const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-
-  const [pesquisa, setPesquisa] = useState("");
-  const [alunos, setAlunos] = useState([]);
 
   const {
     register,
@@ -56,28 +46,6 @@ const Oficina: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
-  useEffect(() => {
-    if (pesquisa) {
-      alunosMatriculados(pesquisa);
-    } else {
-      setAlunos([]);
-    }
-  }, [pesquisa]);
-
-  const alunosMatriculados = async (itemPesquisa) => {
-    const alunosMatriculadosFiltro = await buscarAlunosMatriculados(
-      itemPesquisa
-    );
-
-    setAlunos(alunosMatriculadosFiltro);
-  };
-
-  function adicionarAlunos(aluno) {
-    const alunosMatriculados = Array.from(alunosSelecionados);
-    alunosMatriculados.push({ id: aluno.id, nome: aluno.nome });
-    setAlunosSelecionados(alunosMatriculados);
-  }
 
   const buscarInformacoes = async () => {
     const oficina = await buscarOficina(id);
@@ -181,71 +149,6 @@ const Oficina: React.FC = () => {
               <Input type="text" {...register("nivel")} />
               <FormErrorMessage>{errors?.nivel?.message}</FormErrorMessage>
             </FormControl>
-          </Stack>
-
-          <Stack spacing={6} mt={6}>
-            <Input
-              placeholder="Pesquisar aluno matriculado"
-              value={pesquisa}
-              onChange={(e) => setPesquisa(e.target.value)}
-            />
-
-            <Stack mt={10}>
-              <Text fontWeight="bold">Alunos encontrados na pesquisa</Text>
-
-              <Stack>
-                {alunos.map((aluno) => (
-                  <Box
-                    key={aluno.id}
-                    d="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Text>{aluno?.nome}</Text>
-                    <IconButton
-                      colorScheme="blue"
-                      aria-label="Adicionar aluno"
-                      icon={<AddIcon />}
-                      onClick={() => {
-                        setPesquisa("");
-                        adicionarAlunos(aluno);
-                        setAlunos([]);
-                      }}
-                    />
-                  </Box>
-                ))}
-              </Stack>
-            </Stack>
-
-            <Stack>
-              <Text fontWeight="bold">Alunos selecionados para a oficina</Text>
-              <Stack>
-                {alunosSelecionados?.map((aluno) => (
-                  <Box
-                    key={aluno.id}
-                    d="flex"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Text>{aluno?.nome}</Text>
-                    <IconButton
-                      size="sm"
-                      colorScheme="red"
-                      aria-label="Remover aluno"
-                      icon={<CloseIcon />}
-                      onClick={() => {
-                        const alunos = alunosSelecionados.filter(
-                          (a) => aluno.id !== a.id
-                        );
-                        setAlunosSelecionados(alunos);
-                      }}
-                    />
-                  </Box>
-                ))}
-              </Stack>
-            </Stack>
           </Stack>
 
           <Stack alignItems="flex-end" mt={10}>

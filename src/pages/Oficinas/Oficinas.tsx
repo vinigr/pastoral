@@ -7,7 +7,7 @@ import {
   IonText,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { create, trash } from "ionicons/icons";
+import { create, trash, person } from "ionicons/icons";
 import { Button, Flex, Text } from "@chakra-ui/react";
 
 import buscarOficinas from "../../usecases/buscarOficinas";
@@ -59,6 +59,13 @@ const Oficinas: React.FC = () => {
                   <p>Nível: {oficina.nivel}</p>
                 </IonText>
               </IonLabel>
+              <IonButton
+                slot="end"
+                onClick={() => navigate(`/oficina/${oficina?.id}/alunos`)}
+              >
+                <IonIcon icon={person} slot="start" />
+                Alunos
+              </IonButton>
               <IonButton
                 slot="end"
                 onClick={() => navigate(`/oficina/${oficina?.id}`)}
