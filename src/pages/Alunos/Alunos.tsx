@@ -7,15 +7,17 @@ import {
   IonText,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { Text } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 
 import { create, trash } from "ionicons/icons";
 
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import { formatarCpf } from "../../utils/formatarStrings";
 import { useNavigate } from "react-router-dom";
+import removerAluno from "../../usecases/removerAluno";
 
 const Alunos: React.FC = () => {
+  const toast = useToast();
   const navigate = useNavigate();
 
   const [alunos, setAlunos] = useState([]);
@@ -28,6 +30,36 @@ const Alunos: React.FC = () => {
     const alunosMatriculados = await buscarAlunosMatriculados();
 
     setAlunos(alunosMatriculados);
+  };
+
+  const remover = async (id) => {
+    const confirmacao = window.confirm(
+      "Tem certeza que deseja remover essa oficina?"
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    try {
+      await removerAluno(id);
+
+      toast({
+        title: "Aluno removido com sucesso!",
+        status: "success",
+        position: "top-right",
+        duration: 2000,
+      });
+
+      setAlunos(alunos.filter((aluno) => aluno.id !== id));
+    } catch (error) {
+      return toast({
+        title: "Falha ao remover aluno! Por favor, tente novamente",
+        status: "error",
+        position: "top-right",
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -57,7 +89,11 @@ const Alunos: React.FC = () => {
                 <IonIcon icon={create} slot="start" />
                 Editar
               </IonButton>
-              <IonButton slot="end" color="danger">
+              <IonButton
+                slot="end"
+                color="danger"
+                onClick={() => remover(aluno.id)}
+              >
                 <IonIcon icon={trash} slot="start" />
                 Excluir
               </IonButton>
