@@ -1,29 +1,35 @@
-import { Entity, Column, PrimaryColumn, ManyToMany, JoinTable, PrimaryGeneratedColumn } from 'typeorm'
-import { Aluno } from './Aluno'
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToMany,
+  JoinTable,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Aluno } from "./Aluno";
 
 @Entity()
 export class Oficina {
   @PrimaryGeneratedColumn()
   @PrimaryColumn()
-  id: number
+  id: number;
 
   @Column()
-  nome: string
+  nome: string;
 
   @Column()
-  professor: string
+  professor: string;
 
   @Column()
-  nivel: string
+  nivel: string;
 
   @Column()
-  horario: string
+  horario: string;
 
-  @Column({default: true})
-  ativo: boolean
+  @Column({ default: true })
+  ativo: boolean;
 
-  @ManyToMany(() => Aluno, aluno => aluno.oficinas)
+  @ManyToMany(() => Aluno)
   @JoinTable()
   alunos: Aluno[];
-
 }

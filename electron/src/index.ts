@@ -19,6 +19,7 @@ import {
   setupContentSecurityPolicy,
   setupReloadWatcher,
 } from "./setup";
+import { adicionarAlunoAOficina } from "./use-cases/adicionar-aluno-a-oficina";
 import { buscarAluno } from "./use-cases/buscar-aluno";
 import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados";
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao";
@@ -213,4 +214,10 @@ ipcMain.handle("pesquisaAlunos", async (_event, term) => {
   const alunos = await pesquisarAlunos(term);
 
   return alunos;
+});
+
+ipcMain.handle("adicionarAlunoAOficina", async (_event, idAluno, idOficina) => {
+  const oficina = await adicionarAlunoAOficina(idAluno, idOficina);
+
+  return oficina;
 });

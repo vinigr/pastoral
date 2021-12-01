@@ -1,6 +1,6 @@
-export function criaAluno() {
+export function criaAluno(id = 1) {
   return {
-    id: 1,
+    id,
     nome: "teste",
     sexo: "",
     cpf: "",
@@ -31,7 +31,6 @@ export function criaAluno() {
     renda_familiar: 0,
     permite_catequese: false,
     matriculas: [],
-    oficinas: [],
-    ativo: true
-  }
+    ativo: true,
+  };
 }
