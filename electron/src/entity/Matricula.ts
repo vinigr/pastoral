@@ -22,6 +22,9 @@ export class Matricula {
   @Column()
   serie: string
 
+  @Column({default: true})
+  ativo: boolean
+
   @ManyToOne(() => Aluno, aluno => aluno.matriculas)
   aluno: Aluno
 }

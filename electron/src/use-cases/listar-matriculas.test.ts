@@ -1,93 +1,50 @@
-import { getRepository } from "typeorm"
-import { Aluno } from "../entity/Aluno"
-import { Matricula } from "../entity/Matricula"
-import { listarMatriculas } from "./listar-matriculas"
+import { getRepository } from "typeorm";
+import { Aluno } from "../entity/Aluno";
+import { Matricula } from "../entity/Matricula";
+import { criaAluno } from "../factories/criaAluno";
+import { criaMatricula } from "../factories/criaMatricula";
+import { listarMatriculas } from "./listar-matriculas";
 
-const criaAluno = (): Aluno => ({
-  id: 1,
-  nome: "teste",
-  sexo: "",
-  cpf: "",
-  data_nascimento: new Date(),
-  rg: "",
-  data_expedicao_rg: new Date(),
-  endereco: "",
-  naturalidade: "",
-  nacionalidade: "",
-  certidao_nascimento_termo: "",
-  certidao_nascimento_folha: "",
-  certidao_nascimento_livro: "",
-  email: "",
-  telefone: "",
-  tem_parente: false,
-  nome_parente: "",
-  contato_nome: "",
-  contato_telefone: "",
-  responsavel_tipo: "",
-  responsavel_cpf: "",
-  responsavel_rg: "",
-  responsavel_nome: "",
-  responsavel_nis: "",
-  responsavel_endereco: "",
-  responsavel_telefone: "",
-  responsavel_recebe_auxilio: false,
-  responsavel_profissao: "",
-  renda_familiar: 0,
-  permite_catequese: false,
-  matriculas: []
-})
+describe("listar matricula", () => {
+  test("retorna array vazio se não tem matriculas", async () => {
+    const resposta = await listarMatriculas();
 
-const criaMatricula = (aluno): Matricula => ({
-  id: 1,
-  data: new Date(),
-  turno: "",
-  ano: new Date().getFullYear(),
-  escola: "",
-  serie: "4 ano",
-  aluno
-})
+    expect(resposta).toEqual([]);
+  });
 
+  test("retorna array com matricula se tem matriculas no ano", async () => {
+    const alunosRepo = getRepository(Aluno);
+    const matriculasRepo = getRepository(Matricula);
 
-describe('listar matricula', () => {
-  test('retorna array vazio se não tem matriculas', async () => {
-    const resposta = await listarMatriculas()
+    const aluno: Aluno = criaAluno();
 
-    expect(resposta).toEqual([])
-  })
+    const matricula: Matricula = criaMatricula(aluno);
 
-  test('retorna array com matricula se tem matriculas no ano', async () => {
-    const alunosRepo = getRepository(Aluno)
-    const matriculasRepo = getRepository(Matricula)
+    await alunosRepo.save(aluno);
+    await matriculasRepo.save(matricula);
 
-    const aluno: Aluno = criaAluno()
+    const resposta = await listarMatriculas();
 
-    const matricula: Matricula = criaMatricula(aluno)
+    expect(resposta.length).toBe(1);
+    expect(resposta[0].id).toBe(matricula.id);
+    expect(resposta[0].aluno.id).toBe(aluno.id);
+  });
 
-    await alunosRepo.save(aluno)
-    await matriculasRepo.save(matricula)
+  test("retorna array vazio se tem matriculas, mas não são do ano", async () => {
+    const alunosRepo = getRepository(Aluno);
+    const matriculasRepo = getRepository(Matricula);
 
-    const resposta = await listarMatriculas()
+    const aluno: Aluno = criaAluno();
 
-    expect(resposta.length).toBe(1)
-    expect(resposta[0].id).toBe(matricula.id)
-    expect(resposta[0].aluno.id).toBe(aluno.id)
-  })
+    const matricula: Matricula = criaMatricula(aluno);
 
-  test('retorna array vazio se tem matriculas, mas não são do ano', async () => {
-    const alunosRepo = getRepository(Aluno)
-    const matriculasRepo = getRepository(Matricula)
+    matricula.ano = 2000;
 
-    const aluno: Aluno = criaAluno()
+    await alunosRepo.save(aluno);
+    await matriculasRepo.save(matricula);
 
-    const matricula: Matricula = criaMatricula(aluno)
+    const resposta = await listarMatriculas();
 
-    matricula.ano = 2000
-
-    await alunosRepo.save(aluno)
-    await matriculasRepo.save(matricula)
-
-    const resposta = await listarMatriculas()
-
-    expect(resposta.length).toBe(0)
-  })
-})
+    expect(resposta.length).toBe(0);
+  });
+});

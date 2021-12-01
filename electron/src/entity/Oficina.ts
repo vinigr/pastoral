@@ -19,7 +19,10 @@ export class Oficina {
   @Column()
   horario: string
 
-  @ManyToMany(() => Aluno)
+  @Column({default: true})
+  ativo: boolean
+
+  @ManyToMany(() => Aluno, aluno => aluno.oficinas)
   @JoinTable()
   alunos: Aluno[];
 

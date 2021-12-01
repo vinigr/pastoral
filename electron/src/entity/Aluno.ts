@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm'
 import { Matricula } from './Matricula'
+import { Oficina } from './Oficina'
 
 @Entity()
 export class Aluno {
@@ -94,6 +95,13 @@ export class Aluno {
   @Column()
   permite_catequese: boolean
 
+  @Column({default: true})
+  ativo: boolean
+
   @OneToMany(() => Matricula, matricula => matricula.aluno)
   matriculas: Matricula[]
+  
+  @ManyToMany(() => Oficina, oficina => oficina.alunos)
+  @JoinTable()
+  oficinas: Oficina[];
 }

@@ -1,125 +1,83 @@
-import { getRepository } from "typeorm"
-import { Aluno } from "../entity/Aluno"
-import { Matricula } from "../entity/Matricula"
-import { pesquisarAlunos } from "./pesquisar-alunos"
+import { getRepository } from "typeorm";
+import { Aluno } from "../entity/Aluno";
+import { Matricula } from "../entity/Matricula";
+import { criaAluno } from "../factories/criaAluno";
+import { criaMatricula } from "../factories/criaMatricula";
+import { pesquisarAlunos } from "./pesquisar-alunos";
 
-const criaAluno = (): Aluno => ({
-  id: 1,
-  nome: "teste",
-  sexo: "",
-  cpf: "",
-  data_nascimento: new Date(),
-  rg: "",
-  data_expedicao_rg: new Date(),
-  endereco: "",
-  naturalidade: "",
-  nacionalidade: "",
-  certidao_nascimento_termo: "",
-  certidao_nascimento_folha: "",
-  certidao_nascimento_livro: "",
-  email: "",
-  telefone: "",
-  tem_parente: false,
-  nome_parente: "",
-  contato_nome: "",
-  contato_telefone: "",
-  responsavel_tipo: "",
-  responsavel_cpf: "",
-  responsavel_rg: "",
-  responsavel_nome: "",
-  responsavel_nis: "",
-  responsavel_endereco: "",
-  responsavel_telefone: "",
-  responsavel_recebe_auxilio: false,
-  responsavel_profissao: "",
-  renda_familiar: 0,
-  permite_catequese: false,
-  matriculas: []
-})
+test("retorna array vazio se não existirem alunos", async () => {
+  const alunos = await pesquisarAlunos();
 
-const criaMatricula = (aluno): Matricula => ({
-  id: 1,
-  data: new Date(),
-  turno: "",
-  ano: new Date().getFullYear(),
-  escola: "",
-  serie: "4 ano",
-  aluno
-})
+  expect(alunos).toEqual([]);
+});
 
-test('retorna array vazio se não existirem alunos', async () => {
-  const alunos = await pesquisarAlunos()
+test("retorna array com aluno se encontra aluno sem matricula", async () => {
+  const repo = getRepository(Aluno);
 
-  expect(alunos).toEqual([])
-})
+  const aluno: Aluno = criaAluno();
 
-test('retorna array com aluno se encontra aluno sem matricula', async () => {
-  const repo = getRepository(Aluno)
+  await repo.save(aluno);
 
-  const aluno: Aluno = criaAluno()
+  const alunos = await pesquisarAlunos();
 
-  await repo.save(aluno)
+  expect(alunos[0].id).toEqual(aluno.id);
+});
 
-  const alunos = await pesquisarAlunos()
+test("retorna array vazio se encontra alunos mas com matricula do ano", async () => {
+  const alunosRepo = getRepository(Aluno);
+  const matriculasRepo = getRepository(Matricula);
 
-  expect(alunos[0].id).toEqual(aluno.id)
-})
+  const aluno: Aluno = criaAluno();
 
-test('retorna array vazio se encontra alunos mas com matricula do ano', async () => {
-  const alunosRepo = getRepository(Aluno)
-  const matriculasRepo = getRepository(Matricula)
+  const matricula: Matricula = criaMatricula(aluno);
 
-  const aluno: Aluno = criaAluno()
+  await alunosRepo.save(aluno);
 
-  const matricula: Matricula = criaMatricula(aluno)
+  await matriculasRepo.save(matricula);
 
-  await alunosRepo.save(aluno)
+  const alunos = await pesquisarAlunos();
 
-  await matriculasRepo.save(matricula)
+  expect(alunos).toEqual([]);
+});
 
-  const alunos = await pesquisarAlunos()
+test("retorna array com aluno se encontra aluno com matricula de outro ano", async () => {
+  const alunosRepo = getRepository(Aluno);
+  const matriculasRepo = getRepository(Matricula);
 
-  expect(alunos).toEqual([])
-})
+  const aluno: Aluno = criaAluno();
 
-test('retorna array com aluno se encontra aluno com matricula de outro ano', async () => {
-  const alunosRepo = getRepository(Aluno)
-  const matriculasRepo = getRepository(Matricula)
+  const matricula: Matricula = criaMatricula(aluno);
+  matricula.ano = 2000;
 
-  const aluno: Aluno = criaAluno()
+  await alunosRepo.save(aluno);
 
-  const matricula: Matricula = criaMatricula(aluno)
-  matricula.ano = 2000
+  await matriculasRepo.save(matricula);
 
-  await alunosRepo.save(aluno)
+  const alunos = await pesquisarAlunos();
 
-  await matriculasRepo.save(matricula)
+  expect(alunos[0].id).toEqual(aluno.id);
+});
 
-  const alunos = await pesquisarAlunos()
+test("retorna array vazio se não encontra aluno com o termo", async () => {
+  const alunosRepo = getRepository(Aluno);
 
-  expect(alunos[0].id).toEqual(aluno.id)
-})
+  const aluno: Aluno = criaAluno();
 
-test('retorna array vazio se não encontra aluno com o termo', async () => {
-  const alunosRepo = getRepository(Aluno)
+  await alunosRepo.save(aluno);
 
-  const aluno: Aluno = criaAluno()
+  const alunos = await pesquisarAlunos("termo errado");
 
-  await alunosRepo.save(aluno)
+  expect(alunos).toEqual([]);
+});
 
-  const alunos = await pesquisarAlunos("termo errado")
+test("retorna array com aluno se encontra aluno com o termo correto", async () => {
+  const alunosRepo = getRepository(Aluno);
 
-  expect(alunos).toEqual([])
-})
+  const aluno: Aluno = criaAluno();
 
-test('retorna array com aluno se encontra aluno com o termo correto', async () => {
-  const alunosRepo = getRepository(Aluno)
+  await alunosRepo.save(aluno);
 
-  const aluno: Aluno = criaAluno()
+  const alunos = await pesquisarAlunos(aluno.nome);
 
-  await alunosRepo.save(aluno)
-
-  const alunos = await pesquisarAlunos(aluno.nome)
-
-  expect(alunos?.length).toBeTruthy()
-})
+  expect(alunos?.length).toBeTruthy();
+});
