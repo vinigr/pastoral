@@ -1,29 +1,25 @@
-import { getRepository, Like } from "typeorm"
-import { Aluno } from "../entity/Aluno"
-
+import { getRepository, Like } from "typeorm";
+import { Aluno } from "../entity/Aluno";
 
 export async function buscarAlunosMatriculados(term?: string) {
-  const alunoRepo = getRepository(Aluno)
+  const alunoRepo = getRepository(Aluno);
 
-  const whereClause = qb => {
-    qb.where('matricula.ano = :ano', {
-      ano: new Date().getFullYear()
-    })
+  const whereClause = (qb) => {
+    qb.where("matricula.ativo = true");
     if (term) {
-      qb.andWhere('aluno.nome like :termo', { termo: `%${term}%` })
+      qb.andWhere("aluno.nome like :termo", { termo: `%${term}%` });
     }
-  }
+  };
 
   const alunos = await alunoRepo.find({
     join: {
       alias: "aluno",
       leftJoin: {
-        matricula: "matricula"
-      }
+        matricula: "matricula",
+      },
     },
-    where: whereClause
-  })
+    where: whereClause,
+  });
 
-  return alunos
+  return alunos;
 }
-

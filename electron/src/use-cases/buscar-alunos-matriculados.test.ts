@@ -47,7 +47,7 @@ test("retorna array vazio se encontra aluno sem matricula do ano", async () => {
   const aluno: Aluno = criaAluno();
 
   const matricula = criaMatricula(aluno);
-  matricula.ano = 2000;
+  matricula.ativo = false;
 
   await alunosRepo.save(aluno);
 

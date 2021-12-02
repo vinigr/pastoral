@@ -38,7 +38,7 @@ describe("listar matricula", () => {
 
     const matricula: Matricula = criaMatricula(aluno);
 
-    matricula.ano = 2000;
+    matricula.ativo = false;
 
     await alunosRepo.save(aluno);
     await matriculasRepo.save(matricula);

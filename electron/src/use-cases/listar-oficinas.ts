@@ -1,10 +1,10 @@
-import { getRepository } from "typeorm"
-import { Oficina } from "../entity/Oficina"
+import { getRepository } from "typeorm";
+import { Oficina } from "../entity/Oficina";
 
 export async function listarOficinas() {
-  const repo = getRepository(Oficina)
+  const repo = getRepository(Oficina);
 
-  const oficinas = await repo.find()
+  const oficinas = await repo.find({ ativo: true });
 
-  return oficinas
+  return oficinas;
 }

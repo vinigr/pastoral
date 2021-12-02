@@ -47,7 +47,7 @@ test("retorna array com aluno se encontra aluno com matricula de outro ano", asy
   const aluno: Aluno = criaAluno();
 
   const matricula: Matricula = criaMatricula(aluno);
-  matricula.ano = 2000;
+  matricula.ativo = false;
 
   await alunosRepo.save(aluno);
 

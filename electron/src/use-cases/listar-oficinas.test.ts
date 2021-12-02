@@ -21,4 +21,17 @@ describe("listar oficinas", () => {
 
     expect(response.length).toBe(1);
   });
+
+  test("retorna array vazio se só tem oficinas inativas", async () => {
+    const oficina = criaOficina();
+    oficina.ativo = false;
+
+    const repo = getRepository(Oficina);
+
+    await repo.save(oficina);
+
+    const response = await listarOficinas();
+
+    expect(response.length).toBe(0);
+  });
 });

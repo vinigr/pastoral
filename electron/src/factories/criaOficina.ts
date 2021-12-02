@@ -5,6 +5,7 @@ export function criaOficina() {
     professor: "",
     nivel: "",
     horario: "",
+    ativo: true,
     alunos: [],
   };
 }
