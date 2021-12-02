@@ -31,6 +31,7 @@ import { criarOficina } from "./use-cases/criar-oficina";
 import { editarAluno } from "./use-cases/editar-aluno";
 import { editarMatricula } from "./use-cases/editar-matricula";
 import { editarOficina } from "./use-cases/editar-oficina";
+import { editarUsuario } from "./use-cases/editar-usuario";
 import { fazerLogin } from "./use-cases/fazer-login";
 import { listarMatriculas } from "./use-cases/listar-matriculas";
 import { listarOficinas } from "./use-cases/listar-oficinas";
@@ -255,4 +256,10 @@ ipcMain.handle("removerMatriculasDoAno", async (_event, ano) => {
   const matriculas = await removerMatriculasDoAno(ano);
 
   return matriculas;
+});
+
+ipcMain.handle("editarUsuario", async (_event, usuario, senha) => {
+  const usuarioEditado = await editarUsuario(usuario, senha);
+
+  return usuarioEditado;
 });
