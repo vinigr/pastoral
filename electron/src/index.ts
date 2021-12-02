@@ -37,6 +37,7 @@ import { listarOficinas } from "./use-cases/listar-oficinas";
 import { pesquisarAlunos } from "./use-cases/pesquisar-alunos";
 import { removerAluno } from "./use-cases/remover-aluno";
 import { removerAlunoDaOficina } from "./use-cases/remover-aluno-da-oficina";
+import { removerMatricula } from "./use-cases/remover-matricula";
 import { removerOficina } from "./use-cases/remover-oficina";
 import { salvarInformacoesInstituicao } from "./use-cases/salvar-informacoes-instituicao";
 
@@ -241,4 +242,10 @@ ipcMain.handle("removerOficina", async (_event, idOficina) => {
   const oficina = await removerOficina(idOficina);
 
   return oficina;
+});
+
+ipcMain.handle("removerMatricula", async (_event, idMatricula) => {
+  const matricula = await removerMatricula(idMatricula);
+
+  return matricula;
 });
