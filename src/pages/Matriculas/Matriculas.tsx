@@ -8,13 +8,14 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { create, trash } from "ionicons/icons";
-import { Button, Flex, Text, useToast } from "@chakra-ui/react";
+import { Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import removerMatricula from "../../usecases/removerMatricula";
+import removerMatriculasDoAno from "../../usecases/removerMatriculasDoAno";
 
 const Matriculas: React.FC = () => {
   const toast = useToast();
@@ -72,17 +73,62 @@ const Matriculas: React.FC = () => {
     }
   };
 
+  const inativarMatriculas = async () => {
+    const ano = window.prompt(
+      "Informe o ano das matrículas que deseja inativar"
+    );
+
+    if (!ano) {
+      return;
+    }
+
+    if (isNaN(parseInt(ano))) {
+      return toast({
+        title: "Falha",
+        description: "Por favor, informe um ano somente com números",
+        status: "error",
+        position: "top-right",
+        duration: 2000,
+      });
+    }
+
+    if (parseInt(ano) < 2010 || parseInt(ano) > 2030) {
+      return;
+    }
+
+    try {
+      await removerMatriculasDoAno(ano);
+
+      toast({
+        title: "Matrículas inativadas com sucesso!",
+        status: "success",
+        position: "top-right",
+        duration: 2000,
+      });
+
+      listarMatriculas();
+    } catch (error) {
+      return toast({
+        title: "Falha ao inativar matrículas! Por favor, tente novamente",
+        status: "error",
+        position: "top-right",
+        duration: 2000,
+      });
+    }
+  };
+
   return (
     <>
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        onClick={() => navigate("/matricula")}
-      >
+      <Flex justifyContent="space-between" alignItems="center">
         <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
           Matrículas
         </Text>
-        <Button>Adicionar</Button>
+        <Stack direction="row">
+          <Button onClick={inativarMatriculas} colorScheme={"orange"}>
+            Inativar matrículas
+          </Button>
+          <Button onClick={() => navigate("/matricula")}>Adicionar</Button>
+        </Stack>
       </Flex>
       <div className="container">
         <IonList>

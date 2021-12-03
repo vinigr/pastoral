@@ -62,15 +62,11 @@ const Oficinas: React.FC = () => {
 
   return (
     <>
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        onClick={() => navigate("/oficina")}
-      >
+      <Flex justifyContent="space-between" alignItems="center">
         <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
           Oficinas
         </Text>
-        <Button>Adicionar</Button>
+        <Button onClick={() => navigate("/oficina")}>Adicionar</Button>
       </Flex>
       <Text as="h2" fontSize={24} fontWeight="bold" mb={4}></Text>
       <div className="container">
