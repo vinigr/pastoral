@@ -8,11 +8,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import adicionarAlunoAOficina from "../../usecases/adicionarAlunoAOficina";
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import removerAlunoDaOficina from "../../usecases/removerAlunoDaOficina";
 
 const AlunosOficina: React.FC = () => {
   const toast = useToast();
+  let { id: idOficina } = useParams() ?? {};
 
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
 
@@ -50,7 +53,7 @@ const AlunosOficina: React.FC = () => {
     }
 
     try {
-      const resultado = removerAlunoDaOficina(aluno.id);
+      const resultado = adicionarAlunoAOficina(aluno.id, idOficina);
 
       if (resultado) {
         toast({
@@ -85,7 +88,7 @@ const AlunosOficina: React.FC = () => {
 
   const removerAluno = (id) => {
     try {
-      const resultado = removerAlunoDaOficina(id);
+      const resultado = removerAlunoDaOficina(id, idOficina);
 
       if (resultado) {
         toast({
