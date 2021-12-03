@@ -2,16 +2,11 @@ import { criarOficina } from "./criar-oficina";
 
 import { getRepository } from "typeorm";
 import { Oficina } from "../entity/Oficina";
+import { criaOficina } from "../factories/criaOficina";
 
 describe("criar oficina", () => {
   test("retorna oficina criada com id", async () => {
-    const oficina = {
-      nome: "",
-      professor: "",
-      nivel: "",
-      horario: new Date(),
-      alunos: [],
-    };
+    const oficina = criaOficina()
 
     const resposta = await criarOficina(oficina);
 
