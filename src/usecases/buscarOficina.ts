@@ -11,6 +11,7 @@ export default async function buscarOficina(id) {
       professor: "Sérgio",
       horario: "09:00",
       nivel: "Faixa branca",
+      alunos: [],
     };
   }
 }
