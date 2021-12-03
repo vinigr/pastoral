@@ -10,11 +10,9 @@ export default async function buscarInformacoesMatriculaAluno(id) {
         id: 2,
         nome: "Carlos",
       },
-      matricula: {
-        escola: "COEDUC",
-        serie: "4",
-        turno: "matutino",
-      },
+      escola: "COEDUC",
+      serie: "4",
+      turno: "matutino",
     };
   }
 }

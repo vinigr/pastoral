@@ -4,6 +4,7 @@ import {
   MdLibraryBooks,
   MdPerson,
 } from "react-icons/md";
+import { RiUser2Fill } from "react-icons/ri";
 
 interface NavItem {
   label: string;
@@ -32,5 +33,10 @@ export const ItensMenu: Array<NavItem> = [
     label: "Instituição",
     href: "/instituicao",
     icon: MdBusiness,
+  },
+  {
+    label: "Usuário",
+    href: "/usuario",
+    icon: RiUser2Fill,
   },
 ];

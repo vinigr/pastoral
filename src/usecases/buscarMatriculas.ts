@@ -8,7 +8,9 @@ export default async function buscarMatriculas() {
     return [
       {
         id: 1,
-        nome: "José Antônio",
+        aluno: {
+          nome: "José Antônio",
+        },
         escola: "COEDUC",
         serie: "4",
       },
