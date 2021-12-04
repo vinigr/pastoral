@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import adicionarAlunoAOficina from "../../usecases/adicionarAlunoAOficina";
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
+import buscarOficina from "../../usecases/buscarOficina";
 import removerAlunoDaOficina from "../../usecases/removerAlunoDaOficina";
 
 const AlunosOficina: React.FC = () => {
@@ -21,6 +22,10 @@ const AlunosOficina: React.FC = () => {
 
   const [pesquisa, setPesquisa] = useState("");
   const [alunos, setAlunos] = useState([]);
+
+  useEffect(() => {
+    buscarInformacoesIniciais();
+  }, []);
 
   useEffect(() => {
     if (pesquisa) {
@@ -36,6 +41,14 @@ const AlunosOficina: React.FC = () => {
     );
 
     setAlunos(alunosMatriculadosFiltro);
+  };
+
+  const buscarInformacoesIniciais = async () => {
+    const oficina = await buscarOficina(idOficina);
+
+    if (oficina) {
+      setAlunosSelecionados(oficina.alunos);
+    }
   };
 
   const adicionarAluno = (aluno) => {
