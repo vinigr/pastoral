@@ -9,7 +9,7 @@ import { Usuario } from "./src/entity/Usuario"
 global.beforeAll(async () => {
   await createConnection(
     {
-      type: "sqlite",
+      type: "better-sqlite3",
       database: ":memory:",
       dropSchema: true,
       entities: [

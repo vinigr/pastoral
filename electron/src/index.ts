@@ -91,7 +91,7 @@ if (electronIsDev) {
   await myCapacitorApp.init();
 
   createConnection({
-    type: "sqlite",
+    type: "better-sqlite3",
     database: "matriculas.db",
     entities: [Usuario, Aluno, Instituicao, Oficina, Matricula],
     synchronize: true,
