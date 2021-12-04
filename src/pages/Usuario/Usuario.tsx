@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import editarAluno from "../../usecases/editarAluno";
+import editarUsuario from "../../usecases/editarUsuario";
 
 const schema = Yup.object().shape({
   usuario: Yup.string().required("O usuário é obrigatório"),
@@ -39,7 +39,7 @@ const Usuario: React.FC = () => {
     usuario: string;
     senha: string;
   }) => {
-    const resultado = await editarAluno(usuario, senha);
+    const resultado = await editarUsuario(usuario, senha);
 
     if (resultado) {
       return toast({
