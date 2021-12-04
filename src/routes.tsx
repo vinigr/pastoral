@@ -15,6 +15,7 @@ import Login from "./pages/Login/Login";
 import Matriculas from "./pages/Matriculas/Matriculas";
 import Oficina from "./pages/Oficina/Oficina";
 import Oficinas from "./pages/Oficinas/Oficinas";
+import Usuario from "./pages/Usuario/Usuario";
 
 const PrivateRoute = (props: any) => {
   return localStorage.getItem("logado") ? <Outlet /> : <Navigate to="/login" />;
@@ -41,6 +42,8 @@ const RoutesApp = () => {
 
             <Route path="/instituicao" element={<Instituicao />} />
             <Route path="/relatorio" element={<ComprovanteMatricula />} />
+
+            <Route path="/usuario" element={<Usuario />} />
           </Route>
         </Route>
       </Routes>
