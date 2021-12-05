@@ -92,6 +92,7 @@ const schema = Yup.object().shape({
   telefoneContatoUrgencia: Yup.string().required(
     "O telefone do contato de urgência é obrigatório"
   ),
+  afinidades: Yup.string(),
   parentesco: Yup.string().required(
     "É necessário informar quem é o responsável"
   ),
@@ -240,6 +241,7 @@ const FormularioMatricula: React.FC = () => {
     nomeParente,
     nomeContatoUrgencia,
     telefoneContatoUrgencia,
+    afinidades,
     parentesco,
     nomeResponsavel,
     cpfResponsavel,
@@ -278,6 +280,7 @@ const FormularioMatricula: React.FC = () => {
         nome_parente: nomeParente ?? "",
         contato_nome: nomeContatoUrgencia,
         contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),
+        afinidades,
         responsavel_tipo: parentesco,
         responsavel_nome: nomeResponsavel,
         responsavel_cpf: cpfResponsavel.replace(/[^0-9]+/g, ""),
@@ -653,6 +656,14 @@ const FormularioMatricula: React.FC = () => {
                     </FormControl>
                   </Stack>
                 </Stack>
+
+                <FormControl isInvalid={errors.afinidades}>
+                  <FormLabel>Afinidades do aluno</FormLabel>
+                  <Input type="afinidades" {...register1("afinidades")} />
+                  <FormErrorMessage>
+                    {errors?.afinidades?.message}
+                  </FormErrorMessage>
+                </FormControl>
 
                 <Stack>
                   <FormLabel fontSize={20}>Dados do responsável</FormLabel>
