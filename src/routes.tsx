@@ -8,6 +8,7 @@ import {
 import ComprovanteMatricula from "./components/ComprovanteMatricula/ComprovanteMatricula";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Alunos from "./pages/Alunos/Alunos";
+import AlunosOficina from "./pages/AlunosOficina/AlunosOficina";
 import FormAluno from "./pages/FormAluno/FormAluno";
 import FormularioMatricula from "./pages/FormularioMatricula/FormularioMatricula";
 import Instituicao from "./pages/Instituicao/Instituicao";
@@ -39,6 +40,8 @@ const RoutesApp = () => {
             <Route path="/oficinas" element={<Oficinas />} />
             <Route path="/oficina" element={<Oficina />} />
             <Route path="/oficina/:id" element={<Oficina />} />
+
+            <Route path="/oficina/:id/alunos" element={<AlunosOficina />} />
 
             <Route path="/instituicao" element={<Instituicao />} />
             <Route path="/relatorio" element={<ComprovanteMatricula />} />
