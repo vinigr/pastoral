@@ -40,6 +40,7 @@ const schema = Yup.object().shape({
   sexo: Yup.string().required("A escolha do sexo é obrigatória"),
   serie: Yup.string().required("A série é obrigatória"),
   turno: Yup.string().required("O turno é obrigatório"),
+  turnoPastoral: Yup.string().required("O turno é obrigatório"),
   nome: Yup.string().required("O nome é obrigatório"),
   cpf: Yup.string()
     .required("O CPF é obrigatório")
@@ -52,15 +53,35 @@ const schema = Yup.object().shape({
   endereco: Yup.string().required("O endereço é obrigatório"),
   naturalidade: Yup.string().required("A naturalidade é obrigatória"),
   nacionalidade: Yup.string().required("A nacionalidade é obrigatória"),
-  termoCN: Yup.string().required(
-    "O termo da certidão de nascimento é obrigatório"
-  ),
-  folhaCN: Yup.string().required(
-    "A folha da certidão de nascimento é obrigatória"
-  ),
-  livroCN: Yup.string().required(
-    "O livro da certidão de nascimento é obrigatório"
-  ),
+  certidaoNova: Yup.boolean(),
+  numeroCertidao: Yup.mixed().when("certidaoNova", {
+    is: true,
+    then: Yup.string().required(
+      "O número da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  termoCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "O termo da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  folhaCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "A folha da certidão de nascimento é obrigatória"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  livroCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "O livro da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
   email: Yup.string().required("O e-mail é obrigatório"),
   telefone: Yup.string().required("O telefone é obrigatório"),
   temParente: Yup.string(),
@@ -92,6 +113,7 @@ const schemaMatricula = Yup.object().shape({
   escola: Yup.string().required("A escola é obrigatória"),
   serie: Yup.string().required("A série é obrigatória"),
   turno: Yup.string().required("O turno é obrigatório"),
+  turnoPastoral: Yup.string().required("O turno é obrigatório"),
 });
 
 const FormularioMatricula: React.FC = () => {
@@ -195,6 +217,7 @@ const FormularioMatricula: React.FC = () => {
 
   const temParente = watch("temParente", false);
   const bolsaSocial = watch("bolsaSocial", false);
+  const certidaoNova = watch("certidaoNova", false);
 
   const onSubmit = async ({
     nome,
@@ -206,6 +229,8 @@ const FormularioMatricula: React.FC = () => {
     endereco,
     naturalidade,
     nacionalidade,
+    certidaoNova,
+    numeroCertidao,
     termoCN,
     folhaCN,
     livroCN,
@@ -228,6 +253,7 @@ const FormularioMatricula: React.FC = () => {
     religiao,
     escola,
     turno,
+    turnoPastoral,
     serie,
   }: any) => {
     const dados = {
@@ -241,6 +267,8 @@ const FormularioMatricula: React.FC = () => {
         endereco,
         naturalidade,
         nacionalidade,
+        certidao_nova: certidaoNova,
+        certidao_numero: numeroCertidao,
         certidao_nascimento_termo: termoCN,
         certidao_nascimento_folha: folhaCN,
         certidao_nascimento_livro: livroCN,
@@ -265,6 +293,7 @@ const FormularioMatricula: React.FC = () => {
       matricula: {
         escola,
         turno,
+        turno_pastoral: turnoPastoral,
         serie,
         data: new Date(),
         ano: new Date().getFullYear(),
@@ -381,46 +410,9 @@ const FormularioMatricula: React.FC = () => {
         )}
         {novoAluno && (
           <>
-            <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
-              Dados da matrícula
-            </IonTitle>
-            <Stack spacing={4}>
-              <FormControl isInvalid={Boolean(errors.escola)}>
-                <FormLabel>Escola</FormLabel>
-                <Input type="text" {...register1("escola")} />
-                <FormErrorMessage>{errors?.escola?.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={Boolean(errors.serie)}>
-                <FormLabel>Série</FormLabel>
-                <Input type="text" {...register1("serie")} />
-                <FormErrorMessage>{errors?.serie?.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={Boolean(errors.turno)}>
-                <FormLabel>Turno</FormLabel>
-                <Controller
-                  render={() => (
-                    <RadioGroup name="turno">
-                      <Stack
-                        direction="row"
-                        onChange={(e: any) => {
-                          setValue1("turno", e.target.value);
-                        }}
-                      >
-                        <Radio value="matutino">Matutino</Radio>
-                        <Radio value="vespertino">Vespertino</Radio>
-                      </Stack>
-                    </RadioGroup>
-                  )}
-                  name="turno"
-                  control={control}
-                />
-                <FormErrorMessage>{errors?.turno?.message}</FormErrorMessage>
-              </FormControl>
-            </Stack>
-
-            <IonTitle style={{ marginTop: 10, marginBottom: 10 }}>
+            <Text fontWeight="bold" fontSize={20} marginY={6}>
               Dados do aluno
-            </IonTitle>
+            </Text>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={4}>
                 <FormControl isInvalid={Boolean(errors.nome)}>
@@ -515,31 +507,61 @@ const FormularioMatricula: React.FC = () => {
                 <Stack>
                   <FormLabel fontSize={20}>Certidão de nascimento</FormLabel>
 
-                  <Stack direction="row">
-                    <FormControl isInvalid={Boolean(errors.termoCN)}>
-                      <FormLabel>Termo</FormLabel>
-                      <Input type="text" {...register1("termoCN")} />
-                      <FormErrorMessage>
-                        {errors?.termoCN?.message}
-                      </FormErrorMessage>
-                    </FormControl>
+                  <FormControl isInvalid={Boolean(errors.certidaoNova)}>
+                    <Controller
+                      render={({ field: { value } }) => (
+                        <Checkbox
+                          defaultChecked={value}
+                          onChange={(e) =>
+                            setValue1("certidaoNova", e.target.checked)
+                          }
+                        >
+                          Certidão nova
+                        </Checkbox>
+                      )}
+                      name="certidaoNova"
+                      control={control}
+                    />
+                    <FormErrorMessage>
+                      {errors?.temcertidaoNovaParente?.message}
+                    </FormErrorMessage>
+                  </FormControl>
 
-                    <FormControl isInvalid={Boolean(errors.folhaCN)}>
-                      <FormLabel>Folha</FormLabel>
-                      <Input type="text" {...register1("folhaCN")} />
+                  {certidaoNova ? (
+                    <FormControl isInvalid={Boolean(errors.numeroCertidao)}>
+                      <FormLabel>Número da certidão</FormLabel>
+                      <Input type="text" {...register1("numeroCertidao")} />
                       <FormErrorMessage>
-                        {errors?.folhaCN?.message}
+                        {errors?.numeroCertidao?.message}
                       </FormErrorMessage>
                     </FormControl>
+                  ) : (
+                    <Stack direction="row">
+                      <FormControl isInvalid={Boolean(errors.termoCN)}>
+                        <FormLabel>Termo</FormLabel>
+                        <Input type="text" {...register1("termoCN")} />
+                        <FormErrorMessage>
+                          {errors?.termoCN?.message}
+                        </FormErrorMessage>
+                      </FormControl>
 
-                    <FormControl isInvalid={Boolean(errors.livroCN)}>
-                      <FormLabel>Livro</FormLabel>
-                      <Input type="text" {...register1("livroCN")} />
-                      <FormErrorMessage>
-                        {errors?.livroCN?.message}
-                      </FormErrorMessage>
-                    </FormControl>
-                  </Stack>
+                      <FormControl isInvalid={Boolean(errors.folhaCN)}>
+                        <FormLabel>Folha</FormLabel>
+                        <Input type="text" {...register1("folhaCN")} />
+                        <FormErrorMessage>
+                          {errors?.folhaCN?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl isInvalid={Boolean(errors.livroCN)}>
+                        <FormLabel>Livro</FormLabel>
+                        <Input type="text" {...register1("livroCN")} />
+                        <FormErrorMessage>
+                          {errors?.livroCN?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </Stack>
+                  )}
                 </Stack>
 
                 <FormControl isInvalid={Boolean(errors.email)}>
@@ -821,6 +843,66 @@ const FormularioMatricula: React.FC = () => {
                   />
                   <FormErrorMessage>
                     {errors?.religiao?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </Stack>
+
+              <Text fontWeight="bold" fontSize={20} marginY={6}>
+                Dados da matrícula
+              </Text>
+              <Stack spacing={4}>
+                <FormControl isInvalid={Boolean(errors.escola)}>
+                  <FormLabel>Escola</FormLabel>
+                  <Input type="text" {...register1("escola")} />
+                  <FormErrorMessage>{errors?.escola?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.serie)}>
+                  <FormLabel>Série</FormLabel>
+                  <Input type="text" {...register1("serie")} />
+                  <FormErrorMessage>{errors?.serie?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.turno)}>
+                  <FormLabel>Turno na escola</FormLabel>
+                  <Controller
+                    render={() => (
+                      <RadioGroup name="turno">
+                        <Stack
+                          direction="row"
+                          onChange={(e: any) => {
+                            setValue1("turno", e.target.value);
+                          }}
+                        >
+                          <Radio value="matutino">Matutino</Radio>
+                          <Radio value="vespertino">Vespertino</Radio>
+                        </Stack>
+                      </RadioGroup>
+                    )}
+                    name="turno"
+                    control={control}
+                  />
+                  <FormErrorMessage>{errors?.turno?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.turnoPastoral)}>
+                  <FormLabel>Turno na pastoral</FormLabel>
+                  <Controller
+                    render={() => (
+                      <RadioGroup name="turnoPastoral">
+                        <Stack
+                          direction="row"
+                          onChange={(e: any) => {
+                            setValue1("turnoPastoral", e.target.value);
+                          }}
+                        >
+                          <Radio value="matutino">Matutino</Radio>
+                          <Radio value="vespertino">Vespertino</Radio>
+                        </Stack>
+                      </RadioGroup>
+                    )}
+                    name="turnoPastoral"
+                    control={control}
+                  />
+                  <FormErrorMessage>
+                    {errors?.turnoPastoral?.message}
                   </FormErrorMessage>
                 </FormControl>
               </Stack>

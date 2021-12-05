@@ -42,15 +42,35 @@ const schema = Yup.object().shape({
   endereco: Yup.string().required("O endereço é obrigatório"),
   naturalidade: Yup.string().required("A naturalidade é obrigatória"),
   nacionalidade: Yup.string().required("A nacionalidade é obrigatória"),
-  termoCN: Yup.string().required(
-    "O termo da certidão de nascimento é obrigatório"
-  ),
-  folhaCN: Yup.string().required(
-    "A folha da certidão de nascimento é obrigatória"
-  ),
-  livroCN: Yup.string().required(
-    "O livro da certidão de nascimento é obrigatório"
-  ),
+  certidaoNova: Yup.boolean(),
+  numeroCertidao: Yup.mixed().when("certidaoNova", {
+    is: true,
+    then: Yup.string().required(
+      "O número da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  termoCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "O termo da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  folhaCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "A folha da certidão de nascimento é obrigatória"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
+  livroCN: Yup.mixed().when("certidaoNova", {
+    is: (value) => !value,
+    then: Yup.string().required(
+      "O livro da certidão de nascimento é obrigatório"
+    ),
+    otherwise: Yup.mixed().nullable(),
+  }),
   email: Yup.string().required("O e-mail é obrigatório"),
   telefone: Yup.string().required("O telefone é obrigatório"),
   nomeContatoUrgencia: Yup.string().required(
@@ -150,6 +170,7 @@ const FormAluno: React.FC = () => {
 
   const temParente = watch("temParente", false);
   const bolsaSocial = watch("bolsaSocial", false);
+  const certidaoNova = watch("certidaoNova", false);
 
   const onSubmit = async ({
     nome,
@@ -161,6 +182,8 @@ const FormAluno: React.FC = () => {
     endereco,
     naturalidade,
     nacionalidade,
+    certidaoNova,
+    numeroCertidao,
     termoCN,
     folhaCN,
     livroCN,
@@ -192,6 +215,8 @@ const FormAluno: React.FC = () => {
       endereco,
       naturalidade,
       nacionalidade,
+      certidao_nova: certidaoNova,
+      certidao_numero: numeroCertidao,
       certidao_nascimento_termo: termoCN,
       certidao_nascimento_folha: folhaCN,
       certidao_nascimento_livro: livroCN,
@@ -337,31 +362,61 @@ const FormAluno: React.FC = () => {
             <Stack>
               <FormLabel fontSize={20}>Certidão de nascimento</FormLabel>
 
-              <Stack direction="row">
-                <FormControl isInvalid={errors.termoCN}>
-                  <FormLabel>Termo</FormLabel>
-                  <Input type="text" {...register("termoCN")} />
-                  <FormErrorMessage>
-                    {errors?.termoCN?.message}
-                  </FormErrorMessage>
-                </FormControl>
+              <FormControl isInvalid={Boolean(errors.certidaoNova)}>
+                <Controller
+                  render={({ field: { value } }) => (
+                    <Checkbox
+                      defaultChecked={value}
+                      onChange={(e) =>
+                        setValue("certidaoNova", e.target.checked)
+                      }
+                    >
+                      Certidão nova
+                    </Checkbox>
+                  )}
+                  name="certidaoNova"
+                  control={control}
+                />
+                <FormErrorMessage>
+                  {errors?.temcertidaoNovaParente?.message}
+                </FormErrorMessage>
+              </FormControl>
 
-                <FormControl isInvalid={errors.folhaCN}>
-                  <FormLabel>Folha</FormLabel>
-                  <Input type="text" {...register("folhaCN")} />
+              {certidaoNova ? (
+                <FormControl isInvalid={Boolean(errors.numeroCertidao)}>
+                  <FormLabel>Número da certidão</FormLabel>
+                  <Input type="text" {...register("numeroCertidao")} />
                   <FormErrorMessage>
-                    {errors?.folhaCN?.message}
+                    {errors?.numeroCertidao?.message}
                   </FormErrorMessage>
                 </FormControl>
+              ) : (
+                <Stack direction="row">
+                  <FormControl isInvalid={Boolean(errors.termoCN)}>
+                    <FormLabel>Termo</FormLabel>
+                    <Input type="text" {...register("termoCN")} />
+                    <FormErrorMessage>
+                      {errors?.termoCN?.message}
+                    </FormErrorMessage>
+                  </FormControl>
 
-                <FormControl isInvalid={errors.livroCN}>
-                  <FormLabel>Livro</FormLabel>
-                  <Input type="text" {...register("livroCN")} />
-                  <FormErrorMessage>
-                    {errors?.livroCN?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </Stack>
+                  <FormControl isInvalid={Boolean(errors.folhaCN)}>
+                    <FormLabel>Folha</FormLabel>
+                    <Input type="text" {...register("folhaCN")} />
+                    <FormErrorMessage>
+                      {errors?.folhaCN?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={Boolean(errors.livroCN)}>
+                    <FormLabel>Livro</FormLabel>
+                    <Input type="text" {...register("livroCN")} />
+                    <FormErrorMessage>
+                      {errors?.livroCN?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                </Stack>
+              )}
             </Stack>
 
             <FormControl isInvalid={errors.email}>
