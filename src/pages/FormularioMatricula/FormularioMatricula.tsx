@@ -10,7 +10,11 @@ import {
   IonTitle,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { formatarDinheiro } from "../../utils/formatarStrings";
+import {
+  formatarCPF,
+  formatarDinheiro,
+  formatarTelefone,
+} from "../../utils/formatarStrings";
 import { useNavigate, useParams } from "react-router-dom";
 
 import buscarInformacoesMatriculaAluno from "../../usecases/buscarInformacoesMatriculaAluno";
@@ -30,8 +34,6 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-
-import InputMask from "react-input-mask";
 
 const schema = Yup.object().shape({
   escola: Yup.string().required("A escola é obrigatória"),
@@ -455,9 +457,9 @@ const FormularioMatricula: React.FC = () => {
                     <Input
                       type="text"
                       {...register1("cpf")}
-                      as={InputMask}
-                      mask="999.999.999-99"
-                      maskChar={null}
+                      onChange={(e) =>
+                        setValue1("cpf", formatarCPF(e.target.value))
+                      }
                     />
                     <FormErrorMessage>{errors?.cpf?.message}</FormErrorMessage>
                   </FormControl>
@@ -551,8 +553,9 @@ const FormularioMatricula: React.FC = () => {
                   <Input
                     type="text"
                     {...register1("telefone")}
-                    as={InputMask}
-                    mask="(99) 9999-9999"
+                    onChange={(e) =>
+                      setValue1("telefone", formatarTelefone(e.target.value))
+                    }
                   />
                   <FormErrorMessage>
                     {errors?.telefone?.message}
@@ -615,8 +618,12 @@ const FormularioMatricula: React.FC = () => {
                       <Input
                         type="text"
                         {...register1("telefoneContatoUrgencia")}
-                        as={InputMask}
-                        mask="(99) 99999-9999"
+                        onChange={(e) =>
+                          setValue1(
+                            "telefoneContatoUrgencia",
+                            formatarTelefone(e.target.value)
+                          )
+                        }
                       />
                       <FormErrorMessage>
                         {errors?.telefoneContatoUrgencia?.message}
@@ -670,9 +677,12 @@ const FormularioMatricula: React.FC = () => {
                         <Input
                           type="text"
                           {...register1("cpfResponsavel")}
-                          as={InputMask}
-                          mask="999.999.999-99"
-                          maskChar={null}
+                          onChange={(e) =>
+                            setValue1(
+                              "cpfResponsavel",
+                              formatarCPF(e.target.value)
+                            )
+                          }
                         />
                         <FormErrorMessage>
                           {errors?.cpfResponsavel?.message}
@@ -708,8 +718,12 @@ const FormularioMatricula: React.FC = () => {
                       <Input
                         type="text"
                         {...register1("telefoneResponsavel")}
-                        as={InputMask}
-                        mask="(99) 99999-9999"
+                        onChange={(e) =>
+                          setValue1(
+                            "telefoneResponsavel",
+                            formatarTelefone(e.target.value)
+                          )
+                        }
                       />
                       <FormErrorMessage>
                         {errors?.telefoneResponsavel?.message}

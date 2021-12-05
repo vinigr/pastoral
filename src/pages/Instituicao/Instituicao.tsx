@@ -16,8 +16,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import InputMask from "react-input-mask";
-
 import { formatarCNPJ, formatarTelefone } from "../../utils/formatarStrings";
 
 import buscarInformacoesInstituicao from "../../usecases/buscarInformacoesInstituicao";
@@ -126,9 +124,7 @@ const Instituicao: React.FC = () => {
               <Input
                 type="text"
                 {...register("cnpj")}
-                as={InputMask}
-                mask="99.999.999/9999-99"
-                maskChar={null}
+                onChange={(e) => setValue("cnpj", formatarCNPJ(e.target.value))}
               />
               <FormErrorMessage>{errors?.cnpj?.message}</FormErrorMessage>
             </FormControl>
@@ -147,8 +143,10 @@ const Instituicao: React.FC = () => {
               <Input
                 type="text"
                 {...register("telefone")}
-                as={InputMask}
-                mask="(99) 9999-9999"
+                maxLength={15}
+                onChange={(e) =>
+                  setValue("telefone", formatarTelefone(e.target.value))
+                }
               />
               <FormErrorMessage>{errors?.telefone?.message}</FormErrorMessage>
             </FormControl>

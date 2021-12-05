@@ -12,7 +12,7 @@ import { Text, useToast } from "@chakra-ui/react";
 import { create, trash } from "ionicons/icons";
 
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
-import { formatarCpf } from "../../utils/formatarStrings";
+import { formatarCPF } from "../../utils/formatarStrings";
 import { useNavigate } from "react-router-dom";
 import removerAluno from "../../usecases/removerAluno";
 
@@ -76,7 +76,7 @@ const Alunos: React.FC = () => {
                   <h2>{aluno.nome}</h2>
                 </IonText>
                 <IonText color="medium">
-                  <p>CPF: {formatarCpf(aluno.cpf)}</p>
+                  <p>CPF: {formatarCPF(aluno.cpf)}</p>
                 </IonText>
                 <IonText color="medium">
                   <p>Responsável: {aluno.nomeResponsavel}</p>

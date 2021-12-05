@@ -1,4 +1,4 @@
-export const formatarCpf = (cpf: string) => {
+export const formatarCPF = (cpf: string) => {
   return cpf
     .replace(/\D/g, "") // substitui qualquer caracter que nao seja numero por nada
     .replace(/(\d{3})(\d)/, "$1.$2") // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
@@ -18,10 +18,20 @@ export const formatarCNPJ = (cnpj: string) => {
 };
 
 export const formatarTelefone = (telefone: string) => {
-  return telefone
+  const numeros = telefone.replace(/\D/g, "");
+
+  if (numeros.length <= 10) {
+    return numeros
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(\d{5})-(\d)(\d{4})/, "$1$2-$3")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  }
+
+  return numeros
     .replace(/\D/g, "")
     .replace(/(\d{2})(\d)/, "($1) $2")
-    .replace(/(\d{4})(\d)/, "$1-$2")
+    .replace(/(\d{5})(\d)/, "$1-$2")
     .replace(/(\d{5})-(\d)(\d{4})/, "$1$2-$3")
     .replace(/(-\d{4})\d+?$/, "$1");
 };

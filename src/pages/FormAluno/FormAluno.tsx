@@ -3,9 +3,11 @@ import * as Yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { IonButton, IonTitle } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { formatarCpf, formatarDinheiro } from "../../utils/formatarStrings";
-
-import InputMask from "react-input-mask";
+import {
+  formatarCPF,
+  formatarDinheiro,
+  formatarTelefone,
+} from "../../utils/formatarStrings";
 
 import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -103,7 +105,7 @@ const FormAluno: React.FC = () => {
 
     setValue("nome", alunoMatricula?.nome);
     setValue("sexo", alunoMatricula?.sexo);
-    setValue("cpf", alunoMatricula?.cpf);
+    setValue("cpf", formatarCPF(alunoMatricula?.cpf || ""));
     setValue("dataNascimento", alunoMatricula.data_nascimento);
     setValue("rg", alunoMatricula?.rg);
     setValue("dataExpedicao", alunoMatricula?.data_expedicao_rg);
@@ -114,19 +116,25 @@ const FormAluno: React.FC = () => {
     setValue("folhaCN", alunoMatricula?.certidao_nascimento_folha);
     setValue("livroCN", alunoMatricula?.certidao_nascimento_livro);
     setValue("email", alunoMatricula?.email);
-    setValue("telefone", alunoMatricula?.telefone);
+    setValue("telefone", formatarTelefone(alunoMatricula?.telefone || ""));
     setValue("temParente", alunoMatricula?.tem_arente);
     setValue("nomeParente", alunoMatricula?.nome_parente);
     setValue("nomeContatoUrgencia", alunoMatricula?.contato_nome);
-    setValue("telefoneContatoUrgencia", alunoMatricula?.contato_telefone);
+    setValue(
+      "telefoneContatoUrgencia",
+      formatarTelefone(alunoMatricula?.contato_telefone || "")
+    );
     setValue("parentesco", alunoMatricula?.responsavel_tipo);
     setValue("nomeResponsavel", alunoMatricula?.responsavel_nome);
     setValue(
       "cpfResponsavel",
-      formatarCpf(alunoMatricula?.responsavel_cpf || "")
+      formatarCPF(alunoMatricula?.responsavel_cpf || "")
     );
     setValue("enderecoResponsavel", alunoMatricula?.responsavel_endereco);
-    setValue("telefoneResponsavel", alunoMatricula?.responsavel_telefone);
+    setValue(
+      "telefoneResponsavel",
+      formatarTelefone(alunoMatricula?.responsavel_telefone || "")
+    );
     setValue(
       "ocupacaoProfissionalResponsavel",
       alunoMatricula?.responsavel_profissao
@@ -275,9 +283,7 @@ const FormAluno: React.FC = () => {
                 <Input
                   type="text"
                   {...register("cpf")}
-                  as={InputMask}
-                  mask="999.999.999-99"
-                  maskChar={null}
+                  onChange={(e) => setValue("cpf", formatarCPF(e.target.value))}
                 />
                 <FormErrorMessage>{errors?.cpf?.message}</FormErrorMessage>
               </FormControl>
@@ -369,8 +375,9 @@ const FormAluno: React.FC = () => {
               <Input
                 type="text"
                 {...register("telefone")}
-                as={InputMask}
-                mask="(99) 9999-9999"
+                onChange={(e) =>
+                  setValue("telefone", formatarTelefone(e.target.value))
+                }
               />
               <FormErrorMessage>{errors?.telefone?.message}</FormErrorMessage>
             </FormControl>
@@ -422,8 +429,12 @@ const FormAluno: React.FC = () => {
                   <Input
                     type="text"
                     {...register("telefoneContatoUrgencia")}
-                    as={InputMask}
-                    mask="(99) 99999-9999"
+                    onChange={(e) =>
+                      setValue(
+                        "telefoneContatoUrgencia",
+                        formatarTelefone(e.target.value)
+                      )
+                    }
                   />
                   <FormErrorMessage>
                     {errors?.telefoneContatoUrgencia?.message}
@@ -479,9 +490,9 @@ const FormAluno: React.FC = () => {
                     <Input
                       type="text"
                       {...register("cpfResponsavel")}
-                      as={InputMask}
-                      mask="999.999.999-99"
-                      maskChar={null}
+                      onChange={(e) =>
+                        setValue("cpfResponsavel", formatarCPF(e.target.value))
+                      }
                     />
                     <FormErrorMessage>
                       {errors?.cpfResponsavel?.message}
@@ -510,8 +521,12 @@ const FormAluno: React.FC = () => {
                   <Input
                     type="text"
                     {...register("telefoneResponsavel")}
-                    as={InputMask}
-                    mask="(99) 99999-9999"
+                    onChange={(e) =>
+                      setValue(
+                        "telefoneResponsavel",
+                        formatarTelefone(e.target.value)
+                      )
+                    }
                   />
                   <FormErrorMessage>
                     {errors?.telefoneResponsavel?.message}
