@@ -1,14 +1,18 @@
 import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
+  Flex,
   IconButton,
   Input,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import { useReactToPrint } from "react-to-print";
+import AlunosMatriculaImpressao from "../../components/AlunosMatriculaImpressao/AlunosMatriculaImpressao";
 import adicionarAlunoAOficina from "../../usecases/adicionarAlunoAOficina";
 import buscarAlunosMatriculados from "../../usecases/buscarAlunosMatriculados";
 import buscarOficina from "../../usecases/buscarOficina";
@@ -22,6 +26,15 @@ const AlunosOficina: React.FC = () => {
 
   const [pesquisa, setPesquisa] = useState("");
   const [alunos, setAlunos] = useState([]);
+
+  const [oficina, setOficina] = useState();
+
+  const componentRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Alunos da oficina",
+  });
 
   useEffect(() => {
     buscarInformacoesIniciais();
@@ -44,10 +57,11 @@ const AlunosOficina: React.FC = () => {
   };
 
   const buscarInformacoesIniciais = async () => {
-    const oficina = await buscarOficina(idOficina);
+    const oficinaResultado = await buscarOficina(idOficina);
 
-    if (oficina) {
-      setAlunosSelecionados(oficina.alunos);
+    if (oficinaResultado) {
+      setOficina(oficinaResultado);
+      setAlunosSelecionados(oficinaResultado.alunos);
     }
   };
 
@@ -134,9 +148,12 @@ const AlunosOficina: React.FC = () => {
 
   return (
     <>
-      <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
-        Alunos - Oficina
-      </Text>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text as="h2" fontSize={24} fontWeight="bold" mb={4}>
+          Alunos - Oficina
+        </Text>
+        <Button onClick={handlePrint}>Imprimir lista</Button>
+      </Flex>
       <Stack spacing={6} mt={6}>
         <Input
           placeholder="Pesquisar aluno matriculado"
@@ -196,6 +213,13 @@ const AlunosOficina: React.FC = () => {
           </Stack>
         </Stack>
       </Stack>
+      <div style={{ display: "none" }}>
+        <AlunosMatriculaImpressao
+          ref={componentRef}
+          oficina={oficina}
+          alunos={alunosSelecionados}
+        />
+      </div>
     </>
   );
 };
