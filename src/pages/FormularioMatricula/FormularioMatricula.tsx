@@ -209,11 +209,11 @@ const FormularioMatricula: React.FC = () => {
   const buscarInformacoes = async () => {
     const alunoMatricula = await buscarInformacoesMatriculaAluno(id);
 
-    setAlunoSelecionado(alunoMatricula.aluno);
-
     setValue2("escola", alunoMatricula?.escola);
     setValue2("serie", alunoMatricula?.serie);
     setValue2("turno", alunoMatricula?.turno);
+
+    setAlunoSelecionado(alunoMatricula.aluno);
   };
 
   const temParente = watch("temParente", false);
@@ -290,7 +290,7 @@ const FormularioMatricula: React.FC = () => {
         responsavel_recebe_auxilio: bolsaSocial ?? false,
         responsavel_nis: nis,
         responsavel_rg: rgResponsavel,
-        renda_familiar: rendaFamiliar,
+        renda_familiar: rendaFamiliar.replace(/\D/g, ""),
         permite_catequese: religiao ?? false,
       },
       matricula: {
@@ -356,6 +356,10 @@ const FormularioMatricula: React.FC = () => {
       duration: 2000,
     });
   };
+
+  if (id && !alunoSelecionado) {
+    return <></>;
+  }
 
   return (
     <>
@@ -875,14 +879,15 @@ const FormularioMatricula: React.FC = () => {
                 <FormControl isInvalid={Boolean(errors.turno)}>
                   <FormLabel>Turno na escola</FormLabel>
                   <Controller
-                    render={() => (
-                      <RadioGroup name="turno">
-                        <Stack
-                          direction="row"
-                          onChange={(e: any) => {
-                            setValue1("turno", e.target.value);
-                          }}
-                        >
+                    render={({ field: { value } }) => (
+                      <RadioGroup
+                        defaultValue={value}
+                        name="turno"
+                        onChange={(e: any) => {
+                          setValue1("turno", e);
+                        }}
+                      >
+                        <Stack direction="row">
                           <Radio value="matutino">Matutino</Radio>
                           <Radio value="vespertino">Vespertino</Radio>
                         </Stack>
@@ -896,14 +901,15 @@ const FormularioMatricula: React.FC = () => {
                 <FormControl isInvalid={Boolean(errors.turnoPastoral)}>
                   <FormLabel>Turno na pastoral</FormLabel>
                   <Controller
-                    render={() => (
-                      <RadioGroup name="turnoPastoral">
-                        <Stack
-                          direction="row"
-                          onChange={(e: any) => {
-                            setValue1("turnoPastoral", e.target.value);
-                          }}
-                        >
+                    render={({ field: { value } }) => (
+                      <RadioGroup
+                        defaultValue={value}
+                        name="turnoPastoral"
+                        onChange={(e: any) => {
+                          setValue1("turnoPastoral", e);
+                        }}
+                      >
+                        <Stack direction="row">
                           <Radio value="matutino">Matutino</Radio>
                           <Radio value="vespertino">Vespertino</Radio>
                         </Stack>
@@ -945,25 +951,52 @@ const FormularioMatricula: React.FC = () => {
                   <FormErrorMessage>{errors2?.serie?.message}</FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={Boolean(errors2?.turno)}>
-                  <FormLabel>Turno</FormLabel>
+                  <FormLabel>Turno na escola</FormLabel>
                   <Controller
-                    render={() => (
-                      <RadioGroup name="turno">
-                        <Stack
-                          direction="row"
+                    render={({ field: { value } }) => {
+                      return (
+                        <RadioGroup
+                          defaultValue={value}
+                          name="turno"
                           onChange={(e: any) => {
-                            setValue2("turno", e.target.value);
+                            setValue2("turno", e);
                           }}
                         >
+                          <Stack direction="row">
+                            <Radio value="matutino">Matutino</Radio>
+                            <Radio value="vespertino">Vespertino</Radio>
+                          </Stack>
+                        </RadioGroup>
+                      );
+                    }}
+                    name="turno"
+                    control={control2}
+                  />
+                  <FormErrorMessage>{errors2?.turno?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors2?.turno)}>
+                  <FormLabel>Turno na pastoral</FormLabel>
+                  <Controller
+                    render={({ field: { value } }) => (
+                      <RadioGroup
+                        defaultValue={value}
+                        name="turnoPastoral"
+                        onChange={(e: any) => {
+                          setValue2("turnoPastoral", e);
+                        }}
+                      >
+                        <Stack direction="row">
                           <Radio value="matutino">Matutino</Radio>
                           <Radio value="vespertino">Vespertino</Radio>
                         </Stack>
                       </RadioGroup>
                     )}
-                    name="turno"
+                    name="turnoPastoral"
                     control={control2}
                   />
-                  <FormErrorMessage>{errors2?.turno?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors2?.turnoPastoral?.message}
+                  </FormErrorMessage>
                 </FormControl>
               </Stack>
 
