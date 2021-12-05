@@ -239,7 +239,7 @@ const FormAluno: React.FC = () => {
       responsavel_recebe_auxilio: bolsaSocial ?? false,
       responsavel_nis: nis,
       responsavel_rg: rgResponsavel,
-      renda_familiar: rendaFamiliar,
+      renda_familiar: rendaFamiliar.replace(/\D/g, ""),
       permite_catequese: religiao ?? false,
     };
 

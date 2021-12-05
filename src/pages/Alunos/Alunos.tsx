@@ -79,7 +79,7 @@ const Alunos: React.FC = () => {
                   <p>CPF: {formatarCPF(aluno.cpf)}</p>
                 </IonText>
                 <IonText color="medium">
-                  <p>Responsável: {aluno.nomeResponsavel}</p>
+                  <p>Responsável: {aluno.responsavel_nome}</p>
                 </IonText>
               </IonLabel>
               <IonButton
