@@ -215,7 +215,13 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                   marginRight: 20,
                 }}
               >
-                {dadosMatricula?.aluno?.data_nascimento}
+                {new Date(
+                  `${dadosMatricula?.aluno?.data_nascimento} 03:00:00`
+                ).toLocaleDateString("pt-br", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })}
               </h3>
               <h2
                 style={{
@@ -294,7 +300,13 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {dadosMatricula?.aluno?.data_expedicao_rg}
+              {new Date(
+                `${dadosMatricula?.aluno?.data_expedicao_rg} 03:00:00`
+              ).toLocaleDateString("pt-br", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+              })}
             </h3>
           </div>
           <div
@@ -884,7 +896,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              R$ {dadosMatricula?.aluno.renda_familiar / 100}
+              R$ {Number(dadosMatricula?.aluno.renda_familiar || 0) / 100}
             </h3>
 
             <h2
@@ -895,7 +907,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 4,
               }}
             >
-              Tem parente na pastoral:
+              Possui bolsa social:
             </h2>
             <h3
               style={{
