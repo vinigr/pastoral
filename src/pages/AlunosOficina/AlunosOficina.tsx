@@ -38,6 +38,7 @@ const AlunosOficina: React.FC = () => {
 
   useEffect(() => {
     buscarInformacoesIniciais();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

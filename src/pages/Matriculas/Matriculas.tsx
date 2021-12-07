@@ -24,6 +24,7 @@ import {
   useDisclosure,
   useToast,
   FormLabel,
+  Input,
 } from "@chakra-ui/react";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
@@ -42,10 +43,18 @@ const Matriculas: React.FC = () => {
   const [turno, setTurno] = useState("");
   const [alunos, setAlunos] = useState([]);
 
+  const [anoInativacao, setAnoInativacao] = useState("");
+
   const {
     isOpen: isOpenModalFiltrosRelatorio,
     onOpen: onOpenModalFiltrosRelatorio,
     onClose: onCloseModalFiltrosRelatorio,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenModalInativarMatriculas,
+    onOpen: onOpenModalInativarMatriculas,
+    onClose: onCloseModalInativarMatriculas,
   } = useDisclosure();
 
   const componentRef = useRef(null);
@@ -108,15 +117,11 @@ const Matriculas: React.FC = () => {
   };
 
   const inativarMatriculas = async () => {
-    const ano = window.prompt(
-      "Informe o ano das matrículas que deseja inativar"
-    );
-
-    if (!ano) {
+    if (!anoInativacao) {
       return;
     }
 
-    if (isNaN(parseInt(ano))) {
+    if (isNaN(parseInt(anoInativacao))) {
       return toast({
         title: "Falha",
         description: "Por favor, informe um ano somente com números",
@@ -126,12 +131,12 @@ const Matriculas: React.FC = () => {
       });
     }
 
-    if (parseInt(ano) < 2010 || parseInt(ano) > 2030) {
+    if (parseInt(anoInativacao) < 2010 || parseInt(anoInativacao) > 2030) {
       return;
     }
 
     try {
-      await removerMatriculasDoAno(ano);
+      await removerMatriculasDoAno(anoInativacao);
 
       toast({
         title: "Matrículas inativadas com sucesso!",
@@ -139,6 +144,9 @@ const Matriculas: React.FC = () => {
         position: "top-right",
         duration: 2000,
       });
+
+      onCloseModalInativarMatriculas();
+      setAnoInativacao("");
 
       listarMatriculas();
     } catch (error) {
@@ -169,7 +177,10 @@ const Matriculas: React.FC = () => {
           <Button onClick={onOpenModalFiltrosRelatorio} colorScheme="blue">
             Gerar relatório
           </Button>
-          <Button onClick={inativarMatriculas} colorScheme={"orange"}>
+          <Button
+            onClick={onOpenModalInativarMatriculas}
+            colorScheme={"orange"}
+          >
             Inativar matrículas
           </Button>
           <Button onClick={() => navigate("/matricula")}>Adicionar</Button>
@@ -270,6 +281,40 @@ const Matriculas: React.FC = () => {
             </Button>
             <Button colorScheme="blue" onClick={gerarRelatorio}>
               Gerar relatório
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isOpenModalInativarMatriculas}
+        onClose={onCloseModalInativarMatriculas}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Inativar matrículas</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormLabel>
+              Informe o ano das matrículas que deseja inativar
+            </FormLabel>
+            <Input
+              type="number"
+              value={anoInativacao}
+              onChange={(e) => setAnoInativacao(e.target.value)}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={onCloseModalInativarMatriculas}
+            >
+              Fechar
+            </Button>
+            <Button colorScheme="blue" onClick={inativarMatriculas}>
+              Inativar matrículas
             </Button>
           </ModalFooter>
         </ModalContent>
