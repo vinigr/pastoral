@@ -8,7 +8,23 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { create, trash } from "ionicons/icons";
-import { Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast,
+  FormLabel,
+} from "@chakra-ui/react";
 
 import ComprovanteMatricula from "../../components/ComprovanteMatricula/ComprovanteMatricula";
 import buscarMatriculas from "../../usecases/buscarMatriculas";
@@ -16,15 +32,33 @@ import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import removerMatricula from "../../usecases/removerMatricula";
 import removerMatriculasDoAno from "../../usecases/removerMatriculasDoAno";
+import AlunosMatriculados from "../../components/AlunosMatriculados/AlunosMatriculados";
+import buscarAlunosRelatorio from "../../usecases/buscarAlunosRelatorio";
 
 const Matriculas: React.FC = () => {
   const toast = useToast();
 
+  const [sexo, setSexo] = useState("");
+  const [turno, setTurno] = useState("");
+  const [alunos, setAlunos] = useState([]);
+
+  const {
+    isOpen: isOpenModalFiltrosRelatorio,
+    onOpen: onOpenModalFiltrosRelatorio,
+    onClose: onCloseModalFiltrosRelatorio,
+  } = useDisclosure();
+
   const componentRef = useRef(null);
+  const componentAlunosRef = useRef(null);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: "Comprovante de matrícula",
+  });
+
+  const handlePrintAlunos = useReactToPrint({
+    content: () => componentAlunosRef.current,
+    documentTitle: "Alunos",
   });
 
   const navigate = useNavigate();
@@ -117,6 +151,14 @@ const Matriculas: React.FC = () => {
     }
   };
 
+  const gerarRelatorio = async () => {
+    const alunosRelatorio = await buscarAlunosRelatorio(sexo, turno);
+
+    setAlunos(alunosRelatorio);
+
+    handlePrintAlunos();
+  };
+
   return (
     <>
       <Flex justifyContent="space-between" alignItems="center">
@@ -124,6 +166,9 @@ const Matriculas: React.FC = () => {
           Matrículas
         </Text>
         <Stack direction="row">
+          <Button onClick={onOpenModalFiltrosRelatorio} colorScheme="blue">
+            Gerar relatório
+          </Button>
           <Button onClick={inativarMatriculas} colorScheme={"orange"}>
             Inativar matrículas
           </Button>
@@ -177,7 +222,58 @@ const Matriculas: React.FC = () => {
 
       <div style={{ display: "none" }}>
         <ComprovanteMatricula ref={componentRef} id={idMatriculaImprimir} />
+        <AlunosMatriculados ref={componentAlunosRef} alunos={alunos} />
       </div>
+
+      <Modal
+        isOpen={isOpenModalFiltrosRelatorio}
+        onClose={onCloseModalFiltrosRelatorio}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Relatório</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack>
+              <Flex direction="column">
+                <FormLabel>Sexo</FormLabel>
+                <Select
+                  placeholder="Todos"
+                  value={sexo}
+                  onChange={(e) => setSexo(e.target.value)}
+                >
+                  <option value="masculino">Masculino</option>
+                  <option value="feminino">Feminino</option>
+                </Select>
+              </Flex>
+              <Flex direction="column">
+                <FormLabel>Turno na pastoral</FormLabel>
+                <Select
+                  placeholder="Todos"
+                  value={turno}
+                  onChange={(e) => setTurno(e.target.value)}
+                >
+                  <option value="matutino">Matutino</option>
+                  <option value="vespertino">Vespertino</option>
+                </Select>
+              </Flex>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={onCloseModalFiltrosRelatorio}
+            >
+              Fechar
+            </Button>
+            <Button colorScheme="blue" onClick={gerarRelatorio}>
+              Gerar relatório
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
