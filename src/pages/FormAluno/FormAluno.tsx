@@ -219,7 +219,7 @@ const FormAluno: React.FC = () => {
       naturalidade,
       nacionalidade,
       certidao_nova: certidaoNova,
-      certidao_numero: numeroCertidao,
+      certidao_codigo: numeroCertidao,
       certidao_nascimento_termo: termoCN,
       certidao_nascimento_folha: folhaCN,
       certidao_nascimento_livro: livroCN,

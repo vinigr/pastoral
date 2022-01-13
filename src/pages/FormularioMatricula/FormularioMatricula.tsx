@@ -24,6 +24,7 @@ import pesquisarAlunos from "../../usecases/pesquisarAlunos";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Checkbox,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -40,6 +41,7 @@ const schema = Yup.object().shape({
   sexo: Yup.string().required("A escolha do sexo é obrigatória"),
   serie: Yup.string().required("A série é obrigatória"),
   turno: Yup.string().required("O turno é obrigatório"),
+  matriculaEscola: Yup.string().required("O matrícula da escola é obrigatória"),
   turnoPastoral: Yup.string().required("O turno é obrigatório"),
   nome: Yup.string().required("O nome é obrigatório"),
   cpf: Yup.string()
@@ -115,6 +117,7 @@ const schemaMatricula = Yup.object().shape({
   serie: Yup.string().required("A série é obrigatória"),
   turno: Yup.string().required("O turno é obrigatório"),
   turnoPastoral: Yup.string().required("O turno é obrigatório"),
+  matriculaEscola: Yup.string().required("O matrícula da escola é obrigatória"),
 });
 
 const FormularioMatricula: React.FC = () => {
@@ -181,6 +184,7 @@ const FormularioMatricula: React.FC = () => {
     handleSubmit: handleSubmit2,
     setValue: setValue2,
     formState: { errors: errors2 },
+    watch: watch2,
   } = useForm({
     resolver: yupResolver(schemaMatricula),
   });
@@ -257,6 +261,7 @@ const FormularioMatricula: React.FC = () => {
     turno,
     turnoPastoral,
     serie,
+    matriculaEscola,
   }: any) => {
     const dados = {
       aluno: {
@@ -270,7 +275,7 @@ const FormularioMatricula: React.FC = () => {
         naturalidade,
         nacionalidade,
         certidao_nova: certidaoNova,
-        certidao_numero: numeroCertidao,
+        certidao_codigo: numeroCertidao,
         certidao_nascimento_termo: termoCN,
         certidao_nascimento_folha: folhaCN,
         certidao_nascimento_livro: livroCN,
@@ -296,6 +301,7 @@ const FormularioMatricula: React.FC = () => {
       matricula: {
         escola,
         turno,
+        matricula_escola: matriculaEscola,
         turno_pastoral: turnoPastoral,
         serie,
         data: new Date(),
@@ -323,7 +329,13 @@ const FormularioMatricula: React.FC = () => {
     });
   };
 
-  const onSubmitMatricula = async ({ escola, serie, turno }) => {
+  const onSubmitMatricula = async ({
+    escola,
+    serie,
+    turno,
+    turnoPastoral,
+    matriculaEscola,
+  }) => {
     if (!alunoSelecionado) {
       return toast({
         title: "Por favor, selecione um aluno",
@@ -336,7 +348,9 @@ const FormularioMatricula: React.FC = () => {
     const resultado = await editarMatricula(id, {
       escola,
       turno,
+      turno_pastoral: turnoPastoral,
       serie,
+      matricula_escola: matriculaEscola,
     });
 
     if (resultado) {
@@ -876,6 +890,13 @@ const FormularioMatricula: React.FC = () => {
                   <Input type="text" {...register1("serie")} />
                   <FormErrorMessage>{errors?.serie?.message}</FormErrorMessage>
                 </FormControl>
+                <FormControl isInvalid={Boolean(errors.matriculaEscola)}>
+                  <FormLabel>Matrícula da escola</FormLabel>
+                  <Input type="text" {...register1("matriculaEscola")} />
+                  <FormErrorMessage>
+                    {errors?.matriculaEscola?.message}
+                  </FormErrorMessage>
+                </FormControl>
                 <FormControl isInvalid={Boolean(errors.turno)}>
                   <FormLabel>Turno na escola</FormLabel>
                   <Controller
@@ -885,6 +906,12 @@ const FormularioMatricula: React.FC = () => {
                         name="turno"
                         onChange={(e: any) => {
                           setValue1("turno", e);
+
+                          if (e === "matutino") {
+                            return setValue1("turnoPastoral", "vespertino");
+                          }
+
+                          return setValue1("turnoPastoral", "matutino");
                         }}
                       >
                         <Stack direction="row">
@@ -898,30 +925,18 @@ const FormularioMatricula: React.FC = () => {
                   />
                   <FormErrorMessage>{errors?.turno?.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.turnoPastoral)}>
-                  <FormLabel>Turno na pastoral</FormLabel>
-                  <Controller
-                    render={({ field: { value } }) => (
-                      <RadioGroup
-                        defaultValue={value}
-                        name="turnoPastoral"
-                        onChange={(e: any) => {
-                          setValue1("turnoPastoral", e);
-                        }}
-                      >
-                        <Stack direction="row">
-                          <Radio value="matutino">Matutino</Radio>
-                          <Radio value="vespertino">Vespertino</Radio>
-                        </Stack>
-                      </RadioGroup>
-                    )}
-                    name="turnoPastoral"
-                    control={control}
-                  />
-                  <FormErrorMessage>
-                    {errors?.turnoPastoral?.message}
-                  </FormErrorMessage>
-                </FormControl>
+                {watch("turnoPastoral") && (
+                  <Flex>
+                    <Text fontWeight="bold" mr={2}>
+                      Turno na pastoral:
+                    </Text>
+                    <Text>
+                      {watch("turnoPastoral") === "matutino"
+                        ? "Matutino"
+                        : "Vespertino"}
+                    </Text>
+                  </Flex>
+                )}
               </Stack>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -950,6 +965,13 @@ const FormularioMatricula: React.FC = () => {
                   <Input type="text" {...register2("serie")} />
                   <FormErrorMessage>{errors2?.serie?.message}</FormErrorMessage>
                 </FormControl>
+                <FormControl isInvalid={Boolean(errors2?.matriculaEscola)}>
+                  <FormLabel>Matrícula da escola</FormLabel>
+                  <Input type="text" {...register2("matriculaEscola")} />
+                  <FormErrorMessage>
+                    {errors2?.matriculaEscola?.message}
+                  </FormErrorMessage>
+                </FormControl>
                 <FormControl isInvalid={Boolean(errors2?.turno)}>
                   <FormLabel>Turno na escola</FormLabel>
                   <Controller
@@ -960,6 +982,11 @@ const FormularioMatricula: React.FC = () => {
                           name="turno"
                           onChange={(e: any) => {
                             setValue2("turno", e);
+                            if (e === "matutino") {
+                              return setValue2("turnoPastoral", "vespertino");
+                            }
+
+                            return setValue2("turnoPastoral", "matutino");
                           }}
                         >
                           <Stack direction="row">
@@ -974,30 +1001,18 @@ const FormularioMatricula: React.FC = () => {
                   />
                   <FormErrorMessage>{errors2?.turno?.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors2?.turno)}>
-                  <FormLabel>Turno na pastoral</FormLabel>
-                  <Controller
-                    render={({ field: { value } }) => (
-                      <RadioGroup
-                        defaultValue={value}
-                        name="turnoPastoral"
-                        onChange={(e: any) => {
-                          setValue2("turnoPastoral", e);
-                        }}
-                      >
-                        <Stack direction="row">
-                          <Radio value="matutino">Matutino</Radio>
-                          <Radio value="vespertino">Vespertino</Radio>
-                        </Stack>
-                      </RadioGroup>
-                    )}
-                    name="turnoPastoral"
-                    control={control2}
-                  />
-                  <FormErrorMessage>
-                    {errors2?.turnoPastoral?.message}
-                  </FormErrorMessage>
-                </FormControl>
+                {watch2("turnoPastoral") && (
+                  <Flex>
+                    <Text fontWeight="bold" mr={2}>
+                      Turno na pastoral:
+                    </Text>
+                    <Text>
+                      {watch2("turnoPastoral") === "matutino"
+                        ? "Matutino"
+                        : "Vespertino"}
+                    </Text>
+                  </Flex>
+                )}
               </Stack>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
