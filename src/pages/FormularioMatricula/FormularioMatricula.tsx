@@ -59,7 +59,7 @@ const schema = Yup.object().shape({
   numeroCertidao: Yup.mixed().when("certidaoNova", {
     is: true,
     then: Yup.string().required(
-      "O número da certidão de nascimento é obrigatório"
+      "O código da certidão de nascimento é obrigatório"
     ),
     otherwise: Yup.mixed().nullable(),
   }),
@@ -550,7 +550,7 @@ const FormularioMatricula: React.FC = () => {
 
                   {certidaoNova ? (
                     <FormControl isInvalid={Boolean(errors.numeroCertidao)}>
-                      <FormLabel>Número da certidão</FormLabel>
+                      <FormLabel>Código da certidão</FormLabel>
                       <Input type="text" {...register1("numeroCertidao")} />
                       <FormErrorMessage>
                         {errors?.numeroCertidao?.message}
