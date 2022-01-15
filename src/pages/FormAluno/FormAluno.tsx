@@ -71,8 +71,9 @@ const schema = Yup.object().shape({
     ),
     otherwise: Yup.mixed().nullable(),
   }),
-  email: Yup.string().required("O e-mail é obrigatório"),
+  email: Yup.string(),
   telefone: Yup.string().required("O telefone é obrigatório"),
+  temParente: Yup.boolean(),
   nomeContatoUrgencia: Yup.string().required(
     "O nome de contato de urgência é obrigatório"
   ),
@@ -94,7 +95,7 @@ const schema = Yup.object().shape({
   ),
   rgResponsavel: Yup.string().required("O RG é obrigatório"),
   rendaFamiliar: Yup.string().required("A renda familiar é obrigatória"),
-  religiao: Yup.string(),
+  religiao: Yup.boolean(),
 });
 
 const FormAluno: React.FC = () => {
@@ -138,7 +139,7 @@ const FormAluno: React.FC = () => {
     setValue("livroCN", alunoMatricula?.certidao_nascimento_livro);
     setValue("email", alunoMatricula?.email);
     setValue("telefone", formatarTelefone(alunoMatricula?.telefone || ""));
-    setValue("temParente", alunoMatricula?.tem_arente);
+    setValue("temParente", alunoMatricula?.tem_parente);
     setValue("nomeParente", alunoMatricula?.nome_parente);
     setValue("nomeContatoUrgencia", alunoMatricula?.contato_nome);
     setValue(
