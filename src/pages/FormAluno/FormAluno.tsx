@@ -134,6 +134,8 @@ const FormAluno: React.FC = () => {
     setValue("endereco", alunoMatricula?.endereco);
     setValue("naturalidade", alunoMatricula?.naturalidade);
     setValue("nacionalidade", alunoMatricula?.nacionalidade);
+    setValue("certidaoNova", alunoMatricula?.certidao_nova);
+    setValue("numeroCertidao", alunoMatricula?.certidao_codigo);
     setValue("termoCN", alunoMatricula?.certidao_nascimento_termo);
     setValue("folhaCN", alunoMatricula?.certidao_nascimento_folha);
     setValue("livroCN", alunoMatricula?.certidao_nascimento_livro);
