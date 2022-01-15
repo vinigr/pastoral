@@ -253,8 +253,8 @@ const Matriculas: React.FC = () => {
                   value={sexo}
                   onChange={(e) => setSexo(e.target.value)}
                 >
-                  <option value="Masculino">Masculino</option>
-                  <option value="Feminino">Feminino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="feminino">Feminino</option>
                 </Select>
               </Flex>
               <Flex direction="column">
@@ -264,8 +264,8 @@ const Matriculas: React.FC = () => {
                   value={turno}
                   onChange={(e) => setTurno(e.target.value)}
                 >
-                  <option value="Matutino">Matutino</option>
-                  <option value="Vespertino">Vespertino</option>
+                  <option value="matutino">Matutino</option>
+                  <option value="vespertino">Vespertino</option>
                 </Select>
               </Flex>
             </Stack>
