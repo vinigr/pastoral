@@ -2,6 +2,7 @@ import { chamarFuncaoElectron } from "../utils/chamarFuncaoElectron";
 import { isElectron } from "../utils/isElectron";
 
 interface Matricula {
+  ano: number;
   escola: string;
   turno: string;
   serie: string;

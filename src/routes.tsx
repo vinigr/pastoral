@@ -10,6 +10,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Alunos from "./pages/Alunos/Alunos";
 import AlunosOficina from "./pages/AlunosOficina/AlunosOficina";
 import FormAluno from "./pages/FormAluno/FormAluno";
+import EditarMatricula from "./pages/FormularioMatricula/EditarMatricula";
 import FormularioMatricula from "./pages/FormularioMatricula/FormularioMatricula";
 import Instituicao from "./pages/Instituicao/Instituicao";
 import Login from "./pages/Login/Login";
@@ -35,7 +36,7 @@ const RoutesApp = () => {
 
             <Route path="/matriculas" element={<Matriculas />} />
             <Route path="/matricula" element={<FormularioMatricula />} />
-            <Route path="/matricula/:id" element={<FormularioMatricula />} />
+            <Route path="/matricula/:id" element={<EditarMatricula />} />
 
             <Route path="/oficinas" element={<Oficinas />} />
             <Route path="/oficina" element={<Oficina />} />

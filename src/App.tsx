@@ -18,9 +18,9 @@ import Routes from "./routes";
 import { useEffect } from "react";
 
 const App: React.FC = () => {
-  useEffect(() => {
-    localStorage.removeItem("logado");
-  }, []);
+  // useEffect(() => {
+  //   localStorage.removeItem("logado");
+  // }, []);
 
   return (
     <ChakraProvider>
