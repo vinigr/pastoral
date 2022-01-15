@@ -22,6 +22,7 @@ import {
 import { adicionarAlunoAOficina } from "./use-cases/adicionar-aluno-a-oficina";
 import { buscarAluno } from "./use-cases/buscar-aluno";
 import { buscarAlunosMatriculados } from "./use-cases/buscar-alunos-matriculados";
+import { buscarAlunosRelatorio } from "./use-cases/buscar-alunos-relatorio";
 import { buscarInformacoesInstituicao } from "./use-cases/buscar-informacoes-instituicao";
 import { buscarMatricula } from "./use-cases/buscar-matricula";
 import { buscarMatriculaComAluno } from "./use-cases/buscar-matricula-com-aluno";
@@ -102,7 +103,7 @@ if (electronIsDev) {
 })();
 
 // Handle when all of our windows are close (platforms have their own expectations).
-app.on("window-all-closed", function () {
+app.on("window-all-closed", function() {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
@@ -111,7 +112,7 @@ app.on("window-all-closed", function () {
 });
 
 // When the dock icon is clicked.
-app.on("activate", async function () {
+app.on("activate", async function() {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (myCapacitorApp.getMainWindow().isDestroyed()) {
@@ -262,4 +263,10 @@ ipcMain.handle("editarUsuario", async (_event, usuario, senha) => {
   const usuarioEditado = await editarUsuario(usuario, senha);
 
   return usuarioEditado;
+});
+
+ipcMain.handle("buscarAlunosRelatorio", async (_event, sexo, turma) => {
+  const alunos = await buscarAlunosRelatorio(sexo, turma);
+
+  return alunos;
 });
