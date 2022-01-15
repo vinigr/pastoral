@@ -129,7 +129,9 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 }}
               >
                 Data da matrícula -{" "}
-                {new Date(dadosMatricula?.data).toLocaleDateString("pt-br", {
+                {new Date(
+                  `${dadosMatricula?.data} 03:00:00`
+                ).toLocaleDateString("pt-br", {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",
@@ -401,67 +403,94 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
             >
               Certidão de nascimento:
             </h2>
-            <h2
-              style={{
-                fontSize: 14,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 4,
-              }}
-            >
-              Nª do termo:
-            </h2>
-            <h3
-              style={{
-                fontSize: 12,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 20,
-              }}
-            >
-              {dadosMatricula?.aluno?.certidao_nascimento_termo}
-            </h3>
+            {dadosMatricula?.aluno?.certidao_nova ? (
+              <>
+                <h2
+                  style={{
+                    fontSize: 14,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 4,
+                  }}
+                >
+                  Código:
+                </h2>
+                <h3
+                  style={{
+                    fontSize: 12,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 20,
+                  }}
+                >
+                  {dadosMatricula?.aluno?.certidao_codigo}
+                </h3>{" "}
+              </>
+            ) : (
+              <>
+                <h2
+                  style={{
+                    fontSize: 14,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 4,
+                  }}
+                >
+                  Nº do termo:
+                </h2>
+                <h3
+                  style={{
+                    fontSize: 12,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 20,
+                  }}
+                >
+                  {dadosMatricula?.aluno?.certidao_nascimento_termo}
+                </h3>
 
-            <h2
-              style={{
-                fontSize: 14,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 4,
-              }}
-            >
-              Folha:
-            </h2>
-            <h3
-              style={{
-                fontSize: 12,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 20,
-              }}
-            >
-              {dadosMatricula?.aluno?.certidao_nascimento_folha}
-            </h3>
-            <h2
-              style={{
-                fontSize: 14,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 4,
-              }}
-            >
-              Livro:
-            </h2>
-            <h3
-              style={{
-                fontSize: 12,
-                marginTop: 0,
-                marginBottom: 0,
-                marginRight: 20,
-              }}
-            >
-              {dadosMatricula?.aluno?.certidao_nascimento_livro}
-            </h3>
+                <h2
+                  style={{
+                    fontSize: 14,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 4,
+                  }}
+                >
+                  Folha:
+                </h2>
+                <h3
+                  style={{
+                    fontSize: 12,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 20,
+                  }}
+                >
+                  {dadosMatricula?.aluno?.certidao_nascimento_folha}
+                </h3>
+                <h2
+                  style={{
+                    fontSize: 14,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 4,
+                  }}
+                >
+                  Livro:
+                </h2>
+                <h3
+                  style={{
+                    fontSize: 12,
+                    marginTop: 0,
+                    marginBottom: 0,
+                    marginRight: 20,
+                  }}
+                >
+                  {dadosMatricula?.aluno?.certidao_nascimento_livro}
+                </h3>
+              </>
+            )}
           </div>
           <div
             style={{
