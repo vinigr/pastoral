@@ -17,10 +17,16 @@ export class Matricula {
   turno: string
 
   @Column()
+  turno_pastoral: string
+
+  @Column()
   escola: string
 
   @Column()
   serie: string
+
+  @Column()
+  matricula_escola: string
 
   @Column({default: true})
   ativo: boolean

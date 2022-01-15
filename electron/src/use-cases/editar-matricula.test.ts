@@ -1,18 +1,11 @@
 import { getRepository } from "typeorm"
 import { Matricula } from "../entity/Matricula"
+import { criaMatricula } from "../factories/criaMatricula"
 import { editarMatricula } from "./editar-matricula"
 
 describe('editar matricula', () => {
   test('edita matricula', async () => {
-    const matriculaOriginal = {
-      id: 1,
-      data: new Date(),
-      turno: "",
-      ano: new Date().getFullYear(),
-      escola: "",
-      serie: "4 ano",
-    }
-
+    const matriculaOriginal = criaMatricula()
     const repo = getRepository(Matricula)
 
     const entidadeMatricula = repo.create(matriculaOriginal)

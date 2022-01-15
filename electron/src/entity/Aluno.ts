@@ -44,12 +44,21 @@ export class Aluno {
   nacionalidade: string;
 
   @Column()
+  afinidades: string;
+
+  @Column()
+  certidao_nova: boolean;
+
+  @Column({ nullable: true })
+  certidao_codigo: string;
+
+  @Column({ nullable: true })
   certidao_nascimento_termo: string;
 
-  @Column()
+  @Column({ nullable: true })
   certidao_nascimento_folha: string;
 
-  @Column()
+  @Column({ nullable: true })
   certidao_nascimento_livro: string;
 
   @Column()
@@ -79,7 +88,7 @@ export class Aluno {
   @Column()
   responsavel_nome: string;
 
-  @Column()
+  @Column({ nullable: true })
   responsavel_nis: string;
 
   @Column()
