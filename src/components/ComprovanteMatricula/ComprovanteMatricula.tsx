@@ -32,8 +32,6 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
     const buscarDadosMatricula = async () => {
       const dados = await buscarInformacoesCompletas(id);
 
-      console.log({ dados });
-
       setDadosMatricula(dados);
     };
 
