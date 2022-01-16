@@ -167,7 +167,10 @@ const FormAluno: React.FC = () => {
     setValue("bolsaSocial", alunoMatricula?.responsavel_recebe_auxilio);
     setValue("nis", alunoMatricula?.responsavel_nis);
     setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
-    setValue("rendaFamiliar", alunoMatricula?.renda_familiar);
+    setValue(
+      "rendaFamiliar",
+      formatarDinheiro(alunoMatricula?.renda_familiar || "0")
+    );
     setValue("religiao", alunoMatricula?.permite_catequese);
 
     setAluno(alunoMatricula);
@@ -228,7 +231,7 @@ const FormAluno: React.FC = () => {
       certidao_nascimento_livro: livroCN,
       email,
       telefone: telefone.replace(/[^0-9]+/g, ""),
-      tem_parente: temParente ?? false,
+      tem_parente: Boolean(temParente),
       nome_parente: nomeParente ?? "",
       contato_nome: nomeContatoUrgencia,
       contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),

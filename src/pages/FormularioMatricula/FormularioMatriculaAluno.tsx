@@ -182,7 +182,7 @@ const FormularioMatriculaAluno: React.FC = () => {
         certidao_nascimento_livro: livroCN,
         email,
         telefone: telefone.replace(/[^0-9]+/g, ""),
-        tem_parente: temParente,
+        tem_parente: Boolean(temParente),
         nome_parente: nomeParente ?? "",
         contato_nome: nomeContatoUrgencia,
         contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),

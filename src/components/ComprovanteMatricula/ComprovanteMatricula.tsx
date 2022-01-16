@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 
 import buscarInformacoesCompletas from "../../usecases/buscarInformacoesCompletasMatricula";
 import buscarInformacoesInstituicao from "../../usecases/buscarInformacoesInstituicao";
-import { formatarCNPJ } from "../../utils/formatarStrings";
+import { formatarCNPJ, formatarDinheiro } from "../../utils/formatarStrings";
 import pastoralLogo from "../../assets/images/pastoral-menor.jpg";
 
 interface Props {
@@ -923,7 +923,7 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              R$ {Number(dadosMatricula?.aluno.renda_familiar || 0) / 100}
+              {formatarDinheiro(dadosMatricula?.aluno.renda_familiar || 0)}
             </h3>
 
             <h2
