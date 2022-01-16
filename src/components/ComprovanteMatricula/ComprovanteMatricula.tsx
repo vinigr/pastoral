@@ -923,7 +923,11 @@ const ComprovanteMatricula = forwardRef<HTMLInputElement, Props>(
                 marginRight: 20,
               }}
             >
-              {formatarDinheiro(dadosMatricula?.aluno.renda_familiar || 0)}
+              {formatarDinheiro(
+                dadosMatricula?.aluno?.renda_familiar
+                  ? `${dadosMatricula?.aluno?.renda_familiar}`
+                  : ""
+              )}
             </h3>
 
             <h2

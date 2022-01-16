@@ -169,7 +169,11 @@ const FormAluno: React.FC = () => {
     setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
     setValue(
       "rendaFamiliar",
-      formatarDinheiro(alunoMatricula?.renda_familiar || "0")
+      formatarDinheiro(
+        alunoMatricula?.renda_familiar
+          ? `${alunoMatricula?.renda_familiar}`
+          : ""
+      )
     );
     setValue("religiao", alunoMatricula?.permite_catequese);
 
