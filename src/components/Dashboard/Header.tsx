@@ -8,6 +8,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const logout = () => {
+    localStorage.removeItem("logado");
     navigate("/login");
   };
 

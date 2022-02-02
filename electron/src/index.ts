@@ -98,12 +98,15 @@ if (electronIsDev) {
     synchronize: true,
     logging: false,
   });
+
   // Check for updates if we are in a packaged app.
-  autoUpdater.checkForUpdatesAndNotify();
+  if (process.env.NODE_ENV === "development") {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
 })();
 
 // Handle when all of our windows are close (platforms have their own expectations).
-app.on("window-all-closed", function() {
+app.on("window-all-closed", function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
@@ -112,7 +115,7 @@ app.on("window-all-closed", function() {
 });
 
 // When the dock icon is clicked.
-app.on("activate", async function() {
+app.on("activate", async function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (myCapacitorApp.getMainWindow().isDestroyed()) {

@@ -1,25 +1,25 @@
 {
-  "appId": "com.yourdoamnin.yourapp",
+  "appId": "com.pastoraldomenor.vitoriadaconquista",
   "directories": {
     "buildResources": "resources"
   },
-  "files": [
-    "assets/**/*",
-    "build/**/*",
-    "capacitor.config.*",
-    "app/**/*"
-  ],
+  "files": ["assets/**/*", "build/**/*", "capacitor.config.*", "app/**/*"],
   "publish": {
-    "provider": "github"
+    "provider": "generic"
   },
   "nsis": {
-    "allowElevation": true,
     "oneClick": false,
-    "allowToChangeInstallationDirectory": true
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "installerIcon": "assets/pastoral-menor.ico",
+    "installerSidebar": "assets/pastoral-menor.ico",
+    "uninstallerSidebar": "assets/pastoral-menor.ico",
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
   },
   "win": {
     "target": "nsis",
-    "icon": "assets/appIcon.ico"
+    "icon": "assets/pastoral-menor.ico"
   },
   "mac": {
     "category": "your.app.category.type",
