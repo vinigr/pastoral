@@ -46,7 +46,7 @@ export class Aluno {
   @Column()
   afinidades: string;
 
-  @Column()
+  @Column({ nullable: true })
   certidao_nova: boolean;
 
   @Column({ nullable: true })
@@ -61,7 +61,7 @@ export class Aluno {
   @Column({ nullable: true })
   certidao_nascimento_livro: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @Column()
@@ -70,7 +70,7 @@ export class Aluno {
   @Column()
   tem_parente: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   nome_parente: string;
 
   @Column()
