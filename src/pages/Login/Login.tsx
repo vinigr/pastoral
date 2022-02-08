@@ -27,9 +27,7 @@ import { useNavigate } from "react-router-dom";
 
 import pastoralLogo from "../../assets/images/pastoral-menor.jpg";
 
-const shell = window.require("electron")
-  ? window.require("electron").shell
-  : null;
+const shell = window.require ? window?.require("electron").shell : null;
 
 const schema = Yup.object().shape({
   usuario: Yup.string().required("O usuário é necessário"),

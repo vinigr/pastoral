@@ -166,6 +166,7 @@ const FormAluno: React.FC = () => {
     );
     setValue("bolsaSocial", alunoMatricula?.responsavel_recebe_auxilio);
     setValue("nis", alunoMatricula?.responsavel_nis);
+    setValue("cras", alunoMatricula?.cras);
     setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
     setValue(
       "rendaFamiliar",
@@ -214,6 +215,7 @@ const FormAluno: React.FC = () => {
     ocupacaoProfissionalResponsavel,
     bolsaSocial,
     nis,
+    cras,
     rgResponsavel,
     rendaFamiliar,
     religiao,
@@ -248,6 +250,7 @@ const FormAluno: React.FC = () => {
       responsavel_profissao: ocupacaoProfissionalResponsavel,
       responsavel_recebe_auxilio: bolsaSocial ?? false,
       responsavel_nis: nis,
+      cras,
       responsavel_rg: rgResponsavel,
       renda_familiar: rendaFamiliar.replace(/\D/g, ""),
       permite_catequese: religiao ?? false,
@@ -632,11 +635,18 @@ const FormAluno: React.FC = () => {
               </FormControl>
 
               {bolsaSocial && (
-                <FormControl isInvalid={errors.nis}>
-                  <FormLabel>NIS</FormLabel>
-                  <Input type="text" {...register("nis")} />
-                  <FormErrorMessage>{errors?.nis?.message}</FormErrorMessage>
-                </FormControl>
+                <>
+                  <FormControl isInvalid={errors.nis}>
+                    <FormLabel>NIS</FormLabel>
+                    <Input type="text" {...register("nis")} />
+                    <FormErrorMessage>{errors?.nis?.message}</FormErrorMessage>
+                  </FormControl>
+                  <FormControl isInvalid={errors.cras}>
+                    <FormLabel>CRAS</FormLabel>
+                    <Input type="text" {...register("cras")} />
+                    <FormErrorMessage>{errors?.cras?.message}</FormErrorMessage>
+                  </FormControl>
+                </>
               )}
             </Stack>
 

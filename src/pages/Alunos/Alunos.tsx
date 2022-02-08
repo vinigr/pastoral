@@ -34,7 +34,7 @@ const Alunos: React.FC = () => {
 
   const remover = async (id) => {
     const confirmacao = window.confirm(
-      "Tem certeza que deseja remover essa oficina?"
+      "Tem certeza que deseja remover esse aluno?"
     );
 
     if (!confirmacao) {

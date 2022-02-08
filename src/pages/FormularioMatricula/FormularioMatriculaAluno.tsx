@@ -154,6 +154,7 @@ const FormularioMatriculaAluno: React.FC = () => {
     ocupacaoProfissionalResponsavel,
     bolsaSocial,
     nis,
+    cras,
     rgResponsavel,
     rendaFamiliar,
     religiao,
@@ -195,6 +196,7 @@ const FormularioMatriculaAluno: React.FC = () => {
         responsavel_profissao: ocupacaoProfissionalResponsavel,
         responsavel_recebe_auxilio: bolsaSocial ?? false,
         responsavel_nis: nis,
+        cras,
         responsavel_rg: rgResponsavel,
         renda_familiar: rendaFamiliar.replace(/\D/g, ""),
         permite_catequese: religiao,
@@ -577,11 +579,18 @@ const FormularioMatriculaAluno: React.FC = () => {
             </FormControl>
 
             {bolsaSocial && (
-              <FormControl isInvalid={Boolean(errors.nis)}>
-                <FormLabel>NIS</FormLabel>
-                <Input type="text" {...register("nis")} />
-                <FormErrorMessage>{errors?.nis?.message}</FormErrorMessage>
-              </FormControl>
+              <>
+                <FormControl isInvalid={Boolean(errors.nis)}>
+                  <FormLabel>NIS</FormLabel>
+                  <Input type="text" {...register("nis")} />
+                  <FormErrorMessage>{errors?.nis?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.cras)}>
+                  <FormLabel>CRAS</FormLabel>
+                  <Input type="text" {...register("cras")} />
+                  <FormErrorMessage>{errors?.cras?.message}</FormErrorMessage>
+                </FormControl>
+              </>
             )}
           </Stack>
 
