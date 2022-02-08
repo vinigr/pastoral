@@ -91,6 +91,9 @@ export class Aluno {
   @Column({ nullable: true })
   responsavel_nis: string;
 
+  @Column({ nullable: true })
+  cras: string;
+
   @Column()
   responsavel_rg: string;
 

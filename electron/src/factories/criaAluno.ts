@@ -27,6 +27,7 @@ export function criaAluno(id = 1) {
     responsavel_nome: "",
     afinidades: "",
     responsavel_nis: "",
+    cras: "",
     responsavel_endereco: "",
     responsavel_telefone: "",
     responsavel_recebe_auxilio: false,
