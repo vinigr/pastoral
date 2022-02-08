@@ -71,8 +71,9 @@ const schema = Yup.object().shape({
     ),
     otherwise: Yup.mixed().nullable(),
   }),
-  email: Yup.string().required("O e-mail é obrigatório"),
+  email: Yup.string(),
   telefone: Yup.string().required("O telefone é obrigatório"),
+  temParente: Yup.boolean(),
   nomeContatoUrgencia: Yup.string().required(
     "O nome de contato de urgência é obrigatório"
   ),
@@ -94,7 +95,7 @@ const schema = Yup.object().shape({
   ),
   rgResponsavel: Yup.string().required("O RG é obrigatório"),
   rendaFamiliar: Yup.string().required("A renda familiar é obrigatória"),
-  religiao: Yup.string(),
+  religiao: Yup.boolean(),
 });
 
 const FormAluno: React.FC = () => {
@@ -133,12 +134,14 @@ const FormAluno: React.FC = () => {
     setValue("endereco", alunoMatricula?.endereco);
     setValue("naturalidade", alunoMatricula?.naturalidade);
     setValue("nacionalidade", alunoMatricula?.nacionalidade);
+    setValue("certidaoNova", alunoMatricula?.certidao_nova);
+    setValue("numeroCertidao", alunoMatricula?.certidao_codigo);
     setValue("termoCN", alunoMatricula?.certidao_nascimento_termo);
     setValue("folhaCN", alunoMatricula?.certidao_nascimento_folha);
     setValue("livroCN", alunoMatricula?.certidao_nascimento_livro);
     setValue("email", alunoMatricula?.email);
     setValue("telefone", formatarTelefone(alunoMatricula?.telefone || ""));
-    setValue("temParente", alunoMatricula?.tem_arente);
+    setValue("temParente", alunoMatricula?.tem_parente);
     setValue("nomeParente", alunoMatricula?.nome_parente);
     setValue("nomeContatoUrgencia", alunoMatricula?.contato_nome);
     setValue(
@@ -164,7 +167,14 @@ const FormAluno: React.FC = () => {
     setValue("bolsaSocial", alunoMatricula?.responsavel_recebe_auxilio);
     setValue("nis", alunoMatricula?.responsavel_nis);
     setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
-    setValue("rendaFamiliar", alunoMatricula?.renda_familiar);
+    setValue(
+      "rendaFamiliar",
+      formatarDinheiro(
+        alunoMatricula?.renda_familiar
+          ? `${alunoMatricula?.renda_familiar}`
+          : ""
+      )
+    );
     setValue("religiao", alunoMatricula?.permite_catequese);
 
     setAluno(alunoMatricula);
@@ -225,7 +235,7 @@ const FormAluno: React.FC = () => {
       certidao_nascimento_livro: livroCN,
       email,
       telefone: telefone.replace(/[^0-9]+/g, ""),
-      tem_parente: temParente ?? false,
+      tem_parente: Boolean(temParente),
       nome_parente: nomeParente ?? "",
       contato_nome: nomeContatoUrgencia,
       contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),

@@ -81,9 +81,9 @@ const schema = Yup.object().shape({
     ),
     otherwise: Yup.mixed().nullable(),
   }),
-  email: Yup.string().required("O e-mail é obrigatório"),
+  email: Yup.string(),
   telefone: Yup.string().required("O telefone é obrigatório"),
-  temParente: Yup.string(),
+  temParente: Yup.boolean(),
   nomeParente: Yup.string(),
   nomeContatoUrgencia: Yup.string().required(
     "O nome de contato de urgência é obrigatório"
@@ -106,7 +106,7 @@ const schema = Yup.object().shape({
   ),
   rgResponsavel: Yup.string().required("O RG é obrigatório"),
   rendaFamiliar: Yup.string().required("A renda familiar é obrigatória"),
-  religiao: Yup.string(),
+  religiao: Yup.boolean(),
 });
 
 const FormularioMatriculaAluno: React.FC = () => {
@@ -182,7 +182,7 @@ const FormularioMatriculaAluno: React.FC = () => {
         certidao_nascimento_livro: livroCN,
         email,
         telefone: telefone.replace(/[^0-9]+/g, ""),
-        tem_parente: temParente ?? false,
+        tem_parente: Boolean(temParente),
         nome_parente: nomeParente ?? "",
         contato_nome: nomeContatoUrgencia,
         contato_telefone: telefoneContatoUrgencia.replace(/[^0-9]+/g, ""),
@@ -197,7 +197,7 @@ const FormularioMatriculaAluno: React.FC = () => {
         responsavel_nis: nis,
         responsavel_rg: rgResponsavel,
         renda_familiar: rendaFamiliar.replace(/\D/g, ""),
-        permite_catequese: religiao ?? false,
+        permite_catequese: religiao,
       },
       matricula: {
         escola,
@@ -231,8 +231,8 @@ const FormularioMatriculaAluno: React.FC = () => {
   };
 
   const temParente = watch("temParente", false);
-  const bolsaSocial = watch("bolsaSocial", false);
-  const certidaoNova = watch("certidaoNova", false);
+  const bolsaSocial = watch("bolsaSocial", undefined);
+  const certidaoNova = watch("certidaoNova", undefined);
 
   return (
     <>
@@ -343,7 +343,7 @@ const FormularioMatriculaAluno: React.FC = () => {
                 control={control}
               />
               <FormErrorMessage>
-                {errors?.temcertidaoNovaParente?.message}
+                {errors?.certidaoNova?.message}
               </FormErrorMessage>
             </FormControl>
 

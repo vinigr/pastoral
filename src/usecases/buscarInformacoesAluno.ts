@@ -34,7 +34,7 @@ export default async function buscarInformacoesAluno(id) {
       bolsaSocial: "",
       nis: "",
       rgResponsavel: "",
-      rendaFamiliar: "",
+      renda_familiar: 1100,
       religiao: "",
     };
   }

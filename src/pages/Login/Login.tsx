@@ -16,6 +16,8 @@ import {
   FormErrorMessage,
   useToast,
   Image,
+  Text,
+  Link,
 } from "@chakra-ui/react";
 
 import React from "react";
@@ -24,6 +26,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 
 import pastoralLogo from "../../assets/images/pastoral-menor.jpg";
+
+const shell = window.require("electron")
+  ? window.require("electron").shell
+  : null;
 
 const schema = Yup.object().shape({
   usuario: Yup.string().required("O usuário é necessário"),
@@ -66,7 +72,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Flex minH={"100vh"} align={"center"} justify={"center"} bg="white">
+    <Flex
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg="white"
+      direction={"column"}
+    >
       <Stack
         spacing={8}
         mx={"auto"}
@@ -112,6 +124,62 @@ const Login: React.FC = () => {
           </form>
         </Box>
       </Stack>
+
+      <Flex direction="column" alignItems="center">
+        <Text>Desenvolvido por:</Text>
+        <Flex mb={2}>
+          <Text fontWeight={"bold"} mr={4}>
+            Daniel Costa Carvalho
+          </Text>
+          <Link
+            color="blue"
+            target="_blank"
+            onClick={() =>
+              shell?.openExternal("https://github.com/DanielCostaCarvalho")
+            }
+          >
+            @DanielCostaCarvalho
+          </Link>
+        </Flex>
+        <Flex mb={2}>
+          <Text fontWeight={"bold"} mr={4}>
+            Pedro Henrique Ribeiro Silva
+          </Text>
+          <Link
+            color="blue"
+            target="_blank"
+            onClick={() =>
+              shell?.openExternal("https://github.com/itspedrohrs")
+            }
+          >
+            @itspedrohrs
+          </Link>
+        </Flex>
+        <Flex mb={2}>
+          <Text fontWeight={"bold"} mr={4}>
+            Vinícios Oliveira Grama
+          </Text>
+          <Link
+            color="blue"
+            target="_blank"
+            onClick={() => shell?.openExternal("https://github.com/vinigr")}
+          >
+            @vinigr
+          </Link>
+        </Flex>
+
+        <Flex mb={2}>
+          <Link
+            color="blue"
+            target="_blank"
+            onClick={() =>
+              shell?.openExternal("https://github.com/vinigr/pastoral")
+            }
+          >
+            Repositório
+          </Link>
+        </Flex>
+      </Flex>
     </Flex>
   );
 };
