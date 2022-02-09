@@ -96,7 +96,7 @@ if (electronIsDev) {
     database: "matriculas.db",
     entities: [Usuario, Aluno, Instituicao, Oficina, Matricula],
     synchronize: true,
-    logging: false,
+    logging: true,
   });
 
   // Check for updates if we are in a packaged app.

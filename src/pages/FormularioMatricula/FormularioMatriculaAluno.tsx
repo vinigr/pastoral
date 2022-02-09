@@ -199,7 +199,7 @@ const FormularioMatriculaAluno: React.FC = () => {
         cras,
         responsavel_rg: rgResponsavel,
         renda_familiar: rendaFamiliar.replace(/\D/g, ""),
-        permite_catequese: religiao,
+        permite_catequese: religiao ?? false,
       },
       matricula: {
         escola,

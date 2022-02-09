@@ -6,6 +6,7 @@ export async function buscarAlunosMatriculados(term?: string) {
 
   const whereClause = (qb) => {
     qb.where("matricula.ativo = true");
+    qb.andWhere("aluno.ativo = true");
     if (term) {
       qb.andWhere("aluno.nome like :termo", { termo: `%${term}%` });
     }

@@ -134,7 +134,7 @@ const FormAluno: React.FC = () => {
     setValue("endereco", alunoMatricula?.endereco);
     setValue("naturalidade", alunoMatricula?.naturalidade);
     setValue("nacionalidade", alunoMatricula?.nacionalidade);
-    setValue("certidaoNova", alunoMatricula?.certidao_nova);
+    setValue("certidaoNova", alunoMatricula?.certidao_nova ?? false);
     setValue("numeroCertidao", alunoMatricula?.certidao_codigo);
     setValue("termoCN", alunoMatricula?.certidao_nascimento_termo);
     setValue("folhaCN", alunoMatricula?.certidao_nascimento_folha);
@@ -167,7 +167,7 @@ const FormAluno: React.FC = () => {
     setValue("bolsaSocial", alunoMatricula?.responsavel_recebe_auxilio);
     setValue("nis", alunoMatricula?.responsavel_nis);
     setValue("cras", alunoMatricula?.cras);
-    setValue("rgResponsavel", alunoMatricula?.responsavel_nis);
+    setValue("rgResponsavel", alunoMatricula?.responsavel_rg);
     setValue(
       "rendaFamiliar",
       formatarDinheiro(
